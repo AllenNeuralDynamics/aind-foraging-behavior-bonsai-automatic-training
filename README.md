@@ -1,3 +1,4 @@
-# aind-capsule-template
+# Capsule for automatic training of the dynamic foraging task
 
-Basic structure of a capsule to be customized as needed.
+See [this thread](https://github.com/AllenNeuralDynamics/aind-behavior-blog/issues/73)
+
