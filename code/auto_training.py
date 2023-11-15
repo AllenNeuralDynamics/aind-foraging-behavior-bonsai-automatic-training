@@ -1,6 +1,6 @@
 # %%
 from pydantic import Field
-from typing import List
+from typing import List, NamedTuple, Callable
 from enum import Enum
 
 from aind_data_schema.base import AindModel
@@ -10,7 +10,6 @@ from aind_data_schema.stimulus import BehaviorStimulation
 # %%
 class ForagingTasks(Enum):
     """Foraging tasks"""
-
     C1B1 = "Coupled Baiting"
     C0B0 = "Uncoupled Without Baiting"
     C1B0 = "Coupled Without Baiting"
@@ -27,25 +26,25 @@ class AutoWaterModes(Enum):
     NATURAL = "Natural"
     BOTH = "Both"
     HIGH_PRO = "High pro"
+    
+class TrainingStages(Enum):
+    STAGE_1 = "Stage 1"  # A special first stage that needed to be splitted into 1.1 and 1.2 on the GUI side
+    STAGE_2 = "Stage 2"
+    STAGE_3 = "Stage 3"
+    STAGE_4 = "Stage 4"
+    STAGE_5 = "Stage 5"
+    STAGE_FINAL = "Stage final"
+    GRADUATED = "graduated"
 
 class DynamicForagingTrainingParameters(AindModel):
     ''' Training schema for the dynamic foraging GUI.
         This fully defines a set of training parameters that could be used in the GUI.
         For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
     '''
-    
     # Metadata
     task: ForagingTasks = Field(ForagingTasks.C1B1, title="task name")
-    curriculum_version: str = Field(
-        "0.1",
-        title="Curriculum version",
-        const=True,
-    )
-    training_stage: float = Field(
-        "1.1",
-        title="Training stages",
-        desciption="training stages such as 1.1, 1.2, 2, 3, ..."
-    )
+    curriculum_version: str = Field("0.1", title="Curriculum version", const=True)
+    training_stage: float = Field(TrainingStages.STAGE_1, title="Training stages")
     
     # --- Critical training parameters ---
     # Reward probability
@@ -120,10 +119,18 @@ class DynamicForagingTrainingParameters(AindModel):
         '''Turn to the GUI format, especially convert numbers to strings
         '''        
         return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
-                      value.name if isinstance(value, Enum) else  # Enum --> use its name
+                      value.value if isinstance(value, Enum) else  # Enum --> use its name
                       str(value))   # All other type -> str
                 for key, value in self.dict().items()}
-    
+
+#%%
+from typing import NamedTuple, Callable
+
+# A named tuple for holding transition criteria and the next state
+class Transition(NamedTuple):
+    condition: Callable[[BehavioralMetrics], bool]
+    next_state: TrainingStages
+
 
 class TrainingCurriculum():
     ''' Training curriculum schema.
