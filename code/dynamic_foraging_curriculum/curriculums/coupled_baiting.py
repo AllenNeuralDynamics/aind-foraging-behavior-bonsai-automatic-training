@@ -123,6 +123,13 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
     curriculum_version=curriculum_version,
     schema_version=schema_version,
 
+    parameters={
+        TrainingStage.STAGE_1: paras_stage_1,
+        TrainingStage.STAGE_2: paras_stage_2,
+        TrainingStage.STAGE_3: paras_stage_3,
+        TrainingStage.STAGE_FINAL: paras_stage_final,
+    },
+    
     curriculum={
         TrainingStage.STAGE_1: StageTransitions(
             from_stage=TrainingStage.STAGE_1,
@@ -212,12 +219,6 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
         )
     },
 
-    parameters={
-        TrainingStage.STAGE_1: paras_stage_1,
-        TrainingStage.STAGE_2: paras_stage_2,
-        TrainingStage.STAGE_3: paras_stage_3,
-        TrainingStage.STAGE_FINAL: paras_stage_final,
-    }
 )
 
 # %%
