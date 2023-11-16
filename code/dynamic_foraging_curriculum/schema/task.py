@@ -45,55 +45,55 @@ class DynamicForagingParas(AindModel):
     schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI
     curriculum_version: str = Field("0.1", title="Curriculum version")  # Corresponding to the curriculum
     task: ForagingTask = Field(ForagingTask.C1B1, title="Task name")
-    training_stage: float = Field(TrainingStage.STAGE_1, title="Training stage")
+    training_stage: TrainingStage = Field(TrainingStage.STAGE_1, title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
     # --- Critical training parameters ---
     # Reward probability
-    BaseRewardSum: float = Field(1.0, title="Sum of p_reward")
-    RewardFamily: int = Field(3, title="Reward family")  # Should be explicit here
-    RewardParisN: int = Field(1, title="Number of pairs")  # Should be explicit here
+    BaseRewardSum: float = Field(..., title="Sum of p_reward")
+    RewardFamily: int = Field(..., title="Reward family")  # Should be explicit here
+    RewardParisN: int = Field(..., title="Number of pairs")  # Should be explicit here
     
     UncoupledReward: str = Field("0.1,0.3,0.7", title="Uncoupled reward")  # For uncoupled tasks only
     
     # Block length
-    BlockMin:  int = Field(1, title="Block length (min)")
-    BlockMax:  int = Field(1, title="Block length (max)")
-    BlockBeta:  int = Field(1, title="Block length (beta)")
+    BlockMin:  int = Field(..., title="Block length (min)")
+    BlockMax:  int = Field(..., title="Block length (max)")
+    BlockBeta:  int = Field(..., title="Block length (beta)")
     BlockMinReward:  int = Field(1, title="Minimal rewards in a block to switch")
     
     # Delay period
-    DelayMin:  float = Field(0.0, title="Delay period (min) ") 
-    DelayMax: float = Field(0.0, title="Delay period (max) ")
-    DelayBeta: float = Field(0.5, title="Delay period (beta)")
+    DelayMin:  float = Field(..., title="Delay period (min) ") 
+    DelayMax: float = Field(..., title="Delay period (max) ")
+    DelayBeta: float = Field(..., title="Delay period (beta)")
     
     # Auto water
-    AutoReward: bool = Field(True, title="Auto reward switch")
+    AutoReward: bool = Field(..., title="Auto reward switch")
     AutoWaterType: AutoWaterMode = Field(AutoWaterMode.NATURAL, title="Auto water mode")
-    Multiplier: float = Field(0.5, title="Multiplier for auto reward")
-    Unrewarded: int = Field(0, title="Number of unrewarded trials before auto water")
-    Ignored: int = Field(0, title="Number of ignored trials before auto water")
+    Multiplier: float = Field(..., title="Multiplier for auto reward")
+    Unrewarded: int = Field(..., title="Number of unrewarded trials before auto water")
+    Ignored: int = Field(..., title="Number of ignored trials before auto water")
         
     # ITI
-    ITIMin: float = Field(3, title="ITI (min)")
-    ITIMax: float = Field(15, title="ITI (max)")
-    ITIBeta: float = Field(5, title="ITI (beta)")
+    ITIMin: float = Field(..., title="ITI (min)")
+    ITIMax: float = Field(..., title="ITI (max)")
+    ITIBeta: float = Field(..., title="ITI (beta)")
     ITIIncrease: float = Field(0.0, title="ITI increase")   # TODO: not implemented in the GUI??
     
     # Response time
-    ResponseTime: float = Field(10, title="Response time")
-    RewardConsumeTime: float = Field(3.0, title="Reward consume time", 
+    ResponseTime: float = Field(..., title="Response time")
+    RewardConsumeTime: float = Field(..., title="Reward consume time", 
                                      description="Time of the no-lick period before trial end")
-    StopIgnores: int = Field(20000, title="Number of ignored trials before stop")
+    StopIgnores: int = Field(..., title="Number of ignored trials before stop")
     
     # Auto block
-    AdvancedBlockAuto: AdvancedBlockMode = Field(AdvancedBlockMode.OFF, title="Auto block mode")    
-    SwitchThr: float = Field(0.5, title="Switch threshold for auto block")
-    PointsInARow: int = Field(5, title="Points in a row for auto block")
+    AdvancedBlockAuto: AdvancedBlockMode = Field(..., title="Auto block mode")    
+    SwitchThr: float = Field(..., title="Switch threshold for auto block")
+    PointsInARow: int = Field(..., title="Points in a row for auto block")
                              
     # Auto stop
-    MaxTrial: int = Field(1000, title="Maximal number of trials")
-    MaxTime: int = Field(90, title="Maximal session time (min)")
+    MaxTrial: int = Field(..., title="Maximal number of trials")
+    MaxTime: int = Field(..., title="Maximal session time (min)")
                              
     # Reward size. TODO: which one has higher priority? valve open time or volume?
     RightValue: float = Field(0.05, title="Right reward size (valve open time in sec)", exclude_from_GUI=True)  # exclude_from_GUI means this will not sent to the GUI

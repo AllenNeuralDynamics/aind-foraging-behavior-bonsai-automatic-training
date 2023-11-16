@@ -58,9 +58,8 @@ class DynamicForagingCurriculum(BaseModel):
                 return transition.to_stage
         return current_stage # By default, stay at the current stage
     
-    def save_to_json(self, filename: str = None):
-        if filename is None:
-            filename = f"curriculum_{self.task.value}_{self.curriculum_version}.json"
+    def save_to_json(self, path: str = ""):
+        filename = path + f"/curriculum_{self.task.value}_{self.curriculum_version}.json"
             
         with open(filename, 'w') as f:
             f.write(self.to_json())
