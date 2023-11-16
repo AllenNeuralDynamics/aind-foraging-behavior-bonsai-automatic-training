@@ -19,7 +19,7 @@ coupled_baiting_curriculum = Curriculum(
                         metrics.finished_trials[-1] >= 100 
                         and
                         metrics.foraging_efficiency[-1] > 0.7,
-                    description="Finished trials >= 100 and efficiency >= 0.7",
+                    condition_description="Finished trials >= 100 and efficiency >= 0.7",
                     )
                 ]
         ),
@@ -33,7 +33,7 @@ coupled_baiting_curriculum = Curriculum(
                         np.mean(metrics.finished_trials[-np.max([3, metrics.session_at_current_stage]):]) >= 500
                         and
                         np.mean(metrics.foraging_efficiency[-np.max([3, metrics.session_at_current_stage]):]) > 0.7,
-                    description="For recent 3 sessions, mean finished trials >= 500 and efficiency >= 0.7",                    
+                    condition_description="For recent 3 sessions, mean finished trials >= 500 and efficiency >= 0.7",                    
                 ),
                 TransitionRule(
                     to_stage=TrainingStage.STAGE_1,
@@ -41,7 +41,7 @@ coupled_baiting_curriculum = Curriculum(
                         metrics.finished_trials[-1] < 100
                         or
                         metrics.foraging_efficiency[-1] < 0.6,
-                    description="Finished trials < 100 or efficiency < 0.6",
+                    condition_description="Finished trials < 100 or efficiency < 0.6",
                 ),
             ]
         )
