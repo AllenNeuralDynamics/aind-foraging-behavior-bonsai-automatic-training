@@ -38,8 +38,9 @@ class StageTransitions(BaseModel):
 class DynamicForagingCurriculum(BaseModel):
     ''' A full curriculum for the dynamic foraging task '''
     task: ForagingTask
-    curriculum_version: str = Field(
-        "0.1", title="Curriculum version", const=True)
+    curriculum_version: str = Field("0.1", title="Curriculum version")
+    schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI version
+
     curriculum: Dict[TrainingStage, StageTransitions]         # Core automatic training logic
     parameters: Dict[TrainingStage, DynamicForagingParas]     # Core autoamtic training parameter settings
         

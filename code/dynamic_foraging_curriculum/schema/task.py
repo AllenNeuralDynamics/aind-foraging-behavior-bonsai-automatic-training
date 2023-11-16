@@ -42,8 +42,8 @@ class DynamicForagingParas(AindModel):
         For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
     '''
     # Metadata
-    schema_version: str = Field("0.1", title="Schema version", const=True)
-    curriculum_version: str = Field("0.1", title="Curriculum version", const=True)
+    schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI
+    curriculum_version: str = Field("0.1", title="Curriculum version")  # Corresponding to the curriculum
     task: ForagingTask = Field(ForagingTask.C1B1, title="Task name")
     training_stage: float = Field(TrainingStage.STAGE_1, title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
@@ -127,4 +127,3 @@ class DynamicForagingParas(AindModel):
 
     class Config:
         validate_assignment = True
-
