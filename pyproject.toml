@@ -19,6 +19,7 @@ dynamic = ["version"]
 dependencies = [
     'aind-data-schema==0.15.25',
     'awscli==1.29.79',
+    'pandas',
 ]
 
 [tool.setuptools.packages.find]

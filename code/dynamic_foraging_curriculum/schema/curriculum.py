@@ -35,14 +35,6 @@ class StageTransitions(BaseModel):
     from_stage: TrainingStage
     transition_rules: List[TransitionRule]
 
-# A hack to serialize TrainingStage in the dictionary keys
-def transform_dict_with_enum_keys(obj):
-    if isinstance(obj, Enum):
-        return obj.value
-    elif isinstance(obj, dict):
-        return {transform_dict_with_enum_keys(k): transform_dict_with_enum_keys(v) for k, v in obj.items()}
-    return obj
-
 class DynamicForagingCurriculum(BaseModel):
     ''' A full curriculum for the dynamic foraging task '''
     task: ForagingTask
@@ -77,6 +69,16 @@ class DynamicForagingCurriculum(BaseModel):
         transformed_dict = transform_dict_with_enum_keys(self.dict(by_alias=True))
         return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
     
+    
+# ------------------ Helpers ------------------
+# A hack to serialize TrainingStage in the dictionary keys
+def transform_dict_with_enum_keys(obj):
+    if isinstance(obj, Enum):
+        return obj.value
+    elif isinstance(obj, dict):
+        return {transform_dict_with_enum_keys(k): transform_dict_with_enum_keys(v) for k, v in obj.items()}
+    return obj
+
 
 #%%
 class AutomaticTraining:
