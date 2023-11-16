@@ -8,26 +8,26 @@ from aind_data_schema.session import Session
 from aind_data_schema.stimulus import BehaviorStimulation
 
 # %%
-class ForagingTasks(Enum):
+class ForagingTask(Enum):
     """Foraging tasks"""
     C1B1 = "Coupled Baiting"
     C0B0 = "Uncoupled Without Baiting"
     C1B0 = "Coupled Without Baiting"
     C0B1 = "Uncoupled Baiting"
     
-class AdvancedBlockModes(Enum):
+class AdvancedBlockMode(Enum):
     ''' Modes for advanced block '''
     OFF = "off"
     NOW = "now"
     ONCE = "once"
     
-class AutoWaterModes(Enum):
+class AutoWaterMode(Enum):
     ''' Modes for auto water '''
     NATURAL = "Natural"
     BOTH = "Both"
     HIGH_PRO = "High pro"
     
-class TrainingStages(Enum):
+class TrainingStage(Enum):
     STAGE_1 = "Stage 1"  # A special first stage that needed to be splitted into 1.1 and 1.2 on the GUI side
     STAGE_2 = "Stage 2"
     STAGE_3 = "Stage 3"
@@ -36,15 +36,16 @@ class TrainingStages(Enum):
     STAGE_FINAL = "Stage final"
     GRADUATED = "graduated"
 
-class DynamicForagingTrainingParameters(AindModel):
+class DynamicForagingTaskSchema(AindModel):
     ''' Training schema for the dynamic foraging GUI.
         This fully defines a set of training parameters that could be used in the GUI.
         For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
     '''
     # Metadata
-    task: ForagingTasks = Field(ForagingTasks.C1B1, title="task name")
+    schema_version: str = Field("0.1", title="Schema version", const=True)
     curriculum_version: str = Field("0.1", title="Curriculum version", const=True)
-    training_stage: float = Field(TrainingStages.STAGE_1, title="Training stages")
+    task: ForagingTask = Field(ForagingTask.C1B1, title="Task name")
+    training_stage: float = Field(TrainingStage.STAGE_1, title="Training stage")
     
     # --- Critical training parameters ---
     # Reward probability
@@ -67,7 +68,7 @@ class DynamicForagingTrainingParameters(AindModel):
     
     # Auto water
     AutoReward: bool = Field(True, title="Auto reward switch")
-    AutoWaterType: AutoWaterModes = Field(AutoWaterModes.NATURAL, title="Auto water mode")
+    AutoWaterType: AutoWaterMode = Field(AutoWaterMode.NATURAL, title="Auto water mode")
     Multiplier: float = Field(0.5, title="Multiplier for auto reward")
     Unrewarded: int = Field(0, title="Number of unrewarded trials before auto water")
     Ignored: int = Field(0, title="Number of ignored trials before auto water")
@@ -85,7 +86,7 @@ class DynamicForagingTrainingParameters(AindModel):
     StopIgnores: int = Field(20000, title="Number of ignored trials before stop")
     
     # Auto block
-    AdvancedBlockAuto: AdvancedBlockModes = Field(AdvancedBlockModes.OFF, title="Auto block mode")    
+    AdvancedBlockAuto: AdvancedBlockMode = Field(AdvancedBlockMode.OFF, title="Auto block mode")    
     SwitchThr: float = Field(0.5, title="Switch threshold for auto block")
     PointsInARow: int = Field(5, title="Points in a row for auto block")
                              
@@ -124,15 +125,4 @@ class DynamicForagingTrainingParameters(AindModel):
 
     class Config:
         validate_assignment = True
-
-
-
-# %%
-current_parameters = DynamicForagingTrainingParameters()
-
-
-# %%
-class Test():
-    a = 1
-
 
