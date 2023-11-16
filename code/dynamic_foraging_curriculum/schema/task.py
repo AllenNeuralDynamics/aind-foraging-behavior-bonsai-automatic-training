@@ -95,25 +95,25 @@ class DynamicForagingParas(AindModel):
     MaxTime: int = Field(90, title="Maximal session time (min)")
                              
     # Reward size. TODO: which one has higher priority? valve open time or volume?
-    RightValue: float = Field(0.05, title="Right reward size (valve open time in sec)")
-    LeftValue: float = Field(0.05, title="Left reward size (valve open time in sec)")
-    RightValue_volume: float = Field(5.00, title="Right reward size (volume)")
-    LeftValue_volume: float = Field(5.00, title="Left reward size (volume)")
+    RightValue: float = Field(0.05, title="Right reward size (valve open time in sec)", exclude_from_GUI=True)  # exclude_from_GUI means this will not sent to the GUI
+    LeftValue: float = Field(0.05, title="Left reward size (valve open time in sec)", exclude_from_GUI=True)
+    RightValue_volume: float = Field(5.00, title="Right reward size (volume)", exclude_from_GUI=True)
+    LeftValue_volume: float = Field(5.00, title="Left reward size (volume)", exclude_from_GUI=True)
     
     # --- Other GUI fields that will never be changed by the script (only clicked by the user) ---
-    NextBlock: bool = Field(False, title="(User clicks) Next block", const=True)
-    GiveLeft: bool = Field(False, title="(User clicks) Give left", const=True)
-    GiveRight: bool = Field(False, title="(User clicks) Give right", const=True)
-    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", const=True)
-    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", const=True)
-    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", const=True)
-    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", const=True)
-    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", const=True)
-    SaveTraining: bool = Field(True, title="(User clicks) Save training", const=True)
-    InitiallyInactiveN: int = Field(2, title="Initially inactive trials")   # TODO: What is this???
-    Randomness: str = Field("Exponential", title="Randomness mode", const=True)
+    NextBlock: bool = Field(False, title="(User clicks) Next block", const=True, exclude_from_GUI=True)
+    GiveLeft: bool = Field(False, title="(User clicks) Give left", const=True, exclude_from_GUI=True)
+    GiveRight: bool = Field(False, title="(User clicks) Give right", const=True, exclude_from_GUI=True)
+    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", const=True, exclude_from_GUI=True)
+    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", const=True, exclude_from_GUI=True)
+    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", const=True, exclude_from_GUI=True)
+    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", const=True, exclude_from_GUI=True)
+    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", const=True, exclude_from_GUI=True)
+    SaveTraining: bool = Field(True, title="(User clicks) Save training", const=True, exclude_from_GUI=True)
+    InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
+    Randomness: str = Field("Exponential", title="Randomness mode", const=True, exclude_from_GUI=True)
     
-    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", const=True)  # TODO:What is this???
+    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", const=True, exclude_from_GUI=True)  # TODO:What is this???
     
     def to_GUI_format(self) -> dict:
         '''Turn to the GUI format, especially convert numbers to strings
@@ -121,7 +121,8 @@ class DynamicForagingParas(AindModel):
         return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
                       value.value if isinstance(value, Enum) else  # Enum --> use its name
                       str(value))   # All other type -> str
-                for key, value in self.dict().items()}
+                for key, value in self.dict().items()
+                if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
 
     class Config:
         validate_assignment = True
