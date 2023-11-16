@@ -5,6 +5,7 @@ from enum import Enum, auto
 from typing import List, Callable, Dict
 import json
 import logging
+import numpy as np
 
 from dynamic_foraging_curriculum.schema.task import (DynamicForagingTaskSchema, TrainingStage,
                   ForagingTask)
@@ -16,8 +17,8 @@ logging.basicConfig(level=logging.INFO,
 # %%
 class Metrics(BaseModel):
     ''' Key metrics for automatic training '''
-    foraging_efficiency: float
-    finished_trials: int
+    foraging_efficiency: List[float]  # Full history of foraging efficiency
+    finished_trials: List[int]  # Full history of finished trials
     session_total: int
     session_at_current_stage: int
 
@@ -25,7 +26,7 @@ class Metrics(BaseModel):
 class TransitionRule(BaseModel):
     '''Individual transition rule'''
     to_stage: TrainingStage
-    condition: str = Field(..., title="Condition defined by string")
+    condition: Callable[[Metrics], bool] = Field(exclude=True)  # Exclude from JSON serialization
     description: str = ""
 
 
@@ -47,13 +48,7 @@ class Curriculum(BaseModel):
     task: ForagingTask
     curriculum_version: str = Field(
         "0.1", title="Curriculum version", const=True)
-    stage_transitions: Dict[TrainingStage, StageTransitions]
-
-    class Config:
-        json_encoders = {
-            ForagingTask: lambda v: v.value,
-            TrainingStage: lambda v: v.value,
-        }    
+    stage_transitions: Dict[TrainingStage, StageTransitions]  
         
     def evaluate_transitions(self, 
                              current_stage: TrainingStage, 
@@ -65,7 +60,7 @@ class Curriculum(BaseModel):
         # Evaluate the transition rules
         for transition in transition_rules:
             # Check if the condition is met in order
-            if eval(transition.condition, {}, {"metrics": metrics}):
+            if transition.condition(metrics):
                 return transition.to_stage
         return current_stage # By default, stay at the current stage
     
@@ -80,43 +75,7 @@ class Curriculum(BaseModel):
         # Transform the model dict before serialization
         transformed_dict = transform_dict_with_enum_keys(self.dict(by_alias=True))
         return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
-
-#%%
-coupled_baiting_curriculum = Curriculum(
-    task=ForagingTask.C1B1,
-    curriculum_version="0.1",
     
-    stage_transitions={
-        TrainingStage.STAGE_1: StageTransitions(
-            from_stage=TrainingStage.STAGE_1,
-            transition_rules=[
-                TransitionRule(
-                    description="Stage 1 -> Stage 2",
-                    to_stage=TrainingStage.STAGE_2,
-                    condition="metrics.finished_trials >= 100 and "
-                              "metrics.foraging_efficiency > 0.7"
-                    )
-                ]
-        ),
-
-        TrainingStage.STAGE_2: StageTransitions(
-            from_stage=TrainingStage.STAGE_2,
-            transition_rules=[
-                TransitionRule(
-                    to_stage=TrainingStage.STAGE_2,
-                    condition="metrics.finished_trials >= 100 and "
-                              "metrics.foraging_efficiency > 0.7"
-                ),
-                TransitionRule(
-                    to_stage=TrainingStage.STAGE_1,
-                    condition="metrics.finished_trials <= 100 or "
-                              "metrics.foraging_efficiency < 0.5"
-                ),
-            ]
-        )
-    }
-    # Add other stage transition_rules as needed
-)
 
 #%%
 class AutomaticTraining:

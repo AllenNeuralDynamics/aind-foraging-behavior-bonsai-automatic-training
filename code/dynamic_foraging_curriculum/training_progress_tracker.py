@@ -2,7 +2,7 @@
 import pandas as pd
 from datetime import datetime
 
-from schema.curriculum import add_mouse_tracker, TrainingManager, TrainingStage, Metrics
+from dynamic_foraging_curriculum.schema.curriculum import add_mouse_tracker, TrainingManager, TrainingStage, Metrics
 
 # Initialize DataFrame
 progress_df = pd.DataFrame(columns=['Date', 'MouseID', 'SessionCount', 'TrainingStage'])
