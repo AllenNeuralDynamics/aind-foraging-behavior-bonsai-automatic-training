@@ -27,11 +27,11 @@ class TransitionRule(BaseModel):
     '''Individual transition rule'''
     to_stage: TrainingStage
     condition: Callable[[Metrics], bool] = Field(exclude=True)  # Exclude from JSON serialization
-    description: str = ""
+    condition_description: str = ""
 
 
 class StageTransitions(BaseModel):
-    '''transition_rules for a certain stage'''
+    '''Transition rules for a certain stage'''
     from_stage: TrainingStage
     transition_rules: List[TransitionRule]
 
