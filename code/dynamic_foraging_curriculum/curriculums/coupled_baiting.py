@@ -1,15 +1,15 @@
 #%%
-from dynamic_foraging_curriculum.schema.curriculum import Curriculum, StageTransitions, TransitionRule, TrainingStage, Metrics, ForagingTask, transform_dict_with_enum_keys
-from dynamic_foraging_curriculum.schema.task import ForagingTask, TrainingStage
+from dynamic_foraging_curriculum.schema.curriculum import DynamicForagingCurriculum, StageTransitions, TransitionRule, TrainingStage, Metrics, ForagingTask, transform_dict_with_enum_keys
+from dynamic_foraging_curriculum.schema.task import ForagingTask, TrainingStage, DynamicForagingParas
 import numpy as np
 
 
 # %%
-coupled_baiting_curriculum = Curriculum(
+coupled_baiting_curriculum = DynamicForagingCurriculum(
     task=ForagingTask.C1B1,
     curriculum_version="0.1",
     
-    stage_transitions={
+    curriculum={
         TrainingStage.STAGE_1: StageTransitions(
             from_stage=TrainingStage.STAGE_1,
             transition_rules=[
@@ -45,8 +45,11 @@ coupled_baiting_curriculum = Curriculum(
                 ),
             ]
         )
+    },
+    
+    parameters={
+        TrainingStage.STAGE_1: DynamicForagingParas(),
     }
-    # Add other stage transition_rules as needed
 )
 
 # %%

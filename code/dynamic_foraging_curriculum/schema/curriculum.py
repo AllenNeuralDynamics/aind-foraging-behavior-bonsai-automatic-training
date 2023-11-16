@@ -7,7 +7,7 @@ import json
 import logging
 import numpy as np
 
-from dynamic_foraging_curriculum.schema.task import (DynamicForagingTaskSchema, TrainingStage,
+from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
                   ForagingTask)
 
 logging.basicConfig(level=logging.INFO,
@@ -43,19 +43,20 @@ def transform_dict_with_enum_keys(obj):
         return {transform_dict_with_enum_keys(k): transform_dict_with_enum_keys(v) for k, v in obj.items()}
     return obj
 
-class Curriculum(BaseModel):
+class DynamicForagingCurriculum(BaseModel):
     ''' A full curriculum for the dynamic foraging task '''
     task: ForagingTask
     curriculum_version: str = Field(
         "0.1", title="Curriculum version", const=True)
-    stage_transitions: Dict[TrainingStage, StageTransitions]  
+    curriculum: Dict[TrainingStage, StageTransitions]         # Core automatic training logic
+    parameters: Dict[TrainingStage, DynamicForagingParas]     # Core autoamtic training parameter settings
         
     def evaluate_transitions(self, 
                              current_stage: TrainingStage, 
                              metrics: Metrics) -> TrainingStage:
         ''' Evaluate the transition rules based on the current stage and metrics '''
         # Get transition rules for the current stage
-        transition_rules = self.stage_transitions[current_stage].transition_rules
+        transition_rules = self.curriculum[current_stage].transition_rules
         
         # Evaluate the transition rules
         for transition in transition_rules:

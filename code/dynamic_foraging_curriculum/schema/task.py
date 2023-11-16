@@ -36,7 +36,7 @@ class TrainingStage(Enum):
     STAGE_FINAL = "Stage final"
     GRADUATED = "Graduated"
 
-class DynamicForagingTaskSchema(AindModel):
+class DynamicForagingParas(AindModel):
     ''' Training schema for the dynamic foraging GUI.
         This fully defines a set of training parameters that could be used in the GUI.
         For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
