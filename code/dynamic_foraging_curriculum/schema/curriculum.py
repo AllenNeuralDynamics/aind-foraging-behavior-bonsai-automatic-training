@@ -6,7 +6,7 @@ from typing import List, Callable, Dict
 import json
 import logging
 
-from task import (DynamicForagingTaskSchema, TrainingStage,
+from dynamic_foraging_curriculum.schema.task import (DynamicForagingTaskSchema, TrainingStage,
                   ForagingTask)
 
 logging.basicConfig(level=logging.INFO,
@@ -81,9 +81,8 @@ class Curriculum(BaseModel):
         transformed_dict = transform_dict_with_enum_keys(self.dict(by_alias=True))
         return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
 
-
-# %%
-curriculum = Curriculum(
+#%%
+coupled_baiting_curriculum = Curriculum(
     task=ForagingTask.C1B1,
     curriculum_version="0.1",
     
@@ -119,11 +118,7 @@ curriculum = Curriculum(
     # Add other stage transition_rules as needed
 )
 
-# %%
-current_stage: TrainingStage
-metrics: Metrics
-
-
+#%%
 class AutomaticTraining:
 
     def update(self):

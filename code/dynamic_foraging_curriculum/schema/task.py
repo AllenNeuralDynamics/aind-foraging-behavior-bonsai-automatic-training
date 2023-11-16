@@ -34,7 +34,7 @@ class TrainingStage(Enum):
     STAGE_4 = "Stage 4"
     STAGE_5 = "Stage 5"
     STAGE_FINAL = "Stage final"
-    GRADUATED = "graduated"
+    GRADUATED = "Graduated"
 
 class DynamicForagingTaskSchema(AindModel):
     ''' Training schema for the dynamic foraging GUI.
