@@ -6,8 +6,8 @@ from typing import List, Callable, Dict
 import json
 import logging
 
-from schema_training import (DynamicForagingTaskSchema, TrainingStage,
-                             ForagingTask)
+from task import (DynamicForagingTaskSchema, TrainingStage,
+                  ForagingTask)
 
 logging.basicConfig(level=logging.INFO,
                     filename='curriculum.log',

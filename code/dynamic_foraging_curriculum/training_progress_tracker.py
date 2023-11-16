@@ -1,7 +1,8 @@
 #%%
 import pandas as pd
-from curriculum import add_mouse_tracker, TrainingManager, TrainingStage, Metrics
 from datetime import datetime
+
+from schema.curriculum import add_mouse_tracker, TrainingManager, TrainingStage, Metrics
 
 # Initialize DataFrame
 progress_df = pd.DataFrame(columns=['Date', 'MouseID', 'SessionCount', 'TrainingStage'])
