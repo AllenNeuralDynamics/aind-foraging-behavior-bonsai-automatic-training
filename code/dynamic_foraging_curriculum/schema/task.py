@@ -46,6 +46,7 @@ class DynamicForagingParas(AindModel):
     curriculum_version: str = Field("0.1", title="Curriculum version", const=True)
     task: ForagingTask = Field(ForagingTask.C1B1, title="Task name")
     training_stage: float = Field(TrainingStage.STAGE_1, title="Training stage")
+    description: str = Field("", title='Description of this set of parameters')
     
     # --- Critical training parameters ---
     # Reward probability
