@@ -4,9 +4,10 @@ https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHk
 '''
 
 # %%
+import numpy as np
+
 from dynamic_foraging_curriculum.schema.curriculum import DynamicForagingCurriculum, StageTransitions, TransitionRule, TrainingStage, Metrics, ForagingTask, transform_dict_with_enum_keys
 from dynamic_foraging_curriculum.schema.task import ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
-import numpy as np
 
 curriculum_version = "0.1"
 schema_version = "1.0"
@@ -28,23 +29,47 @@ paras_stage_1 = DynamicForagingParas(
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
-    # Essentials
+    # -- Essentials --
     # p_sum = 0.8, p_ratio = [1:0]
-    BaseRewardSum=0.8, RewardFamily=3, RewardParisN=1,
+    BaseRewardSum=0.8, 
+    RewardFamily=3, 
+    RewardParisN=1,
+    
     # block = [10, 20, 5]
-    BlockMin=10, BlockMax=20, BlockBeta=5, BlockMinReward=0,
+    BlockMin=10, 
+    BlockMax=20, 
+    BlockBeta=5, 
+    BlockMinReward=0,
+    
     # Small ITI at the beginning to better engage the animal
-    ITIMin=1, ITIMax=7, ITIBeta=3,
+    ITIMin=1, 
+    ITIMax=7, 
+    ITIBeta=3,
+    
     # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
-    DelayMin=0.5, DelayMax=0.5, DelayBeta=0,
+    DelayMin=0.5, 
+    DelayMax=0.5, 
+    DelayBeta=0,
 
-    # Within session automation
-    AutoReward=True, AutoWaterType=AutoWaterMode.NATURAL, Unrewarded=5, Ignored=5, Multiplier=0.5,  # Auto water
-    AdvancedBlockAuto=AdvancedBlockMode.NOW, SwitchThr=0.5, PointsInARow=5,  # Auto block
+    # -- Within session automation --
+    # Auto water
+    AutoReward=True, 
+    AutoWaterType=AutoWaterMode.NATURAL, 
+    Unrewarded=5, 
+    Ignored=5, 
+    Multiplier=0.5,  
+    
+    # Auto block
+    AdvancedBlockAuto=AdvancedBlockMode.NOW,
+    SwitchThr=0.5,
+    PointsInARow=5,  
+    
     # Auto stop; set StopIgnores to a large number at the beginning
-    MaxTrial=1000, MaxTime=90, StopIgnores=20000,
+    MaxTrial=1000, 
+    MaxTime=90, 
+    StopIgnores=20000,
 
-    # Miscs
+    # -- Miscs --
     ResponseTime=5, RewardConsumeTime=3,  # Very long response time at the beginning
     UncoupledReward="",  # Only valid in uncoupled task
 )
@@ -54,19 +79,34 @@ paras_stage_2 = paras_stage_1.copy(update=dict(
     training_stage=TrainingStage.STAGE_2,
     description="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])",
 
-    # --- Only include changes ---
-    # Essentials
+    # --- Only include changes compared to stage_1 ---
+    # -- Essentials --
     # p_sum = 0.8 --> 0.6, p_ratio = [1:0] -> [8:1]
-    BaseRewardSum=0.6, RewardFamily=1, RewardParisN=1,
+    BaseRewardSum=0.6, 
+    RewardFamily=1, 
+    RewardParisN=1,
+    
     # block length [10, 20, 5] --> [10, 40, 10]
-    BlockMin=10, BlockMax=40, BlockBeta=10,
-    ITIMin=2, ITIMax=10, ITIBeta=5,  # ITI [1, 7, 3] --> [2, 10, 5]
-    DelayMin=1.0, DelayMax=1.0,  # Delay 0.5 --> 1.0
+    BlockMin=10, 
+    BlockMax=40,
+    BlockBeta=10,
+    
+    # ITI [1, 7, 3] --> [2, 10, 5]
+    ITIMin=2, 
+    ITIMax=10, 
+    ITIBeta=5,  
+    
+    # Delay 0.5 --> 1.0
+    DelayMin=1.0, 
+    DelayMax=1.0,  
 
-    # Within session automation
+    # -- Within session automation --
     # Decrease auto water: unrewarded 5 --> 10, ignored 5 --> 10
-    Unrewarded=10, Ignored=10,
-    SwitchThr=0.6,  # Increase auto block switch threshold: 0.5 --> 0.6
+    Unrewarded=10, 
+    Ignored=10,
+    
+    # Increase auto block switch threshold: 0.5 --> 0.6
+    SwitchThr=0.6,  
     StopIgnores=50,  # Auto stop on ignores-in-a-row starts to take effect
 
     # Miscs
@@ -78,12 +118,23 @@ paras_stage_3 = paras_stage_2.copy(update=dict(
     training_stage=TrainingStage.STAGE_3,
     description="Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])",
 
-    # Essentials
-    BaseRewardSum=0.45,  # p_sum = 0.6 --> 0.45, p_ratio still [8:1]
+    # -- Essentials --
+    # p_sum = 0.6 --> 0.45, p_ratio still [8:1]
+    BaseRewardSum=0.45, 
+    
     # block length [10, 40, 10] --> [20, 60, 20]
-    BlockMin=20, BlockMax=60, BlockBeta=20,
-    ITIMin=3, ITIMax=15, ITIBeta=5,  # ITI [2, 10, 5] --> [3, 15, 5]
-    DelayMin=1.5, DelayMax=1.5,  # Delay 1.0 --> 1.5
+    BlockMin=20, 
+    BlockMax=60, 
+    BlockBeta=20,
+    
+    # ITI [2, 10, 5] --> [3, 15, 5]
+    ITIMin=3,
+    ITIMax=15, 
+    ITIBeta=5,
+    
+    # Delay 1.0 --> 1.5
+    DelayMin=1.5, 
+    DelayMax=1.5,  
 
     # Miscs
     ResponseTime=2,  # Decrease response time:  3 --> 2
@@ -97,21 +148,37 @@ paras_stage_final = paras_stage_3.copy(update=dict(
     # --- Here I explicitly list all parameters again just for clarity ---
     # Essentials
     # p_sum = 0.45, p_ratio = [8:1] --> [8:1], [6:1], [3:1], [1:1]
-    BaseRewardSum=0.45, RewardFamily=1, RewardParisN=4,
+    BaseRewardSum=0.45, 
+    RewardFamily=1, 
+    RewardParisN=4,
+    
     # block = [10, 20, 5] (mean ~ 33 trials)
-    BlockMin=20, BlockMax=60, BlockBeta=20, BlockMinReward=0,
+    BlockMin=20, 
+    BlockMax=60, 
+    BlockBeta=20, 
+    BlockMinReward=0,
+    
     # ITI [3, 15, 5] --> [3, 30, 5] (mean ~ 7.9 s, Bari et al. 2019)
-    ITIMin=3, ITIMax=30, ITIBeta=5,
+    ITIMin=3, 
+    ITIMax=30, 
+    ITIBeta=5,
+    
     # Delay 1.5 --> 2.0 (Bari et al. 2019)
-    DelayMin=2.0, DelayMax=2.0, DelayBeta=0,
+    DelayMin=2.0, 
+    DelayMax=2.0, 
+    DelayBeta=0,
 
     # Within session automation
     AutoReward=False,  # Turn off auto water
     AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
-    MaxTrial=1000, MaxTime=90, StopIgnores=50,
+    
+    MaxTrial=1000, 
+    MaxTime=90, 
+    StopIgnores=50,
 
     # Miscs
-    ResponseTime=2, RewardConsumeTime=3,  # Very long response time at the beginning
+    ResponseTime=2, 
+    RewardConsumeTime=3,
     UncoupledReward="",  # Only valid in uncoupled task
 ))
 
