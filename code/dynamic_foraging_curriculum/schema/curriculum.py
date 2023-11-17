@@ -11,10 +11,6 @@ from pydantic.json import pydantic_encoder
 from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
                                                      ForagingTask)
 
-logging.basicConfig(level=logging.INFO,
-                    filename='curriculum.log',
-                    format='%(asctime)s - %(levelname)s - %(message)s')
-
 # %%
 
 class Metrics(BaseModel):
@@ -24,9 +20,14 @@ class Metrics(BaseModel):
     session_total: int
     session_at_current_stage: int
 
+class Decision(Enum):
+    STAY: str = "stay"
+    PROGRESS: str = "progress"
+    ROLLBACK: str = "rollback"
 
 class TransitionRule(BaseModel):
     '''Individual transition rule'''
+    decision: Decision
     to_stage: TrainingStage
     condition: Callable[[Metrics], bool] = Field(
         exclude=True)  # Exclude from JSON serialization
@@ -44,7 +45,7 @@ class DynamicForagingCurriculum(BaseModel):
     task: ForagingTask
     curriculum_version: str = Field("0.1", title="Curriculum version")
     # Corresponding to the GUI version
-    schema_version: str = Field("0.1", title="Schema version")
+    task_schema_version: str = Field("0.1", title="Task schema version")
 
     # Core autoamtic training parameter settings
     parameters: Dict[TrainingStage, DynamicForagingParas]
@@ -87,41 +88,3 @@ def transform_dict_with_enum_keys(obj):
     elif isinstance(obj, dict):
         return {transform_dict_with_enum_keys(k): transform_dict_with_enum_keys(v) for k, v in obj.items()}
     return obj
-
-
-# %%
-class AutomaticTraining:
-
-    def update(self):
-        ''' Update all mice in the manager'''
-        for mouse_id, mouse_tracker in self.mice.items():
-            mouse_tracker.evaluate_transitions()
-
-    # Function to update progress for a mouse
-    def update_progress(mouse_id: str, session_count: int, metrics: Metrics):
-        # Update the tracker's metrics
-        manager.mice[mouse_id].metrics = metrics
-        manager.update()
-
-        logging.info(
-            f"Mouse {self.mouse_id} transitioned from {current_stage.name} to {next_stage}")
-        logging.info(
-            f"Mouse {self.mouse_id} stayed at {self.current_stage.name}")
-
-        # Get the current stage
-        current_stage = manager.mice[mouse_id].current_stage
-
-        # Log the progress in the DataFrame
-        today = datetime.now().strftime('%Y-%m-%d')
-        progress_df.loc[len(progress_df)] = [today, mouse_id,
-                                             session_count, current_stage.name]
-
-    # Function to save progress to a CSV
-    def save_progress_to_csv(filepath: str):
-        progress_df.to_csv(filepath, index=False)
-
-    # Function to load progress from a CSV
-    def load_progress_from_csv(filepath: str):
-        return pd.read_csv(filepath)
-
-# %%
