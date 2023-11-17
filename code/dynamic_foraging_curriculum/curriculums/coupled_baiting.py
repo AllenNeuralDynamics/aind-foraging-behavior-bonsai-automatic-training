@@ -6,11 +6,16 @@ https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHk
 # %%
 import numpy as np
 
-from dynamic_foraging_curriculum.schema.curriculum import DynamicForagingCurriculum, StageTransitions, TransitionRule, TrainingStage, Metrics, ForagingTask, transform_dict_with_enum_keys
-from dynamic_foraging_curriculum.schema.task import ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
+from dynamic_foraging_curriculum.schema.curriculum import (
+    DynamicForagingCurriculum, StageTransitions, TransitionRule, 
+    TrainingStage, Metrics, Decision, ForagingTask, 
+)
+from dynamic_foraging_curriculum.schema.task import (
+    ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
+)
 
 curriculum_version = "0.1"
-schema_version = "1.0"
+task_schema_version = "1.0"
 
 # --- Parameters ---
 # Notes on the STAGE_1:
@@ -24,7 +29,7 @@ schema_version = "1.0"
 paras_stage_1 = DynamicForagingParas(
     # Metainfo
     curriculum_version=curriculum_version,
-    schema_version=schema_version,
+    task_schema_version=task_schema_version,
     task=ForagingTask.C1B1,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
@@ -188,7 +193,7 @@ paras_stage_final = paras_stage_3.copy(update=dict(
 coupled_baiting_curriculum = DynamicForagingCurriculum(
     task=ForagingTask.C1B1,
     curriculum_version=curriculum_version,
-    schema_version=schema_version,
+    task_schema_version=task_schema_version,
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,
@@ -202,6 +207,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
             from_stage=TrainingStage.STAGE_1,
             transition_rules=[
                 TransitionRule(
+                    decision=Decision.PROGRESS,
                     to_stage=TrainingStage.STAGE_2,
                     condition_description="Finished trials >= 200 and efficiency >= 0.6",
                     condition=lambda metrics:
@@ -216,6 +222,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
             from_stage=TrainingStage.STAGE_2,
             transition_rules=[
                 TransitionRule(
+                    decision=Decision.PROGRESS,
                     to_stage=TrainingStage.STAGE_3,
                     condition_description="Finished trials >= 300 and efficiency > 0.65",
                     condition=lambda metrics:
@@ -225,6 +232,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
                         metrics.foraging_efficiency[-1] >= 0.65,
                 ),
                 TransitionRule(
+                    decision=Decision.ROLLBACK,
                     to_stage=TrainingStage.STAGE_1,
                     condition_description="Finished trials < 200 or efficiency < 0.55",
                     condition=lambda metrics:
@@ -239,6 +247,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
             from_stage=TrainingStage.STAGE_3,
             transition_rules=[
                 TransitionRule(
+                    decision=Decision.PROGRESS,
                     to_stage=TrainingStage.STAGE_FINAL,
                     condition_description="Finished trials >= 400 and efficiency >= 0.7",
                     condition=lambda metrics:
@@ -247,6 +256,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
                         metrics.foraging_efficiency[-1] >= 0.7,
                 ),
                 TransitionRule(
+                    decision=Decision.ROLLBACK,
                     to_stage=TrainingStage.STAGE_2,
                     condition_description="Finished trials < 200 or efficiency < 0.6",
                     condition=lambda metrics:
@@ -263,6 +273,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
             transition_rules=[
                 TransitionRule(
                     # For graduation, obviously we need more requirements.
+                    decision=Decision.PROGRESS,
                     to_stage=TrainingStage.GRADUATED,
                     condition_description="For recent 5 sessions, mean finished trials >= 500 and efficiency >= 0.7",
                     condition=lambda metrics:
@@ -275,6 +286,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
                         np.mean(metrics.foraging_efficiency[-5:]) >= 0.7, # Stable efficiency >= 0.7 (should be higher?)
                 ),
                 TransitionRule(
+                    decision=Decision.ROLLBACK,
                     to_stage=TrainingStage.STAGE_3,
                     condition_description="For recent 2 sessions, mean finished trials < 400 or efficiency < 0.6",
                     condition=lambda metrics:

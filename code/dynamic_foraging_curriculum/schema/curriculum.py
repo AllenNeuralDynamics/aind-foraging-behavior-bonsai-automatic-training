@@ -63,8 +63,8 @@ class DynamicForagingCurriculum(BaseModel):
         for transition in transition_rules:
             # Check if the condition is met in order
             if transition.condition(metrics):
-                return transition.to_stage
-        return current_stage  # By default, stay at the current stage
+                return [transition.decision, transition.to_stage]
+        return [Decision.STAY, current_stage]  # By default, stay at the current stage
 
     def save_to_json(self, path: str = ""):
         filename = path + \
