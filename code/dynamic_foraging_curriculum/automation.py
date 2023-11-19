@@ -25,36 +25,23 @@ class CurriculumManager:
 
     def update(self):
         """update each mouse's training stage"""
+        # Diff the to dataframe to find the new mice / new sessions
+        
         # Loop over all mouse
-
-
-def update(self):
-    ''' Update all mice in the manager'''
-    for mouse_id, mouse_tracker in self.mice.items():
-        mouse_tracker.evaluate_transitions()
-
-# Function to update progress for a mouse
-
-
-def update_progress(mouse_id: str, session_count: int, metrics: Metrics):
-    # Update the tracker's metrics
-    manager.mice[mouse_id].metrics = metrics
-    manager.update()
-
-    logging.info(
-        f"Mouse {self.mouse_id} transitioned from {current_stage.name} to {next_stage}")
-    logging.info(
-        f"Mouse {self.mouse_id} stayed at {self.current_stage.name}")
-
-    # Get the current stage
-    current_stage = manager.mice[mouse_id].current_stage
-
-    # Log the progress in the DataFrame
-    today = datetime.now().strftime('%Y-%m-%d')
-    progress_df.loc[len(progress_df)] = [today, mouse_id,
-                                         session_count, current_stage.name]
-
-# Function to save progress to a CSV
+        
+            # For each session of the mouse
+            # Assuming STAGE suggestions were followed (how to get feedback from the GUI about the actual stages uesd?)
+            # Generate all decisions and next_stages
+            
+        # Upload the df_master_path
+             
+        pass
+    
+    def plot(self):
+        # Plot the training history of a mouse
+        
+        pass
+    
 
 # %%
 
