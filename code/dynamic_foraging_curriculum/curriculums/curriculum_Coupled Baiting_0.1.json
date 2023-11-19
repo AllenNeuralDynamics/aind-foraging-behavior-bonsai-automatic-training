@@ -1,60 +1,10 @@
 {
     "task": "Coupled Baiting",
     "curriculum_version": "0.1",
-    "schema_version": "1.0",
-    "curriculum": {
-        "Stage 1": {
-            "from_stage": "Stage 1",
-            "transition_rules": [
-                {
-                    "to_stage": "Stage 2",
-                    "condition_description": "Finished trials >= 200 and efficiency >= 0.6"
-                }
-            ]
-        },
-        "Stage 2": {
-            "from_stage": "Stage 2",
-            "transition_rules": [
-                {
-                    "to_stage": "Stage 3",
-                    "condition_description": "Finished trials >= 300 and efficiency > 0.65"
-                },
-                {
-                    "to_stage": "Stage 1",
-                    "condition_description": "Finished trials < 200 or efficiency < 0.55"
-                }
-            ]
-        },
-        "Stage 3": {
-            "from_stage": "Stage 3",
-            "transition_rules": [
-                {
-                    "to_stage": "Stage final",
-                    "condition_description": "Finished trials >= 400 and efficiency >= 0.7"
-                },
-                {
-                    "to_stage": "Stage 2",
-                    "condition_description": "Finished trials < 200 or efficiency < 0.6"
-                }
-            ]
-        },
-        "Stage final": {
-            "from_stage": "Stage final",
-            "transition_rules": [
-                {
-                    "to_stage": "Graduated",
-                    "condition_description": "For recent 5 sessions, mean finished trials >= 500 and efficiency >= 0.7"
-                },
-                {
-                    "to_stage": "Stage 3",
-                    "condition_description": "For recent 2 sessions, mean finished trials < 400 or efficiency < 0.6"
-                }
-            ]
-        }
-    },
+    "task_schema_version": "1.0",
     "parameters": {
         "Stage 1": {
-            "schema_version": "1.0",
+            "task_schema_version": "1.0",
             "curriculum_version": "0.1",
             "task": "Coupled Baiting",
             "training_stage": "Stage 1",
@@ -105,7 +55,7 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage 2": {
-            "schema_version": "1.0",
+            "task_schema_version": "1.0",
             "curriculum_version": "0.1",
             "task": "Coupled Baiting",
             "training_stage": "Stage 2",
@@ -156,7 +106,7 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage 3": {
-            "schema_version": "1.0",
+            "task_schema_version": "1.0",
             "curriculum_version": "0.1",
             "task": "Coupled Baiting",
             "training_stage": "Stage 3",
@@ -207,7 +157,7 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage final": {
-            "schema_version": "1.0",
+            "task_schema_version": "1.0",
             "curriculum_version": "0.1",
             "task": "Coupled Baiting",
             "training_stage": "Stage final",
@@ -256,6 +206,70 @@
             "InitiallyInactiveN": 2,
             "Randomness": "Exponential",
             "qt_spinbox_lineedit": 5.0
+        }
+    },
+    "curriculum": {
+        "Stage 1": {
+            "from_stage": "Stage 1",
+            "transition_rules": [
+                {
+                    "decision": "progress",
+                    "to_stage": "Stage 2",
+                    "condition": "lambda metrics:\n                        metrics.finished_trials[-1] >= 200\n                        and\n                        metrics.foraging_efficiency[-1] >= 0.6\n                        ",
+                    "condition_description": "Finished trials >= 200 and efficiency >= 0.6"
+                }
+            ]
+        },
+        "Stage 2": {
+            "from_stage": "Stage 2",
+            "transition_rules": [
+                {
+                    "decision": "progress",
+                    "to_stage": "Stage 3",
+                    "condition": "lambda metrics:\n                        metrics.finished_trials[-1] >= 300\n                        and\n                        metrics.foraging_efficiency[-1] >= 0.65\n                        ",
+                    "condition_description": "Finished trials >= 300 and efficiency > 0.65"
+                },
+                {
+                    "decision": "rollback",
+                    "to_stage": "Stage 1",
+                    "condition": "lambda metrics:\n                        metrics.finished_trials[-1] < 200\n                        or\n                        metrics.foraging_efficiency[-1] < 0.55\n                        ",
+                    "condition_description": "Finished trials < 200 or efficiency < 0.55"
+                }
+            ]
+        },
+        "Stage 3": {
+            "from_stage": "Stage 3",
+            "transition_rules": [
+                {
+                    "decision": "progress",
+                    "to_stage": "Stage final",
+                    "condition": "lambda metrics:\n                        metrics.finished_trials[-1] >= 400\n                        and\n                        metrics.foraging_efficiency[-1] >= 0.7\n                        ",
+                    "condition_description": "Finished trials >= 400 and efficiency >= 0.7"
+                },
+                {
+                    "decision": "rollback",
+                    "to_stage": "Stage 2",
+                    "condition": "lambda metrics:\n                        metrics.finished_trials[-1] < 200\n                        or\n                        metrics.foraging_efficiency[-1] < 0.6\n                        ",
+                    "condition_description": "Finished trials < 200 or efficiency < 0.6"
+                }
+            ]
+        },
+        "Stage final": {
+            "from_stage": "Stage final",
+            "transition_rules": [
+                {
+                    "decision": "progress",
+                    "to_stage": "Graduated",
+                    "condition": "lambda metrics:\n                        metrics.session_total >= 10 \n                        and\n                        metrics.session_at_current_stage >= 5\n                        and\n                        np.mean(metrics.finished_trials[-5:]) >= 500\n                        and\n                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.7\n                        ",
+                    "condition_description": "For recent 5 sessions, mean finished trials >= 500 and efficiency >= 0.7"
+                },
+                {
+                    "decision": "rollback",
+                    "to_stage": "Stage 3",
+                    "condition": "lambda metrics:\n                        np.mean(metrics.finished_trials[-2:]) < 400\n                        or\n                        np.mean(metrics.foraging_efficiency[-2:]) < 0.6\n                        ",
+                    "condition_description": "For recent 2 sessions, mean finished trials < 400 or efficiency < 0.6"
+                }
+            ]
         }
     }
 }

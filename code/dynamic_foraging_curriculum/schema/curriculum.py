@@ -1,6 +1,7 @@
 # %%
 import json
 import logging
+import os
 import numpy as np
 from enum import Enum, auto
 from typing import List, Callable, Dict
@@ -29,8 +30,7 @@ class TransitionRule(BaseModel):
     '''Individual transition rule'''
     decision: Decision
     to_stage: TrainingStage
-    condition: Callable[[Metrics], bool] = Field(
-        exclude=True)  # Exclude from JSON serialization
+    condition: str = ""  # A string for lambda function
     condition_description: str = ""
 
 
@@ -62,11 +62,14 @@ class DynamicForagingCurriculum(BaseModel):
         # Evaluate the transition rules
         for transition in transition_rules:
             # Check if the condition is met in order
-            if transition.condition(metrics):
-                return [transition.decision, transition.to_stage]
-        return [Decision.STAY, current_stage]  # By default, stay at the current stage
+            func = eval(transition.condition.replace("\n", ""))  # Turn the string into a lambda function 
+            if func(metrics):  
+                return transition.decision, transition.to_stage
+        return Decision.STAY, current_stage  # By default, stay at the current stage
 
     def save_to_json(self, path: str = ""):
+        if path == "":
+            path = os.path.dirname(__file__)
         filename = path + \
             f"/curriculum_{self.task.value}_{self.curriculum_version}.json"
 
