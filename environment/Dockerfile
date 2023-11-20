@@ -1,4 +1,4 @@
-# hash:sha256:2b02e2cf36196de41c803e11c7ebfa4337222d393061b01ce77eee0f6293638f
+# hash:sha256:290ce7b36fd52004d63a48f2936e7c1a6a2302966073ccc9ebf8f3d2d6ea3c4f
 FROM registry.codeocean.allenneuraldynamics.org/codeocean/jupyterlab:3.0.9-miniconda4.9.2-python3.8-ubuntu20.04
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -9,8 +9,8 @@ COPY git-askpass /
 
 RUN pip install -U --no-cache-dir \
     aind-data-schema==0.15.25 \
-    awscli==1.29.79 \
-    pydantic==2.4.2
+    awscli==1.29.79\
+	pandas
 
 ADD "https://github.com/coder/code-server/releases/download/v4.9.0/code-server-4.9.0-linux-amd64.tar.gz" /.code-server/code-server.tar.gz
 	
