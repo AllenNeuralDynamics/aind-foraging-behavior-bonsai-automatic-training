@@ -56,6 +56,10 @@ class DynamicForagingCurriculum(BaseModel):
                              current_stage: TrainingStage,
                              metrics: Metrics) -> TrainingStage:
         ''' Evaluate the transition rules based on the current stage and metrics '''
+        # Return if already graduated
+        if current_stage == TrainingStage.GRADUATED:
+            return Decision.STAY, current_stage
+        
         # Get transition rules for the current stage
         transition_rules = self.curriculum[current_stage].transition_rules
 
