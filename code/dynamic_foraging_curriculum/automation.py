@@ -64,7 +64,6 @@ class CurriculumManager:
     def add_and_evaluate_session(self, subject_id, session):
         """ Add a session to the curriculum manager and evaluate the transition """
 
-        df = self.df_manager  # Alias
         df_this = self.df_master.query(
             f'subject_id == {subject_id} and session == {session}').iloc[0]
 
@@ -90,7 +89,7 @@ class CurriculumManager:
 
         # Count session_at_current_stage
         session_at_current_stage = self._count_session_at_current_stage(
-            df, subject_id, current_stage)
+            self.df_manager, subject_id, current_stage)
 
         # Evaluate
         metrics = dict(**performance,
@@ -103,7 +102,7 @@ class CurriculumManager:
             metrics=Metrics(**metrics))
 
         # Add to the manager
-        df.loc[len(df)] = dict(
+        self.df_manager.loc[len(self.df_manager)] = dict(
             subject_id=subject_id,
             session_date=df_this.session_date,
             session=session,
@@ -118,8 +117,6 @@ class CurriculumManager:
             decision=decision.name,
             next_stage_suggested=next_stage_suggested.name
         )
-
-        self.df_manager = df
 
     def update(self):
         """update each mouse's training stage"""
@@ -150,6 +147,9 @@ class CurriculumManager:
         pass
 
 
-manager = CurriculumManager()
-manager.df_manager
-manager.update()
+if __name__ == "__main__":
+    manager = CurriculumManager()
+    manager.df_manager
+    manager.update()
+
+# %%
