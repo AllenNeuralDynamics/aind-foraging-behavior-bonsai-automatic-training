@@ -54,10 +54,10 @@ class CurriculumManager:
         """ Count the number of sessions at the current stage (reset after rolling back) """
         session_at_current_stage = 1
         for stage in reversed(df.query(f'subject_id == {subject_id}')['current_stage_suggested'].to_list()):
-            if stage != current_stage:
-                break
-            else:
+            if stage == current_stage:
                 session_at_current_stage += 1
+            else:
+                break
 
         return session_at_current_stage
 
@@ -100,6 +100,11 @@ class CurriculumManager:
         decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage],
             metrics=Metrics(**metrics))
+        
+        # Logging
+        logger.info(f"{subject_id}, {df_this.session_date}, session {session}: " +
+                    (f"STAY at {current_stage}" if decision.name == 'STAY' 
+                    else f"{decision.name} {current_stage} --> {next_stage_suggested.name}"))
 
         # Add to the manager
         self.df_manager.loc[len(self.df_manager)] = dict(
