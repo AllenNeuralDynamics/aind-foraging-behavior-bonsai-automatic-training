@@ -144,7 +144,7 @@ class CurriculumManager:
 
     def compute_stats(self):
         """compute simple stats"""
-        df_stats = df_statistics = self.df_manager.groupby(
+        df_stats = self.df_manager.groupby(
             ['subject_id', 'current_stage_suggested'], sort=False
         )['session'].agg([('session_spent', 'count'),  # Number of sessions spent at this stage
                           ('first_entry', 'min'),  # First entry to this stage
