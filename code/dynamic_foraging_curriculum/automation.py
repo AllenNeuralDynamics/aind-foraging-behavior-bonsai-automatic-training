@@ -25,7 +25,7 @@ class CurriculumManager:
 
         # Tweaks of the master table
         self.df_master = self.df_master.sort_values(
-            by=['subject_id', 'session'], ascending=True).reset_index().iloc[:100]
+            by=['subject_id', 'session'], ascending=True).reset_index()[:100]
         self.task_mapper = {'coupled_block_baiting': 'Coupled Baiting'}
 
         # Load curriculum manager table; if not exist, create a new one
@@ -100,11 +100,11 @@ class CurriculumManager:
         decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage],
             metrics=Metrics(**metrics))
-        
+
         # Logging
         logger.info(f"{subject_id}, {df_this.session_date}, session {session}: " +
-                    (f"STAY at {current_stage}" if decision.name == 'STAY' 
-                    else f"{decision.name} {current_stage} --> {next_stage_suggested.name}"))
+                    (f"STAY at {current_stage}" if decision.name == 'STAY'
+                     else f"{decision.name} {current_stage} --> {next_stage_suggested.name}"))
 
         # Add to the manager
         self.df_manager.loc[len(self.df_manager)] = dict(
@@ -122,6 +122,36 @@ class CurriculumManager:
             decision=decision.name,
             next_stage_suggested=next_stage_suggested.name
         )
+
+    def compute_stats(self):
+        """compute simple stats"""
+        df_stats = df_statistics = self.df_manager.groupby(
+            ['subject_id', 'current_stage_suggested'], sort=False
+        )['session'].agg([('session_spent', 'count'),  # Number of sessions spent at this stage
+                          ('first_entry', 'min'),  # First entry to this stage
+                          # Last leave from this stage (Note that session_to_graduation = last_leave of STAGE_FINAL)
+                          ('last_leave', 'max'),
+                          ])
+
+        df_stats['session_spanned'] = (
+            df_stats.last_leave - df_stats.first_entry + 1)
+
+        # Count the number of different decisions made at each stage
+        df_decision = self.df_manager.groupby(
+            ['subject_id', 'current_stage_suggested', 'decision'], sort=False
+        )['session'].agg('count').to_frame()
+
+        # Reorganize the table and rename the columns
+        df_decision = df_decision.unstack(level='decision').fillna(0).astype(
+            'Int64').droplevel(level=0, axis=1)
+        df_decision.rename(
+            columns={col: f'n_{col}' for col in df_decision.columns}, inplace=True)
+
+        # Merge df_decision with df_stats
+        df_stats = df_stats.merge(df_decision, how='left', on=[
+                                  'subject_id', 'current_stage_suggested'])
+
+        self.df_stats = df_stats
 
     def update(self):
         """update each mouse's training stage"""
@@ -144,7 +174,8 @@ class CurriculumManager:
             for session in df_new_sessions['session']:
                 self.add_and_evaluate_session(subject_id, session)
 
-            pass
+        # Compute stats
+        self.compute_stats()
 
     def plot(self):
         # Plot the training history of a mouse
