@@ -166,6 +166,7 @@ class CurriculumManager:
             pass
 
     def plot_all_progress(self, if_show_fig=True):
+        #%%
         # Plot the training history of a mouse
         df_manager = self.df_manager
 
@@ -215,17 +216,28 @@ class CurriculumManager:
             )
             traces.append(trace)
 
-        # Create the figur  e
+        # Create the figure
         fig = go.Figure(data=traces)
         fig.update_layout(
             title='Training Progress of Mice',
             xaxis_title='Session',
             yaxis_title='Mouse'
         )
+        
+        # Set subject_id as y axis label
+        fig.update_layout(
+            yaxis=dict(
+                tickmode='array',
+                tickvals=np.arange(0, n + 1),  # Original y-axis values
+                ticktext=df_manager['subject_id'].unique()  # New labels
+            )
+        )
 
         # Show the plot
         if if_show_fig:
             fig.show()
+        
+        #%%
         return fig
 
 
