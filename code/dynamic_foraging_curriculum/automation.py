@@ -252,7 +252,8 @@ class CurriculumManager:
         fig.update_layout(
             title='Training Progress of Mice',
             xaxis_title='Session',
-            yaxis_title='Mouse'
+            yaxis_title='Mouse',
+            height=1200
         )
         
         # Set subject_id as y axis label
