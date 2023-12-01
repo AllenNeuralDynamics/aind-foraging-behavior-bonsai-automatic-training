@@ -27,3 +27,5 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 
 See [this notebook](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/demo.ipynb)
 
+## Compared with mTrack
+See [this thread](https://github.com/AllenNeuralDynamics/aind-behavior-blog/discussions/124)
