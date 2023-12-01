@@ -18,10 +18,12 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 - [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/automation.py)  (WIP) fetches data from `df_master` and updates `df_curriculum_manager`.
 
 ## Usage
-1. Design the curriculum, i.e., all training stages and the transition rules between them. Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py) and its generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1.json) for the dynamic foraging task.
-2. Feed all necessary metrics to `Curriculum manager` and let it run.
-3. To add other tasks, users should add their own task and curriculum schemas.
+1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py#L198-L203) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py#L222-L246).
+   - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py) and automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1.json) for the dynamic foraging task.
+3. Feed all necessary metrics to `Curriculum manager` and let it run.
+4. To add other tasks, users should add their own task and curriculum schemas.
 
 ## Demo
 
+See [this notebook](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/demo.ipynb)
 
