@@ -39,10 +39,10 @@ def export_df_and_upload(df,
         logger.error(e)
 
 
-def download_and_load_df(file_name,
-                         local_cache_path='/root/capsule/results/',
-                         s3_path='foraging_auto_training/',
-                         method='csv'):
+def download_and_import_df(file_name,
+                           local_cache_path='/root/capsule/results/',
+                           s3_path='foraging_auto_training/',
+                           method='csv'):
 
     # download from s3
     s3_file_name = s3_path + file_name
@@ -52,7 +52,7 @@ def download_and_load_df(file_name,
         s3_client.download_file(BUCKET,
                                 s3_file_name,
                                 local_file_name)
-        
+
         size = os.path.getsize(local_file_name) / (1024 * 1024)
         logger.info(f'file downloaded to {BUCKET}/{s3_file_name}, '
                     f'size = {size} MB, df_length = {len(df)}')
