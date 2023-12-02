@@ -56,12 +56,11 @@ def download_and_import_df(file_name,
         size = os.path.getsize(local_file_name) / (1024 * 1024)
         logger.info(f'file downloaded to {BUCKET}/{s3_file_name}, '
                     f'size = {size} MB, df_length = {len(df)}')
-    except FileNotFoundError as e:
-        logger.info(f'file not found: {e}')
-        return e
     except ClientError as e:
         logger.error(e)
+        return None
 
+    # import to df
     if method == 'pickle':
         return pd.read_pickle(local_file_name)
     elif method == 'csv':
@@ -81,9 +80,8 @@ if __name__ == '__main__':
                          s3_path='foraging_auto_training/',
                          method='csv')
 
-    df = download_and_load_df(file_name='test.csv',
-                              local_cache_path='/root/capsule/results/',
-                              s3_path='foraging_auto_training/',
-                              method='csv')
+    df = download_and_import_df(file_name='test1.csv',
+                                local_cache_path='/root/capsule/results/',
+                                s3_path='foraging_auto_training/',
+                                method='csv')
 
-    print(df)
