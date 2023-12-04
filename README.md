@@ -4,7 +4,8 @@
 
 Here is a diagram of the [automatic training system](https://github.com/AllenNeuralDynamics/aind-behavior-blog/issues/73) we've been devloping for the dynamic foraging task (those blue arrows on top of our existing [foraging behavior pipeline](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-trigger-pipeline))
 
-<img src="https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/assets/24734299/1a0aded6-c211-4e5d-95e6-f3fa988c2424" width="800">
+<img width="1115" alt="Screenshot 2023-12-04 at 11 11 32" src="https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/assets/24734299/ccea0ea1-9eb0-47dd-b974-4137879b721f">
+
 
 This repo is the red circle in the diagram. It will be running on Code Ocean and do the following things (very similar to mTrack):
 1. Define the training curriculum (mTrack's "Regimen")
