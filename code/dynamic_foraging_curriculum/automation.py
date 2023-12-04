@@ -11,33 +11,63 @@ import plotly.graph_objects as go
 
 from dynamic_foraging_curriculum.schema.curriculum import TrainingStage, Metrics
 from dynamic_foraging_curriculum.curriculums.coupled_baiting import coupled_baiting_curriculum
+from dynamic_foraging_curriculum.util.aws_util import download_and_import_df, export_and_upload_df
 
 logger = logging.getLogger(__name__)
+logging.basicConfig(level=logging.INFO)
+
+# Directory for caching df_maseter tables
+LOCAL_CACHE_ROOT = '/root/capsule/results/curriculum_manager/'
+task_mapper = {'coupled_block_baiting': 'Coupled Baiting'}
 
 
 class CurriculumManager:
+    def __init__(
+            self,
+            manager_name: str = 'Janelia_demo',
+            df_behavior_on_s3: dict = dict(bucket='aind-behavior-data',
+                                           root='Han/ephys/report/all_sessions/export_all_nwb/',
+                                           file_name='df_sessions.pkl'),
+            df_manager_root_on_s3: dict = dict(bucket='aind-behavior-data',
+                                               root='foraging_auto_training/'),
+    ):
+        """
+        manager_name: str
+            Name of the manager, will be used for dababase
+        df_behavior_on_s3: dict
+            Full path to the behavior master table.
+        df_manager_root_on_s3: dict
+            Root path to the manager table.
+        """
 
-    def __init__(self, df_manager_path: str = None, df_master_path: str = None):
-        """load df_curriculum_manager and df_master from s3"""
+        # --- define database names ---
+        self.df_manager_name = f'df_manager_{manager_name}.csv'
+        self.df_manager_stats_name = f'df_manager_stats_{manager_name}.csv'
+        self.df_manager_root_on_s3 = df_manager_root_on_s3
 
-        # Load behavior master table
-        if df_master_path is None:
-            df_master_path = "/root/capsule/data/s3_foraging_all_nwb/df_sessions.pkl"
-        self.df_master = pd.read_pickle(df_master_path)
+        # --- load df_curriculum_manager and df_behavior from s3 ---
+        self.df_behavior = download_and_import_df(bucket=df_behavior_on_s3['bucket'],
+                                                  s3_path=df_behavior_on_s3['root'],
+                                                  file_name=df_behavior_on_s3['file_name'],
+                                                  local_cache_path=LOCAL_CACHE_ROOT,
+                                                  )
+
+        if self.df_behavior is None:
+            logger.error('No df_behavior found, exiting...')
 
         # Tweaks of the master table
-        self.df_master = self.df_master.query(
+        self.df_behavior = self.df_behavior.query(
             "task == 'coupled_block_baiting'").sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
-        self.task_mapper = {'coupled_block_baiting': 'Coupled Baiting'}
 
-        # Load curriculum manager table; if not exist, create a new one
-        if df_manager_path is None:
-            df_manager_path = "/root/capsule/code/dynamic_foraging_curriculum/df_curriculum_manager.csv"
-
-        if os.path.exists(df_manager_path):
-            self.df_manager = pd.read_csv(df_manager_path)
-        else:
+        # --- Load curriculum manager table; if not exist, create a new one ---
+        self.df_manager = download_and_import_df(bucket=df_manager_root_on_s3['bucket'],
+                                                 s3_path=df_manager_root_on_s3['root'],
+                                                 file_name=self.df_manager_name,
+                                                 local_cache_path=LOCAL_CACHE_ROOT,
+                                                 )
+        if self.df_manager is None:  # Create a new table
+            logger.info('No df_manager found, creating a new one...')
             self.df_manager = pd.DataFrame(columns=['subject_id', 'session_date', 'task',
                                                     'session', 'session_at_current_stage',
                                                     'curriculum_version', 'task_schema_version',
@@ -45,10 +75,20 @@ class CurriculumManager:
                                                     'metrics', 'current_stage_suggested', 'current_stage_actual',
                                                     'decision', 'next_stage_suggested'])
 
-    def upload_df(self):
-        """Upload the df_manager_path"""
+    def upload_to_s3(self):
+        """Upload s3"""
 
-        pass
+        df_to_upload = {self.df_manager_name: self.df_manager,
+                        self.df_manager_stats_name: self.df_manager_stats}
+
+        for file_name, df in df_to_upload.items():
+            export_and_upload_df(df=df,
+                                 bucket='aind-behavior-data',
+                                 s3_path=self.df_manager_root_on_s3['root'],
+                                 file_name=file_name,
+                                 local_cache_path=LOCAL_CACHE_ROOT,
+                                 method='csv'
+                                 )
 
     def _count_session_at_current_stage(self,
                                         df: pd.DataFrame,
@@ -70,7 +110,7 @@ class CurriculumManager:
         df_this_mouse = self.df_manager.query(f'subject_id == {subject_id}')
 
         # If we don't have feedback from the GUI about the actual training stage used
-        if 'actual_stage' not in self.df_master:
+        if 'actual_stage' not in self.df_behavior:
             if session == 1:  # If this is the first session
                 current_stage = 'STAGE_1'
             else:
@@ -95,7 +135,7 @@ class CurriculumManager:
                         return
 
         # Get metrics history
-        df_history = self.df_master.query(
+        df_history = self.df_behavior.query(
             f"subject_id == {subject_id} and session <= {session}")
 
         performance = {
@@ -119,13 +159,13 @@ class CurriculumManager:
             metrics=Metrics(**metrics))
 
         # Add to the manager
-        df_this = self.df_master.query(
+        df_this = self.df_behavior.query(
             f'subject_id == {subject_id} and session == {session}').iloc[0]
         self.df_manager.loc[len(self.df_manager)] = dict(
             subject_id=subject_id,
             session_date=df_this.session_date,
             session=session,
-            task=self.task_mapper[df_this.task],
+            task=task_mapper[df_this.task],
             curriculum_version='0.1',  # Allows changing curriculum during training
             task_schema_version='1.0',  # Allows changing task schema during training
             session_at_current_stage=session_at_current_stage,
@@ -144,7 +184,7 @@ class CurriculumManager:
 
     def compute_stats(self):
         """compute simple stats"""
-        df_stats = df_statistics = self.df_manager.groupby(
+        df_stats = self.df_manager.groupby(
             ['subject_id', 'current_stage_suggested'], sort=False
         )['session'].agg([('session_spent', 'count'),  # Number of sessions spent at this stage
                           ('first_entry', 'min'),  # First entry to this stage
@@ -168,18 +208,19 @@ class CurriculumManager:
 
         # Merge df_decision with df_stats
         df_stats = df_stats.merge(df_decision, how='left', on=[
-                                  'subject_id', 'current_stage_suggested'])
+            'subject_id', 'current_stage_suggested'])
 
-        self.df_stats = df_stats
+        self.df_manager_stats = df_stats
 
     def update(self):
         """update each mouse's training stage"""
         session_key = ['subject_id', 'session']
 
         # Diff the to dataframe to find the new mice / new sessions
-        df_merge = self.df_master.merge(self.df_manager, on=session_key,
-                                        how='left', indicator=True)
-        df_new_sessions_all = self.df_master[df_merge['_merge'] == 'left_only']
+        df_merge = self.df_behavior.merge(self.df_manager, on=session_key,
+                                          how='left', indicator=True)
+        df_new_sessions_all = self.df_behavior[df_merge['_merge']
+                                               == 'left_only']
         unique_subjects_to_evaluate = df_new_sessions_all['subject_id'].unique(
         )
         logger.info(
@@ -196,8 +237,11 @@ class CurriculumManager:
         # Compute stats
         self.compute_stats()
 
+        # Save to local cache folder
+        self.upload_to_s3()
+
     def plot_all_progress(self, if_show_fig=True):
-        #%%
+        # %%
         # Plot the training history of a mouse
         df_manager = self.df_manager
 
@@ -215,9 +259,9 @@ class CurriculumManager:
         for n, subject_id in enumerate(df_manager['subject_id'].unique()):
             df_subject = df_manager[df_manager['subject_id'] == subject_id]
             # Get h2o if available
-            if 'h2o' in self.df_master:
-                h2o = self.df_master[
-                    self.df_master['subject_id'] == subject_id]['h2o'].iloc[0]
+            if 'h2o' in self.df_behavior:
+                h2o = self.df_behavior[
+                    self.df_behavior['subject_id'] == subject_id]['h2o'].iloc[0]
             else:
                 h2o = None
 
@@ -255,7 +299,7 @@ class CurriculumManager:
             yaxis_title='Mouse',
             height=1200
         )
-        
+
         # Set subject_id as y axis label
         fig.update_layout(
             yaxis=dict(
@@ -268,8 +312,8 @@ class CurriculumManager:
         # Show the plot
         if if_show_fig:
             fig.show()
-        
-        #%%
+
+        # %%
         return fig
 
 
