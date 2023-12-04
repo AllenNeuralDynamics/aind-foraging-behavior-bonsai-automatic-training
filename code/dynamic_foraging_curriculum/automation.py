@@ -18,7 +18,8 @@ logging.basicConfig(level=logging.INFO)
 
 # Directory for caching df_maseter tables
 LOCAL_CACHE_ROOT = '/root/capsule/results/curriculum_manager/'
-task_mapper = {'coupled_block_baiting': 'Coupled Baiting'}
+task_mapper = {'coupled_block_baiting': 'Coupled Baiting',
+               'Coupled Baiting': 'Coupled Baiting'}
 
 
 class CurriculumManager:
@@ -54,10 +55,22 @@ class CurriculumManager:
 
         if self.df_behavior is None:
             logger.error('No df_behavior found, exiting...')
+            return
 
-        # Tweaks of the master table
+        # --- Formatting the behavior master table ---
+        # Remove multiIndex on columns, if any
+        if self.df_behavior.columns.nlevels > 1:
+            self.df_behavior.columns = self.df_behavior.columns.droplevel(
+                level=0)
+        # Remove session number with NaN, if any
+        self.df_behavior = self.df_behavior.reset_index().dropna(
+            subset=['session'])
+        # Turn subject_id to str for maximum compatibility
+        self.df_behavior['subject_id'] = self.df_behavior['subject_id'].astype(
+            str)
+        # TODO: do not hard code the task name
         self.df_behavior = self.df_behavior.query(
-            "task == 'coupled_block_baiting'").sort_values(
+            f"task in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
 
         # --- Load curriculum manager table; if not exist, create a new one ---
@@ -96,7 +109,7 @@ class CurriculumManager:
                                         current_stage: str) -> int:
         """ Count the number of sessions at the current stage (reset after rolling back) """
         session_at_current_stage = 1
-        for stage in reversed(df.query(f'subject_id == {subject_id}')['current_stage_suggested'].to_list()):
+        for stage in reversed(df.query(f'subject_id == "{subject_id}"')['current_stage_suggested'].to_list()):
             if stage == current_stage:
                 session_at_current_stage += 1
             else:
@@ -107,7 +120,7 @@ class CurriculumManager:
     def add_and_evaluate_session(self, subject_id, session):
         """ Add a session to the curriculum manager and evaluate the transition """
 
-        df_this_mouse = self.df_manager.query(f'subject_id == {subject_id}')
+        df_this_mouse = self.df_manager.query(f'subject_id == "{subject_id}"')
 
         # If we don't have feedback from the GUI about the actual training stage used
         if 'actual_stage' not in self.df_behavior:
@@ -136,7 +149,7 @@ class CurriculumManager:
 
         # Get metrics history
         df_history = self.df_behavior.query(
-            f"subject_id == {subject_id} and session <= {session}")
+            f'subject_id == "{subject_id}" and session <= {session}')
 
         performance = {
             # Already sorted by session
@@ -160,7 +173,7 @@ class CurriculumManager:
 
         # Add to the manager
         df_this = self.df_behavior.query(
-            f'subject_id == {subject_id} and session == {session}').iloc[0]
+            f'subject_id == "{subject_id}" and session == {session}').iloc[0]
         self.df_manager.loc[len(self.df_manager)] = dict(
             subject_id=subject_id,
             session_date=df_this.session_date,
@@ -187,7 +200,8 @@ class CurriculumManager:
         df_stats = self.df_manager.groupby(
             ['subject_id', 'current_stage_suggested'], sort=False
         )['session'].agg([('session_spent', 'count'),  # Number of sessions spent at this stage
-                          ('first_entry', 'min'),  # First entry to this stage
+                          # First entry to this stage
+                          ('first_entry', 'min'),
                           # Last leave from this stage (Note that session_to_graduation = last_leave of STAGE_FINAL)
                           ('last_leave', 'max'),
                           ])
@@ -229,7 +243,7 @@ class CurriculumManager:
         # Loop over all mouse
         for subject_id in unique_subjects_to_evaluate:
             df_new_sessions = df_new_sessions_all.query(
-                f'subject_id == {subject_id}')
+                f'subject_id == "{subject_id}"')
             # Loop over all new sessions
             for session in df_new_sessions['session']:
                 self.add_and_evaluate_session(subject_id, session)
