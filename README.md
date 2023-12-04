@@ -8,14 +8,14 @@ Here is a diagram of the [automatic training system](https://github.com/AllenNeu
 
 This repo is the red circle in the diagram. It will be running on Code Ocean and do the following things (very similar to mTrack):
 1. Define the training curriculum (mTrack's "Regimen")
-2. Retrieve data for each mouse from the behavioral master table (`df_master` on S3 that stores session-wise metrics)
-3. Evaluate daily performance based on the curriculum and make decisions of the next training stage (stored in `df_curriculum_manager`)
-4. Push the decisions back to S3 by uploading `df_curriculum_manager`, from which our [python GUI](https://github.com/AllenNeuralDynamics/dynamic-foraging-task) can access and automatically set the training parameters on the next day.
+2. Retrieve data for each mouse from the behavioral master table (`df_behavior` on S3 that stores session-wise metrics)
+3. Evaluate daily performance based on the curriculum and make decisions of the next training stage (stored in `df_manager`)
+4. Push the decisions back to S3 by uploading `df_manager`, from which our [python GUI](https://github.com/AllenNeuralDynamics/dynamic-foraging-task) can access and automatically set the training parameters on the next day.
 
 ## Key elements
 - [Task schema](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/schema/task.py) defines schema for training parameters
 - [Curriculum schema](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/schema/curriculum.py) defines schema for the curriculum, especially the `evaluate_transitions` method
-- [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/automation.py)  (WIP) fetches data from `df_master` and updates `df_curriculum_manager`.
+- [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/dynamic_foraging_curriculum/automation.py)  (WIP) fetches data from `df_behavior` and updates `df_manager`.
 
 ## Usage
 1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py#L198-L203) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/dynamic_foraging_curriculum/curriculums/coupled_baiting.py#L222-L246).
