@@ -20,7 +20,8 @@ dependencies = [
     'aind-data-schema==0.15.25',
     'pandas',
     'plotly',
-    'boto3'
+    'boto3',
+    'graphviz'
 ]
 
 [tool.setuptools.packages.find]

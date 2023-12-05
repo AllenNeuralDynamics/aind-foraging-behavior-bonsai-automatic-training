@@ -17,3 +17,6 @@ if [ ! -d "/.vscode/extensions" ]
        else
           echo "code-server not found"
        fi
+
+apt-get update
+apt-get install graphviz -y

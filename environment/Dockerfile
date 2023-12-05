@@ -12,7 +12,8 @@ RUN pip install -U --no-cache-dir \
 	pandas\
 	ipykernel\
 	plotly\
-	boto3
+	boto3\
+	graphviz
 
 ADD "https://github.com/coder/code-server/releases/download/v4.9.0/code-server-4.9.0-linux-amd64.tar.gz" /.code-server/code-server.tar.gz
 	
