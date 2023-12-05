@@ -42,8 +42,8 @@ class CurriculumManager:
         """
 
         # --- define database names ---
-        self.df_manager_name = f'df_manager_{manager_name}.csv'
-        self.df_manager_stats_name = f'df_manager_stats_{manager_name}.csv'
+        self.df_manager_name = f'df_manager_{manager_name}.pkl'
+        self.df_manager_stats_name = f'df_manager_stats_{manager_name}.pkl'
         self.df_manager_root_on_s3 = df_manager_root_on_s3
 
         # --- load df_curriculum_manager and df_behavior from s3 ---
@@ -100,7 +100,6 @@ class CurriculumManager:
                                  s3_path=self.df_manager_root_on_s3['root'],
                                  file_name=file_name,
                                  local_cache_path=LOCAL_CACHE_ROOT,
-                                 method='csv'
                                  )
 
     def _count_session_at_current_stage(self,
