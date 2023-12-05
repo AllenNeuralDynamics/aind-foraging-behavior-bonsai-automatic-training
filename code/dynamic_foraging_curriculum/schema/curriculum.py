@@ -75,7 +75,7 @@ class DynamicForagingCurriculum(BaseModel):
         if path == "":
             path = os.path.dirname(__file__)
         filename = path + \
-            f"/curriculum_{self.task.value}_{self.curriculum_version}.json"
+            f"/curriculum_{self.task.value}_{self.curriculum_version}_{self.task_schema_version}.json"
 
         with open(filename, 'w') as f:
             f.write(self.to_json())

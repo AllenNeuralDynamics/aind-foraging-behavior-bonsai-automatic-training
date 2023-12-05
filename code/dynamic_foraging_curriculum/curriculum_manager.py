@@ -168,9 +168,8 @@ class CurriculumManager:
 
         # TODO: to use the correct version of curriculum
         # Should we allow change of curriculum version during a training? maybe not...
-        # But we should definitely allow different curriculum versions for different mice
-        self.curriculum_used = coupled_baiting_curriculum  # self.curriculum_used
-        decision, next_stage_suggested = self.curriculum.evaluate_transitions(
+        # But we should definitely allow different curriculum versions for different 
+        decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage],
             metrics=Metrics(**metrics))
 
