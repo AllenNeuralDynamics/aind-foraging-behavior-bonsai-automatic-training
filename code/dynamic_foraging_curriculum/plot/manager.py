@@ -5,7 +5,7 @@ from dynamic_foraging_curriculum.schema.curriculum import TrainingStage
 
 # Define color scale - mapping stages to colors from red to green
 # TODO: make this flexible
-stage_to_numeric = {
+stage_color_mapper = {
     TrainingStage.STAGE_1.name: 'red',
     TrainingStage.STAGE_2.name: 'orange',
     TrainingStage.STAGE_3.name: 'yellow',
@@ -39,7 +39,7 @@ def plot_manager_all_progress(manager: 'CurriculumManager',
                 size=10,
                 line=dict(width=1, color='black'),
                 color=df_subject['current_stage_suggested'].map(
-                    stage_to_numeric),
+                    stage_color_mapper),
                 # colorbar=dict(title='Training Stage'),
             ),
             name=f'Mouse {subject_id}',
