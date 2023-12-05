@@ -15,15 +15,14 @@ def export_and_upload_df(df,
                          file_name,
                          local_cache_path='/root/capsule/results/',
                          bucket='aind-behavior-data',
-                         s3_path='foraging_auto_training/',
-                         method='csv'):
+                         s3_path='foraging_auto_training/'):
 
     # save to local cache
     local_file_name = local_cache_path + file_name
 
-    if method == 'pickle':
+    if file_name.split('.')[-1] == 'pkl':
         df.to_pickle(local_file_name)
-    elif method == 'csv':
+    elif file_name.split('.')[-1] == 'csv':
         df.to_csv(local_file_name)
 
     size = os.path.getsize(local_file_name) / (1024 * 1024)
