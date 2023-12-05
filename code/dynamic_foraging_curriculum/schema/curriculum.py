@@ -11,6 +11,7 @@ from pydantic.json import pydantic_encoder
 
 from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
                                                      ForagingTask)
+from dynamic_foraging_curriculum.plot.curriculum import draw_curriculum_diagram
 
 # %%
 
@@ -86,6 +87,9 @@ class DynamicForagingCurriculum(BaseModel):
             self.dict(by_alias=True))
         return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
 
+    def draw_curriculum_diagram(self):
+        ''' Show the diagram of the curriculum '''
+        return draw_curriculum_diagram(self)
 
 # ------------------ Helpers ------------------
 # A hack to serialize TrainingStage in the dictionary keys
