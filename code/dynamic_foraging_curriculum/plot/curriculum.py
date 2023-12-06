@@ -18,7 +18,7 @@ def _format_lambda_description(string: str):
     return wrapped_text
 
 
-def draw_curriculum_diagram(curriculum: 'Curriculum',
+def draw_diagram_rules(curriculum: 'Curriculum',
                             ) -> 'dot file':
     """Generate stage transition rules by graphviz 
 
@@ -88,7 +88,7 @@ def draw_curriculum_diagram(curriculum: 'Curriculum',
     return dot
 
 
-def draw_parameter_table(curriculum: 'Curriculum',
+def draw_diagram_paras(curriculum: 'Curriculum',
                          min_value_width=1,
                          min_var_name_width=2,
                          fontsize=12,
@@ -187,7 +187,7 @@ if __name__ == '__main__':
         loaded_json = json.load(f)
 
     loaded_curriculum = DynamicForagingCurriculum(**loaded_json)
-    dot = draw_curriculum_diagram(loaded_curriculum)
+    dot = draw_diagram_rules(loaded_curriculum)
 
     dot.render('dynamic_foraging_curriculum.svg', format='svg')
 

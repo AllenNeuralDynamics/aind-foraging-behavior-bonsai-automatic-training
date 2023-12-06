@@ -11,7 +11,7 @@ from pydantic.json import pydantic_encoder
 
 from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
                                                      ForagingTask)
-from dynamic_foraging_curriculum.plot.curriculum import draw_curriculum_diagram, draw_parameter_table
+from dynamic_foraging_curriculum.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
 
@@ -76,13 +76,14 @@ class DynamicForagingCurriculum(BaseModel):
                 return transition.decision, transition.to_stage
         return Decision.STAY, current_stage  # By default, stay at the current stage
 
-    def save_to_json(self, path: str = ""):
+    def _get_export_file_name(self, path: str = ""):
         if path == "":
             path = os.path.dirname(__file__)
-        filename = path + \
-            f"/curriculum_{self.task.value}_{self.curriculum_version}_{self.task_schema_version}.json"
+        return path + \
+            f"/curriculum_{self.task.value}_{self.curriculum_version}_{self.task_schema_version}"
 
-        with open(filename, 'w') as f:
+    def save_to_json(self, path: str = ""):
+        with open(self._get_export_file_name(path) + '.json', 'w') as f:
             f.write(self.to_json())
 
     def to_json(self):
@@ -91,20 +92,34 @@ class DynamicForagingCurriculum(BaseModel):
             self.dict(by_alias=True))
         return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
 
-    def draw_curriculum_diagram(self):
+    def diagram_rules(self,
+                      render_file_format='svg',
+                      path=''):
         ''' Show the diagram of the curriculum '''
-        return draw_curriculum_diagram(self)
+        dot_rules = draw_diagram_rules(self)
+        if render_file_format != '':
+            dot_rules.render(self._get_export_file_name(path) + '_rules', 
+                             format=render_file_format)
+        return dot_rules
 
-    def draw_parameter_table(self,
-                             min_value_width=1,
-                             min_var_name_width=2,
-                             fontsize=12):
+    def diagram_paras(self,
+                      min_value_width=1,
+                      min_var_name_width=2,
+                      fontsize=12,
+                      render_file_format='svg',
+                      path='',
+                      ):
         ''' Show the table for all parameters in all stages'''
-        return draw_parameter_table(self,
-                                    min_value_width=min_value_width,
-                                    min_var_name_width=min_var_name_width,
-                                    fontsize=fontsize
-                                    )
+        dot_paras = draw_diagram_paras(self,
+                                       min_value_width=min_value_width,
+                                       min_var_name_width=min_var_name_width,
+                                       fontsize=fontsize
+                                       )
+        if render_file_format != '':
+            dot_paras.render(self._get_export_file_name(path) + '_paras', 
+                             format=render_file_format)
+
+        return dot_paras
 
 
 # ------------------ Helpers ------------------
@@ -115,3 +130,5 @@ def transform_dict_with_enum_keys(obj):
     elif isinstance(obj, dict):
         return {transform_dict_with_enum_keys(k): transform_dict_with_enum_keys(v) for k, v in obj.items()}
     return obj
+
+# %%
