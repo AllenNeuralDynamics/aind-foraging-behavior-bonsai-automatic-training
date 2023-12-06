@@ -26,9 +26,13 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 
 | rules | parameters |
 |--|--|
-|<img width="400" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/92b23ae3b205f6edb9cb922992fd47f87d0570ce/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_paras.svg">|
+|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/92b23ae3b205f6edb9cb922992fd47f87d0570ce/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_paras.svg">|
 
+2. Create `CurriculumManager` and connect it to the behavior database `df_behavior`.
 3. Feed all necessary metrics to `Curriculum manager` and let it run.
+   - Here is an open-loop simulation with our old mice<br>
+     <img width="500" src="https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/assets/24734299/885ce4eb-33e9-471b-94e3-bb4fec4d24a8">
+
 4. To add other tasks, users should add their own task and curriculum schemas.
 
 ## Demo
