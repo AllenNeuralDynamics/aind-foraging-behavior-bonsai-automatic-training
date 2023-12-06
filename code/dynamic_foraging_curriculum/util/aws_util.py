@@ -35,13 +35,15 @@ def get_aws_credentials(profile='default'):
             'aws_secret_access_key': os.environ['AWS_SECRET_ACCESS_KEY']
         }
 
+    logger.info(f'AWS credentials not found in environment variables. Try ~/.aws/credentials...')
+
     # --- Try reading from ~/.aws/credentials ---
     # Construct the path to the credentials file
     credentials_path = os.path.expanduser("~/.aws/credentials")
 
     # Check if credentials file exists
     if not os.path.exists(credentials_path):
-        logger.error("AWS credentials file not found.")
+        logger.error("AWS credentials file not found at ~/.aws/credentials either!")
         return None
 
     # Read the credentials file
