@@ -7,11 +7,11 @@ import logging
 
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go
 
 from dynamic_foraging_curriculum.schema.curriculum import TrainingStage, Metrics
 from dynamic_foraging_curriculum.curriculums.coupled_baiting import coupled_baiting_curriculum
 from dynamic_foraging_curriculum.util.aws_util import download_and_import_df, export_and_upload_df
+from dynamic_foraging_curriculum.plot.manager import plot_manager_all_progress
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -42,6 +42,7 @@ class CurriculumManager:
         """
 
         # --- define database names ---
+        self.manager_name = manager_name
         self.df_manager_name = f'df_manager_{manager_name}.pkl'
         self.df_manager_stats_name = f'df_manager_stats_{manager_name}.pkl'
         self.df_manager_root_on_s3 = df_manager_root_on_s3
@@ -166,6 +167,8 @@ class CurriculumManager:
                        session_at_current_stage=session_at_current_stage)
 
         # TODO: to use the correct version of curriculum
+        # Should we allow change of curriculum version during a training? maybe not...
+        # But we should definitely allow different curriculum versions for different 
         decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage],
             metrics=Metrics(**metrics))
@@ -224,6 +227,9 @@ class CurriculumManager:
             'subject_id', 'current_stage_suggested'])
 
         self.df_manager_stats = df_stats
+        
+    def plot_all_progress(self, if_show_fig=True):
+        return plot_manager_all_progress(self, if_show_fig=if_show_fig)
 
     def update(self):
         """update each mouse's training stage"""
@@ -253,81 +259,6 @@ class CurriculumManager:
         # Save to local cache folder
         self.upload_to_s3()
 
-    def plot_all_progress(self, if_show_fig=True):
-        # %%
-        # Plot the training history of a mouse
-        df_manager = self.df_manager
-
-        # Define color scale - mapping stages to colors from red to green
-        stage_to_numeric = {
-            TrainingStage.STAGE_1.name: 'red',
-            TrainingStage.STAGE_2.name: 'orange',
-            TrainingStage.STAGE_3.name: 'yellow',
-            TrainingStage.STAGE_FINAL.name: 'lightgreen',
-            TrainingStage.GRADUATED.name: 'green'
-        }
-
-        # Preparing the scatter plot
-        traces = []
-        for n, subject_id in enumerate(df_manager['subject_id'].unique()):
-            df_subject = df_manager[df_manager['subject_id'] == subject_id]
-            # Get h2o if available
-            if 'h2o' in self.df_behavior:
-                h2o = self.df_behavior[
-                    self.df_behavior['subject_id'] == subject_id]['h2o'].iloc[0]
-            else:
-                h2o = None
-
-            trace = go.Scattergl(
-                x=df_subject['session'],
-                y=[n] * len(df_subject),
-                mode='markers',
-                marker=dict(
-                    size=10,
-                    line=dict(width=1, color='black'),
-                    color=df_subject['current_stage_suggested'].map(
-                        stage_to_numeric),
-                    # colorbar=dict(title='Training Stage'),
-                ),
-                name=f'Mouse {subject_id}',
-                hovertemplate=(f"<b>Subject {subject_id} ({h2o})"
-                               "<br>Session %{x}"
-                               "<br>%{customdata[0]}</b>"
-                               "<br>foraging_eff = %{customdata[1]}"
-                               "<br>finished_trials = %{customdata[2]}"
-                               "<extra></extra>"),
-                customdata=np.stack(
-                    (df_subject.current_stage_suggested,
-                     df_subject.foraging_efficiency,
-                     df_subject.finished_trials), axis=-1),
-                showlegend=False
-            )
-            traces.append(trace)
-
-        # Create the figure
-        fig = go.Figure(data=traces)
-        fig.update_layout(
-            title='Training Progress of Mice',
-            xaxis_title='Session',
-            yaxis_title='Mouse',
-            height=1200
-        )
-
-        # Set subject_id as y axis label
-        fig.update_layout(
-            yaxis=dict(
-                tickmode='array',
-                tickvals=np.arange(0, n + 1),  # Original y-axis values
-                ticktext=df_manager['subject_id'].unique()  # New labels
-            )
-        )
-
-        # Show the plot
-        if if_show_fig:
-            fig.show()
-
-        # %%
-        return fig
 
 
 if __name__ == "__main__":

@@ -261,7 +261,7 @@
                     "decision": "progress",
                     "to_stage": "Graduated",
                     "condition": "lambda metrics:\n                        metrics.session_total >= 10 \n                        and\n                        metrics.session_at_current_stage >= 5\n                        and\n                        np.mean(metrics.finished_trials[-5:]) >= 500\n                        and\n                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.7\n                        ",
-                    "condition_description": "For recent 5 sessions, mean finished trials >= 500 and efficiency >= 0.7"
+                    "condition_description": "For recent 5 sessions,mean finished trials >= 500 and mean efficiency >= 0.7 and total sessions >= 10 and sessions at final >= 5"
                 },
                 {
                     "decision": "rollback",

@@ -279,7 +279,9 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
                     # For graduation, obviously we need more requirements.
                     decision=Decision.PROGRESS,
                     to_stage=TrainingStage.GRADUATED,
-                    condition_description="For recent 5 sessions, mean finished trials >= 500 and efficiency >= 0.7",
+                    condition_description=("For recent 5 sessions,"
+                                           "mean finished trials >= 500 and mean efficiency >= 0.7 "
+                                           "and total sessions >= 10 and sessions at final >= 5"),
                     condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
