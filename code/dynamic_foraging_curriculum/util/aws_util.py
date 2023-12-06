@@ -9,22 +9,33 @@ from botocore.exceptions import ClientError
 
 logger = logging.getLogger(__name__)
 
+
 def get_aws_credentials(profile='default'):
-    """
-    Retrieve AWS credentials from the ~/.aws/credentials file.
-    For windows, the file should be at %UserProfile%\.aws\credentials.
-    
-    The file should look like this:
-    
-    [default]
-    aws_access_key_id=foo
-    aws_secret_access_key=bar
-    
-    See https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
+    """Explicitly get AWS credentials for boto3 client 
+    (somehow boto3.client('s3') doesn't work out of box)
+    First check if the credentials are in the environment variables.
+    If not, try ~/.aws/credentials (for windows, %UserProfile%\.aws\credentials)
+        The content of the file should look like this:
+
+        [default]
+        AWS_ACCESS_KEY_ID=foo
+        AWS_SECRET_ACCESS_KEY=bar
+
+        See https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
 
     :param profile: The profile to read from the credentials file. Default is 'default'.
     :return: A dictionary containing 'aws_access_key_id' and 'aws_secret_access_key', or None if not found.
     """
+
+    # --- Try environment variables first ---
+    if 'AWS_SECRET_ACCESS_KEY' in os.environ and 'AWS_ACCESS_KEY_ID' in os.environ:
+        logger.info(f'Found AWS credential from environment variables!')
+        return {
+            'aws_access_key_id': os.environ['AWS_ACCESS_KEY_ID'],
+            'aws_secret_access_key': os.environ['AWS_SECRET_ACCESS_KEY']
+        }
+
+    # --- Try reading from ~/.aws/credentials ---
     # Construct the path to the credentials file
     credentials_path = os.path.expanduser("~/.aws/credentials")
 
@@ -46,9 +57,9 @@ def get_aws_credentials(profile='default'):
             'aws_access_key_id': aws_access_key_id,
             'aws_secret_access_key': aws_secret_access_key
         }
-    else:
-        logger.error(f"Profile '{profile}' not found in credentials file.")
-        return None
+
+    logger.error(f"Profile '{profile}' not found in credentials file.")
+    return None
 
 
 aws_credentials = get_aws_credentials()
@@ -66,7 +77,7 @@ def export_and_upload_df(df,
 
     # save to local cache
     local_file_name = local_cache_path + file_name
-    
+
     os.makedirs(local_cache_path, exist_ok=True)
 
     if file_name.split('.')[-1] == 'pkl':
@@ -97,7 +108,7 @@ def download_and_import_df(file_name,
     # download from s3
     s3_file_name = s3_path + file_name
     local_file_name = local_cache_path + file_name
-    
+
     os.makedirs(local_cache_path, exist_ok=True)
 
     try:
@@ -106,17 +117,20 @@ def download_and_import_df(file_name,
                                 local_file_name)
 
         size = os.path.getsize(local_file_name) / (1024 * 1024)
-        logger.info(f'file downloaded to {bucket}/{s3_file_name}, '
-                    f'size = {size} MB')
     except ClientError as e:
         logger.warning(f's3://{bucket}/{s3_path}{file_name} not found!')
         return None
 
     # import to df
     if file_name.split('.')[-1] == 'pkl':
-        return pd.read_pickle(local_file_name)
+        df = pd.read_pickle(local_file_name)
     elif file_name.split('.')[-1] == 'csv':
-        return pd.read_csv(local_file_name)
+        df = pd.read_csv(local_file_name)
+
+    logger.info(f'file downloaded to {bucket}/{s3_file_name}, '
+                f'size = {size} MB, df_length = {len(df)}')
+
+    return df
 
 
 if __name__ == '__main__':
