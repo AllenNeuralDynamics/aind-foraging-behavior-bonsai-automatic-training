@@ -15,6 +15,7 @@ from dynamic_foraging_curriculum.plot.curriculum import draw_curriculum_diagram,
 
 # %%
 
+
 class Metrics(BaseModel):
     ''' Key metrics for automatic training '''
     foraging_efficiency: List[float]  # Full history of foraging efficiency
@@ -22,10 +23,12 @@ class Metrics(BaseModel):
     session_total: int
     session_at_current_stage: int
 
+
 class Decision(Enum):
     STAY: str = "stay"
     PROGRESS: str = "progress"
     ROLLBACK: str = "rollback"
+
 
 class TransitionRule(BaseModel):
     '''Individual transition rule'''
@@ -60,15 +63,16 @@ class DynamicForagingCurriculum(BaseModel):
         # Return if already graduated
         if current_stage == TrainingStage.GRADUATED:
             return Decision.STAY, current_stage
-        
+
         # Get transition rules for the current stage
         transition_rules = self.curriculum[current_stage].transition_rules
 
         # Evaluate the transition rules
         for transition in transition_rules:
             # Check if the condition is met in order
-            func = eval(transition.condition.replace("\n", ""))  # Turn the string into a lambda function 
-            if func(metrics):  
+            # Turn the string into a lambda function
+            func = eval(transition.condition.replace("\n", ""))
+            if func(metrics):
                 return transition.decision, transition.to_stage
         return Decision.STAY, current_stage  # By default, stay at the current stage
 
@@ -91,9 +95,17 @@ class DynamicForagingCurriculum(BaseModel):
         ''' Show the diagram of the curriculum '''
         return draw_curriculum_diagram(self)
 
-    def draw_parameter_table(self):
+    def draw_parameter_table(self,
+                             min_value_width=1,
+                             min_var_name_width=2,
+                             fontsize=12):
         ''' Show the table for all parameters in all stages'''
-        return draw_parameter_table(self)
+        return draw_parameter_table(self,
+                                    min_value_width=min_value_width,
+                                    min_var_name_width=min_var_name_width,
+                                    fontsize=fontsize
+                                    )
+
 
 # ------------------ Helpers ------------------
 # A hack to serialize TrainingStage in the dictionary keys

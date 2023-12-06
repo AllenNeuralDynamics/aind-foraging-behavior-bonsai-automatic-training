@@ -89,6 +89,9 @@ def draw_curriculum_diagram(curriculum: 'Curriculum',
 
 
 def draw_parameter_table(curriculum: 'Curriculum',
+                         min_value_width=1,
+                         min_var_name_width=2,
+                         fontsize=12,
                          ) -> 'dot file':
     """Generate detailed parameter table by graphviz
     with change of parameters highlighted in green
@@ -103,61 +106,73 @@ def draw_parameter_table(curriculum: 'Curriculum',
              shape='box',
              style='filled',
              fillcolor='lightgrey',
-             width='0', height='0.2')
+             fontsize=str(fontsize),
+             width=str(min_var_name_width),
+             height='0.2'
+             )
 
     # Add nodes for parameters
     paras = []
-    for n_stage, (stage, task_schema) in enumerate(curriculum.parameters.items()):
+    for i_stage, (stage, task_schema) in enumerate(curriculum.parameters.items()):
         dict_paras = task_schema.to_GUI_format()
         paras.append(dict_paras)  # Cache the parameters
-        dict_paras = {k: v for k, v in dict_paras.items() 
+        dict_paras = {k: v for k, v in dict_paras.items()
                       if k not in ('task', 'task_schema_version', 'curriculum_version',
-                                      'training_stage', 'description', 'UncoupledReward')}
+                                   'training_stage', 'description', 'UncoupledReward')}
 
-        for n_para, (para_name, para_value) in enumerate(dict_paras.items()):
+        for i_para, (para_name, para_value) in enumerate(dict_paras.items()):
             # Hightlight the changed parameters
-            if n_stage > 0 and para_value != paras[-2][para_name]:
-                fillcolor = 'lightgreen'
+            if i_stage > 0 and para_value != paras[-2][para_name]:
+                fillcolor = 'darkseagreen'
             else:
                 fillcolor = 'lightgrey'
 
             # Add cell of the table as a node
             # For parameters, (row, column) starting from (1, 1)
-            dot.node(name=f'cell_{n_para+1}_{n_stage+1}',
+            dot.node(name=f'cell_{i_para+1}_{i_stage+1}',
                      fillcolor=fillcolor,
-                     label=str(para_value))
+                     label=str(para_value),
+                     width=str(min_value_width),
+                     tooltip=f'{para_name} @ {stage.name}')
 
     # Add first column as paras names
-    for n_para, (para_name, _) in enumerate(dict_paras.items()):
-        dot.node(name=f'cell_{n_para+1}_0',
+    for i_para, (para_name, _) in enumerate(dict_paras.items()):
+        dot.node(name=f'cell_{i_para+1}_0',
                  fillcolor='lightgrey',
                  label=para_name,
                  # Retrieve description from the schema
                  tooltip=task_schema.schema()['properties'][para_name]['title']
                  )
-        
+
     # Add first row as stage names
-    for n_stage, (stage, _) in enumerate(curriculum.parameters.items()):
-        dot.node(name=f'cell_0_{n_stage+1}',
+    for i_stage, (stage, _) in enumerate(curriculum.parameters.items()):
+        dot.node(name=f'cell_0_{i_stage+1}',
                  fillcolor=stage_color_mapper[stage.name],
                  label=stage.name,
-                 tooltip=curriculum.parameters[stage].description)
-
+                 tooltip=curriculum.parameters[stage].description,
+                 width=str(min_value_width),
+        )
 
     # Invisible edges to position nodes in a grid
-    for row in range(0, n_para+2):
-        for col in range(0, n_stage+2):
-            if row + 1 <= n_para:
-                dot.edge(f'cell_{row}_{col}', f'cell_{row+1}_{col}')
-            if col + 1 <= n_stage:
-                dot.edge(f'cell_{row}_{col}', f'cell_{row}_{col+1}')
+    n_cols = len(curriculum.parameters) + 1
+    n_rows = len(dict_paras) + 1
 
+    for col in range(0, n_cols):
+        for row in range(0, n_rows):
+            if col == 0 and row == 0: 
+                continue
+            if row < n_rows - 1:
+                dot.edge(f'cell_{row}_{col}', f'cell_{row+1}_{col}', style='invis')
+            if col < n_cols - 1:
+                dot.edge(f'cell_{row}_{col}', f'cell_{row}_{col+1}', style='invis')
 
     # Using subgraphs to align nodes in rows
-    for row in range(0, n_para+2):
+    for row in range(0, n_rows):
         with dot.subgraph(name=f'row_{row}') as row_graph:
             row_graph.attr(rank='same')
-            for col in range(0, n_stage+1):
+            for col in range(0, n_cols):
+                if row == 0 and col == 0:
+                    continue
                 row_graph.node(f'cell_{row}_{col}')
 
     return dot
