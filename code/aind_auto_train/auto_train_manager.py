@@ -177,7 +177,7 @@ class AutoTrainManager:
         # Add to the manager
         df_this = self.df_behavior.query(
             f'subject_id == "{subject_id}" and session == {session}').iloc[0]
-        self.df_manager.loc[len(self.df_manager)] = dict(
+        self.df_manager = pd.concat([self.df_manager, dict(
             subject_id=subject_id,
             session_date=df_this.session_date,
             session=session,
@@ -191,7 +191,7 @@ class AutoTrainManager:
             metrics=metrics,
             decision=decision.name,
             next_stage_suggested=next_stage_suggested.name
-        )
+        )], ignore_index=True)
 
         # Logging
         logger.info(f"{subject_id}, {df_this.session_date}, session {session}: " +
