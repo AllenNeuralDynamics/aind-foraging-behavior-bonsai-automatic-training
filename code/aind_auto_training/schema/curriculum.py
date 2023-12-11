@@ -128,6 +128,9 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
 
         return dot_paras
 
+    class Config:
+        validate_assignment = True        
+
 
 class DynamicForagingCurriculum(BehaviorCurriculum[DynamicForagingParas,
                                                    DynamicForagingMetrics]):
