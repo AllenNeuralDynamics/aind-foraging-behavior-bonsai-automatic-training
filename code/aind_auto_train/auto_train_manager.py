@@ -30,21 +30,23 @@ class AutoTrainManager:
        download_from_database()
        upload_to_database()
     """
+    
+    # Specify the Metrics subclass for a specific task
+    _metrics_model: metrics_class
+
 
     def __init__(self,
                  manager_name: str,
-                 metrics_model: metrics_class,
                  ):
         """
         manager_name: str
             Name of the manager, will be used for dababase
         """
         self.manager_name = manager_name
-        self.metrics_model = metrics_model
         self.df_behavior, self.df_manager = self.download_from_database()
 
         # Check if all required metrics exist in df_behavior
-        self.task_specific_metrics_keys = set(self.metrics_model.schema()['properties'].keys()) \
+        self.task_specific_metrics_keys = set(self._metrics_model.schema()['properties'].keys()) \
             - set(Metrics.schema()['properties'].keys())
         assert all([col in self.df_behavior.columns for col in
                     list(self.task_specific_metrics_keys)]), "Not all required metrics exist in df_behavior!"
@@ -234,10 +236,12 @@ class AutoTrainManager:
 
 
 class DynamicForagingAutoTrainManager(AutoTrainManager):
+    
+    _metrics_model = DynamicForagingMetrics  # Override the metrics model
+    
     def __init__(
             self,
             manager_name: str = 'Janelia_demo',
-            metrics_model: metrics_class = DynamicForagingMetrics,
             df_behavior_on_s3: dict = dict(bucket='aind-behavior-data',
                                            root='Han/ephys/report/all_sessions/export_all_nwb/',
                                            file_name='df_sessions.pkl'),
@@ -259,8 +263,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         self.df_manager_root_on_s3 = df_manager_root_on_s3
         self.df_behavior_on_s3 = df_behavior_on_s3
 
-        super().__init__(manager_name=manager_name,
-                         metrics_model=metrics_model)
+        super().__init__(manager_name=manager_name)
 
     def download_from_database(self):
         # --- load df_auto_train_manager and df_behavior from s3 ---
