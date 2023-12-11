@@ -9,10 +9,10 @@ from typing import List, Dict, Generic
 from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
 
-from aind_auto_training.schema.task import (Task, TrainingStage,
+from aind_auto_train.schema.task import (Task, TrainingStage,
                                             taskparas_class, DynamicForagingParas,
                                             metrics_class, DynamicForagingMetrics)
-from aind_auto_training.plot.curriculum import draw_diagram_rules, draw_diagram_paras
+from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
 

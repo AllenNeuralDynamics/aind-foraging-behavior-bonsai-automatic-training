@@ -3,5 +3,4 @@
 
 .vscode
 *.pyc
-code/aind_auto_training/TrainingStagePar.json
 *.log

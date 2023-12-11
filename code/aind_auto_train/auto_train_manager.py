@@ -8,22 +8,22 @@ import logging
 import numpy as np
 import pandas as pd
 
-from aind_auto_training.schema.curriculum import TrainingStage
-from aind_auto_training.schema.task import DynamicForagingMetrics
-from aind_auto_training.curriculums.coupled_baiting import coupled_baiting_curriculum
-from aind_auto_training.util.aws_util import download_and_import_df, export_and_upload_df
-from aind_auto_training.plot.manager import plot_manager_all_progress
+from aind_auto_train.schema.curriculum import TrainingStage
+from aind_auto_train.schema.task import DynamicForagingMetrics
+from aind_auto_train.curriculums.coupled_baiting import coupled_baiting_curriculum
+from aind_auto_train.util.aws_util import download_and_import_df, export_and_upload_df
+from aind_auto_train.plot.manager import plot_manager_all_progress
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Directory for caching df_maseter tables
-LOCAL_CACHE_ROOT = '/root/capsule/results/curriculum_manager/'
+LOCAL_CACHE_ROOT = '/root/capsule/results/auto_train_manager/'
 task_mapper = {'coupled_block_baiting': 'Coupled Baiting',
                'Coupled Baiting': 'Coupled Baiting'}
 
 
-class CurriculumManager:
+class AutoTrainManager:
     def __init__(
             self,
             manager_name: str = 'Janelia_demo',
@@ -48,7 +48,7 @@ class CurriculumManager:
         self.df_manager_stats_name = f'df_manager_stats_{manager_name}.pkl'
         self.df_manager_root_on_s3 = df_manager_root_on_s3
 
-        # --- load df_curriculum_manager and df_behavior from s3 ---
+        # --- load df_auto_train_manager and df_behavior from s3 ---
         self.df_behavior = download_and_import_df(bucket=df_behavior_on_s3['bucket'],
                                                   s3_path=df_behavior_on_s3['root'],
                                                   file_name=df_behavior_on_s3['file_name'],
@@ -263,7 +263,7 @@ class CurriculumManager:
 
 
 if __name__ == "__main__":
-    manager = CurriculumManager()
+    manager = AutoTrainManager()
     manager.df_manager
     manager.update()
     manager.plot_all_progress()

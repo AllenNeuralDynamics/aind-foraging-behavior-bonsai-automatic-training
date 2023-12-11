@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from aind_auto_training.schema.curriculum import TrainingStage
+from aind_auto_train.schema.curriculum import TrainingStage
 
 # Define color scale - mapping stages to colors from red to green
 # TODO: make this flexible
@@ -13,7 +13,7 @@ stage_color_mapper = {
     TrainingStage.GRADUATED.name: 'green'
 }
 
-def plot_manager_all_progress(manager: 'CurriculumManager',
+def plot_manager_all_progress(manager: 'AutoTrainManager',
                               if_show_fig=True
                               ):
     # %%
