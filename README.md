@@ -19,14 +19,14 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 - [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/automation.py)  (WIP) fetches data from `df_behavior` and updates `df_manager`.
 
 ## Usage
-1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/aind_auto_train/curriculums/coupled_baiting.py#L198-L203) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/ae4692e523f0dfa14448bdf5693c1338287b4fb1/code/aind_auto_train/curriculums/coupled_baiting.py#L222-L246).
+1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L199-L204) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L223-L247).
    - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py) for the dynamic foraging task.
    - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/curriculum_Coupled%20Baiting_0.1_1.0.json) 
    - Here are automatically rendered diagrams for stage transitions rules and parameters (click the images to try the hover feature :blush:)
 
 | rules | parameters |
 |--|--|
-|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/92b23ae3b205f6edb9cb922992fd47f87d0570ce/code/aind_auto_train/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_paras.svg">|
+|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/curriculum_Coupled%20Baiting_0.1_1.0_paras.svg">|
 
 2. Create `AutoTrainManager` and connect it to the behavior database `df_behavior`.
 3. Feed all necessary metrics to `Curriculum manager` and let it run.
