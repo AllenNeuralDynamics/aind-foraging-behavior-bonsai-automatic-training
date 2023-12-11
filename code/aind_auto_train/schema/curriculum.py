@@ -86,8 +86,7 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
         if path == "":
             path = os.path.dirname(__file__)
         return path + \
-            f"/curriculum_{self.task.value}_{
-                self.curriculum_version}_{self.task_schema_version}"
+            f"/curriculum_{self.task.value}_{self.curriculum_version}_{self.task_schema_version}"
 
     def save_to_json(self, path: str = ""):
         with open(self._get_export_file_name(path) + '.json', 'w') as f:
