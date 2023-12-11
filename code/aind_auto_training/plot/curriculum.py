@@ -18,8 +18,7 @@ def _format_lambda_description(string: str):
     return wrapped_text
 
 
-def draw_diagram_rules(curriculum: 'Curriculum',
-                            ) -> 'dot file':
+def draw_diagram_rules(curriculum):
     """Generate stage transition rules by graphviz 
 
     Args:
@@ -88,11 +87,11 @@ def draw_diagram_rules(curriculum: 'Curriculum',
     return dot
 
 
-def draw_diagram_paras(curriculum: 'Curriculum',
-                         min_value_width=1,
-                         min_var_name_width=2,
-                         fontsize=12,
-                         ) -> 'dot file':
+def draw_diagram_paras(curriculum,
+                       min_value_width=1,
+                       min_var_name_width=2,
+                       fontsize=12,
+                       ):
     """Generate detailed parameter table by graphviz
     with change of parameters highlighted in green
     """
@@ -181,7 +180,7 @@ def draw_diagram_paras(curriculum: 'Curriculum',
 if __name__ == '__main__':
     import json
 
-    from aind_auto_training.schema.curriculum import DynamicForagingCurriculum, TrainingStage
+    from aind_auto_training.schema.curriculum import DynamicForagingCurriculum
 
     with open("/root/capsule/code/aind_auto_training/curriculums/curriculum_Coupled Baiting_0.1_1.0.json", "r") as f:
         loaded_json = json.load(f)

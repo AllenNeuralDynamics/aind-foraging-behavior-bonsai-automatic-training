@@ -8,7 +8,8 @@ import logging
 import numpy as np
 import pandas as pd
 
-from aind_auto_training.schema.curriculum import TrainingStage, Metrics
+from aind_auto_training.schema.curriculum import TrainingStage
+from aind_auto_training.schema.task import DynamicForagingMetrics
 from aind_auto_training.curriculums.coupled_baiting import coupled_baiting_curriculum
 from aind_auto_training.util.aws_util import download_and_import_df, export_and_upload_df
 from aind_auto_training.plot.manager import plot_manager_all_progress
@@ -171,7 +172,7 @@ class CurriculumManager:
         # But we should definitely allow different curriculum versions for different 
         decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage],
-            metrics=Metrics(**metrics))
+            metrics=DynamicForagingMetrics(**metrics))
 
         # Add to the manager
         df_this = self.df_behavior.query(

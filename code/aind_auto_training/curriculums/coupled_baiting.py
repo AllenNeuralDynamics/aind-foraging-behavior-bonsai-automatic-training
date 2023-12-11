@@ -8,10 +8,11 @@ import numpy as np
 
 from aind_auto_training.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    TrainingStage, Metrics, Decision, ForagingTask,
+    TrainingStage, Decision, Task,
 )
 from aind_auto_training.schema.task import (
-    ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
+    Task, TrainingStage, DynamicForagingParas, DynamicForagingMetrics,
+    AutoWaterMode, AdvancedBlockMode
 )
 
 curriculum_version = "0.1"
@@ -30,7 +31,7 @@ paras_stage_1 = DynamicForagingParas(
     # Metainfo
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
-    task=ForagingTask.C1B1,
+    task=Task.C1B1,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
@@ -191,7 +192,7 @@ paras_stage_final = paras_stage_3.copy(update=dict(
 # --- Curriculum ---
 # %%
 coupled_baiting_curriculum = DynamicForagingCurriculum(
-    task=ForagingTask.C1B1,
+    task=Task.C1B1,
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
 
