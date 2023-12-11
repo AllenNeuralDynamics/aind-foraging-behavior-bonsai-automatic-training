@@ -6,11 +6,11 @@ https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHk
 # %%
 import numpy as np
 
-from dynamic_foraging_curriculum.schema.curriculum import (
+from aind_auto_training.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
     TrainingStage, Metrics, Decision, ForagingTask,
 )
-from dynamic_foraging_curriculum.schema.task import (
+from aind_auto_training.schema.task import (
     ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
 )
 
@@ -311,4 +311,4 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
 # %%
 if __name__ == '__main__':
     coupled_baiting_curriculum.save_to_json(
-        path='/root/capsule/code/dynamic_foraging_curriculum/curriculums')
+        path='/root/capsule/code/aind_auto_training/curriculums')

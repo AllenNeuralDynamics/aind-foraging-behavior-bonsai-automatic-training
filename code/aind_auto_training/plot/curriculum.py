@@ -1,7 +1,7 @@
 import re
 
 from graphviz import Digraph
-from dynamic_foraging_curriculum.plot.manager import stage_color_mapper
+from aind_auto_training.plot.manager import stage_color_mapper
 
 
 def _format_lambda_full(string: str):
@@ -83,7 +83,7 @@ def draw_diagram_rules(curriculum: 'Curriculum',
                      )
 
     # # Visualize the graph
-    # dot.render('dynamic_foraging_curriculum', format='png', cleanup=True)
+    # dot.render('aind_auto_training', format='png', cleanup=True)
 
     return dot
 
@@ -181,14 +181,14 @@ def draw_diagram_paras(curriculum: 'Curriculum',
 if __name__ == '__main__':
     import json
 
-    from dynamic_foraging_curriculum.schema.curriculum import DynamicForagingCurriculum, TrainingStage
+    from aind_auto_training.schema.curriculum import DynamicForagingCurriculum, TrainingStage
 
-    with open("/root/capsule/code/dynamic_foraging_curriculum/curriculums/curriculum_Coupled Baiting_0.1_1.0.json", "r") as f:
+    with open("/root/capsule/code/aind_auto_training/curriculums/curriculum_Coupled Baiting_0.1_1.0.json", "r") as f:
         loaded_json = json.load(f)
 
     loaded_curriculum = DynamicForagingCurriculum(**loaded_json)
     dot = draw_diagram_rules(loaded_curriculum)
 
-    dot.render('dynamic_foraging_curriculum.svg', format='svg')
+    dot.render('aind_auto_training.svg', format='svg')
 
     print(dot)

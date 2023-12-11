@@ -3,5 +3,5 @@
 
 .vscode
 *.pyc
-code/dynamic_foraging_curriculum/TrainingStagePar.json
+code/aind_auto_training/TrainingStagePar.json
 *.log

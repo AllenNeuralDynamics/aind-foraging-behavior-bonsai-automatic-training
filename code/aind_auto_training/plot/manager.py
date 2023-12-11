@@ -1,7 +1,7 @@
 import numpy as np
 import plotly.graph_objects as go
 
-from dynamic_foraging_curriculum.schema.curriculum import TrainingStage
+from aind_auto_training.schema.curriculum import TrainingStage
 
 # Define color scale - mapping stages to colors from red to green
 # TODO: make this flexible

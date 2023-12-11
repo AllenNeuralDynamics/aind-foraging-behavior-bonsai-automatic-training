@@ -9,9 +9,9 @@ from typing import List, Callable, Dict
 from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
 
-from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
+from aind_auto_training.schema.task import (DynamicForagingParas, TrainingStage,
                                                      ForagingTask)
-from dynamic_foraging_curriculum.plot.curriculum import draw_diagram_rules, draw_diagram_paras
+from aind_auto_training.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
 

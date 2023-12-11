@@ -8,10 +8,10 @@ import logging
 import numpy as np
 import pandas as pd
 
-from dynamic_foraging_curriculum.schema.curriculum import TrainingStage, Metrics
-from dynamic_foraging_curriculum.curriculums.coupled_baiting import coupled_baiting_curriculum
-from dynamic_foraging_curriculum.util.aws_util import download_and_import_df, export_and_upload_df
-from dynamic_foraging_curriculum.plot.manager import plot_manager_all_progress
+from aind_auto_training.schema.curriculum import TrainingStage, Metrics
+from aind_auto_training.curriculums.coupled_baiting import coupled_baiting_curriculum
+from aind_auto_training.util.aws_util import download_and_import_df, export_and_upload_df
+from aind_auto_training.plot.manager import plot_manager_all_progress
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
