@@ -1,14 +1,13 @@
 # %%
 from pydantic import Field
-from typing import List, NamedTuple, Callable
+from typing import List, TypeVar
 from enum import Enum
 
+from pydantic import BaseModel
 from aind_data_schema.base import AindModel
-from aind_data_schema.session import Session
-from aind_data_schema.stimulus import BehaviorStimulation
 
 # %%
-class ForagingTask(Enum):
+class Task(Enum):
     """Foraging tasks"""
     C1B1 = "Coupled Baiting"
     C0B0 = "Uncoupled Without Baiting"
@@ -35,19 +34,46 @@ class TrainingStage(Enum):
     STAGE_5 = "Stage 5"
     STAGE_FINAL = "Stage final"
     GRADUATED = "Graduated"
+    
+    
+class Metrics(BaseModel):
+    """ Parent class for all metrics. All other metrics should inherit from this class
+    """
+    session_total: int
+    session_at_current_stage: int
 
-class DynamicForagingParas(AindModel):
-    ''' Training schema for the dynamic foraging GUI.
-        This fully defines a set of training parameters that could be used in the GUI.
-        For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
-    '''
+# Metrics class in Curriculum must be a subclass of Metrics
+metrics_class = TypeVar('metrics_class', bound=Metrics)
+
+class DynamicForagingMetrics(Metrics):
+    """ Metrics for dynamic foraging
+    """
+    foraging_efficiency: List[float]  # Full history of foraging efficiency
+    finished_trials: List[int]  # Full history of finished trials
+    
+class TaskParas(AindModel):
+    """Parent class for TaskParas. All other task parameters should inherit from this class
+    """
     # Metadata
+    task: Task = Field(Task.C1B1, title="Task name")
     task_schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI
     curriculum_version: str = Field("0.1", title="Curriculum version")  # Corresponding to the curriculum
-    task: ForagingTask = Field(ForagingTask.C1B1, title="Task name")
     training_stage: TrainingStage = Field(TrainingStage.STAGE_1, title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
+    class Config:
+        validate_assignment = True
+    
+# Metrics class in Curriculum must be a subclass of Metrics
+taskparas_class = TypeVar('taskparas_class', bound=TaskParas)
+
+class DynamicForagingParas(TaskParas):
+    ''' Training schema for the dynamic foraging GUI.
+    
+    
+        This fully defines a set of training parameters that could be used in the GUI.
+        For simplicity, let's start with a flat structure and use exactly the same names as in the GUI.
+    '''    
     # --- Critical training parameters ---
     # Reward probability
     BaseRewardSum: float = Field(..., title="Sum of p_reward")
@@ -125,5 +151,4 @@ class DynamicForagingParas(AindModel):
                 for key, value in self.dict().items()
                 if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
 
-    class Config:
-        validate_assignment = True
+

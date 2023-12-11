@@ -1,12 +1,14 @@
 {
+    "curriculum_schema_version": "0.1",
     "task": "Coupled Baiting",
-    "curriculum_version": "0.1",
     "task_schema_version": "1.0",
+    "curriculum_version": "0.1",
+    "curriculum_description": "",
     "parameters": {
         "Stage 1": {
+            "task": "Coupled Baiting",
             "task_schema_version": "1.0",
             "curriculum_version": "0.1",
-            "task": "Coupled Baiting",
             "training_stage": "Stage 1",
             "description": "Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
             "BaseRewardSum": 0.8,
@@ -55,9 +57,9 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage 2": {
+            "task": "Coupled Baiting",
             "task_schema_version": "1.0",
             "curriculum_version": "0.1",
-            "task": "Coupled Baiting",
             "training_stage": "Stage 2",
             "description": "Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])",
             "BaseRewardSum": 0.6,
@@ -106,9 +108,9 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage 3": {
+            "task": "Coupled Baiting",
             "task_schema_version": "1.0",
             "curriculum_version": "0.1",
-            "task": "Coupled Baiting",
             "training_stage": "Stage 3",
             "description": "Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])",
             "BaseRewardSum": 0.45,
@@ -157,9 +159,9 @@
             "qt_spinbox_lineedit": 5.0
         },
         "Stage final": {
+            "task": "Coupled Baiting",
             "task_schema_version": "1.0",
             "curriculum_version": "0.1",
-            "task": "Coupled Baiting",
             "training_stage": "Stage final",
             "description": "Phase E in Han's slides (full task: block = [20, 60, 20], p_sum = 0.45, p_ratio = [8:1], [6:1], [3:1], [1:1])",
             "BaseRewardSum": 0.45,

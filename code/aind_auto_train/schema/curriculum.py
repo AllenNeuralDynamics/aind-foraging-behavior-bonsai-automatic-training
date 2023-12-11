@@ -4,24 +4,18 @@ import logging
 import os
 import numpy as np
 from enum import Enum, auto
-from typing import List, Callable, Dict
+from typing import List, Dict, Generic
 
 from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
 
-from dynamic_foraging_curriculum.schema.task import (DynamicForagingParas, TrainingStage,
-                                                     ForagingTask)
-from dynamic_foraging_curriculum.plot.curriculum import draw_diagram_rules, draw_diagram_paras
+from aind_auto_train.schema.task import (Task, TrainingStage,
+                                            taskparas_class, DynamicForagingParas,
+                                            metrics_class, DynamicForagingMetrics)
+from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
 
-
-class Metrics(BaseModel):
-    ''' Key metrics for automatic training '''
-    foraging_efficiency: List[float]  # Full history of foraging efficiency
-    finished_trials: List[int]  # Full history of finished trials
-    session_total: int
-    session_at_current_stage: int
 
 
 class Decision(Enum):
@@ -44,21 +38,33 @@ class StageTransitions(BaseModel):
     transition_rules: List[TransitionRule]
 
 
-class DynamicForagingCurriculum(BaseModel):
-    ''' A full curriculum for the dynamic foraging task '''
-    task: ForagingTask
-    curriculum_version: str = Field("0.1", title="Curriculum version")
-    # Corresponding to the GUI version
-    task_schema_version: str = Field("0.1", title="Task schema version")
+class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
+    ''' A parent curriculum for AIND behavioral task '''
+    # Version of this **schema**, hard-coded here only.
+    curriculum_schema_version: str = Field(
+        "0.1", title="Curriculum schema version", const=True)
 
-    # Core autoamtic training parameter settings
-    parameters: Dict[TrainingStage, DynamicForagingParas]
+    task: Task
+    # Version of the task schema (i.e., set of parameters accepted by the GUI)
+    task_schema_version: str = Field(...,
+                                     title="Task schema version")
+
+    # Version of an instance of the curriculum schema (i.e., one curriculum)
+    curriculum_version: str = Field(...,
+                                    title="Curriculum version")
+    curriculum_description: str = Field(
+        "", title="Description of this curriculum")
+
+    # !! Should be overriden by the subclass !!
+    parameters: Dict[TrainingStage, taskparas_class]
+
     # Core automatic training stage transition logic
     curriculum: Dict[TrainingStage, StageTransitions]
 
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
-                             metrics: Metrics) -> TrainingStage:
+                             metrics: metrics_class  # Note the dynamical type here
+                             ) -> TrainingStage:
         ''' Evaluate the transition rules based on the current stage and metrics '''
         # Return if already graduated
         if current_stage == TrainingStage.GRADUATED:
@@ -98,7 +104,7 @@ class DynamicForagingCurriculum(BaseModel):
         ''' Show the diagram of the curriculum '''
         dot_rules = draw_diagram_rules(self)
         if render_file_format != '':
-            dot_rules.render(self._get_export_file_name(path) + '_rules', 
+            dot_rules.render(self._get_export_file_name(path) + '_rules',
                              format=render_file_format)
         return dot_rules
 
@@ -116,10 +122,27 @@ class DynamicForagingCurriculum(BaseModel):
                                        fontsize=fontsize
                                        )
         if render_file_format != '':
-            dot_paras.render(self._get_export_file_name(path) + '_paras', 
+            dot_paras.render(self._get_export_file_name(path) + '_paras',
                              format=render_file_format)
 
         return dot_paras
+
+    class Config:
+        validate_assignment = True        
+
+
+class DynamicForagingCurriculum(BehaviorCurriculum[DynamicForagingParas,
+                                                   DynamicForagingMetrics]):
+    # Override parameters
+    parameters: Dict[TrainingStage, DynamicForagingParas]
+    
+    # Override metrics
+    def evaluate_transitions(self,
+                             current_stage: TrainingStage,
+                             metrics: DynamicForagingMetrics  # Note the dynamical type here
+                             ) -> TrainingStage:
+        return super().evaluate_transitions(current_stage, metrics)
+
 
 
 # ------------------ Helpers ------------------

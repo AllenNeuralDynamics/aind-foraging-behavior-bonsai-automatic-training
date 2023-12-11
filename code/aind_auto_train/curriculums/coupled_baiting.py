@@ -6,12 +6,13 @@ https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHk
 # %%
 import numpy as np
 
-from dynamic_foraging_curriculum.schema.curriculum import (
+from aind_auto_train.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    TrainingStage, Metrics, Decision, ForagingTask,
+    TrainingStage, Decision, Task,
 )
-from dynamic_foraging_curriculum.schema.task import (
-    ForagingTask, TrainingStage, DynamicForagingParas, AutoWaterMode, AdvancedBlockMode
+from aind_auto_train.schema.task import (
+    Task, TrainingStage, DynamicForagingParas, DynamicForagingMetrics,
+    AutoWaterMode, AdvancedBlockMode
 )
 
 curriculum_version = "0.1"
@@ -30,7 +31,7 @@ paras_stage_1 = DynamicForagingParas(
     # Metainfo
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
-    task=ForagingTask.C1B1,
+    task=Task.C1B1,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
@@ -191,7 +192,7 @@ paras_stage_final = paras_stage_3.copy(update=dict(
 # --- Curriculum ---
 # %%
 coupled_baiting_curriculum = DynamicForagingCurriculum(
-    task=ForagingTask.C1B1,
+    task=Task.C1B1,
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
 
@@ -311,4 +312,4 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
 # %%
 if __name__ == '__main__':
     coupled_baiting_curriculum.save_to_json(
-        path='/root/capsule/code/dynamic_foraging_curriculum/curriculums')
+        path='/root/capsule/code/aind_auto_train/curriculums')
