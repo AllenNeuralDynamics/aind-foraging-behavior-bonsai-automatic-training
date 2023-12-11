@@ -21,7 +21,8 @@ dependencies = [
     'pandas',
     'plotly',
     'boto3',
-    'graphviz'
+    'graphviz',
+    'nbformat==5.1.2',
 ]
 
 [tool.setuptools.packages.find]
