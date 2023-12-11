@@ -64,7 +64,7 @@ class TaskParas(AindModel):
     class Config:
         validate_assignment = True
     
-# Metrics class in Curriculum must be a subclass of Metrics
+# Task para class in Curriculum must be a subclass of TaskParas
 taskparas_class = TypeVar('taskparas_class', bound=TaskParas)
 
 class DynamicForagingParas(TaskParas):

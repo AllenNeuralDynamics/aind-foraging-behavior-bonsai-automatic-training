@@ -129,7 +129,7 @@ def download_and_import_df(file_name,
     elif file_name.split('.')[-1] == 'csv':
         df = pd.read_csv(local_file_name)
 
-    logger.info(f'file downloaded to {bucket}/{s3_file_name}, '
+    logger.info(f'file downloaded from {bucket}/{s3_file_name}, '
                 f'size = {size} MB, df_length = {len(df)}')
 
     return df
