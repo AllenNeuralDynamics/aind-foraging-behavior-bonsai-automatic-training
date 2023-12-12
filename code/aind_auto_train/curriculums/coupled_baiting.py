@@ -232,7 +232,7 @@ curriculum = DynamicForagingCurriculum(
                 TransitionRule(
                     decision=Decision.PROGRESS,
                     to_stage=TrainingStage.STAGE_3,
-                    condition_description="Finished trials >= 300 and efficiency > 0.65",
+                    condition_description="Finished trials >= 300 and efficiency >= 0.65",
                     condition="""lambda metrics:
                         metrics.finished_trials[-1] >= 300
                         and
