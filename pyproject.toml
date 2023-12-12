@@ -17,7 +17,7 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-    'aind-data-schema==0.15.25',
+    'aind-data-schema',
     'pandas',
     'plotly',
     'boto3',
