@@ -93,7 +93,7 @@ def import_df_from_s3(file_name,
                       bucket='aind-behavior-data',
                       s3_path='foraging_auto_training/'
                       ):
-    
+
     s3_file_path = f"{bucket}/{s3_path}{file_name}"
     try:
         if file_name.endswith('.pkl'):
@@ -111,30 +111,44 @@ def import_df_from_s3(file_name,
         return None
 
 
-def download_dir_from_s3(bucket,
-                         s3_path,
-                         local_cache_path=None
+def download_dir_from_s3(bucket='aind-behavior-data',
+                         s3_dir='foraging_auto_training/saved_curriculums/',
+                         local_dir='/root/capsule/scratch/saved_curriculums/',
                          ):
     """
-    Download the contents of a folder directory
-    Args:
-        bucket: the name of the s3 bucket
-        s3_path: the folder path in the s3 bucket
-        local_cache_path: a relative or absolute directory path in the local file system
-    https://stackoverflow.com/questions/49772151/download-a-folder-from-s3-using-boto3
+    Copy a directory from S3 to local
     """
-    bucket = s3_resource.Bucket(bucket)
-    for obj in bucket.objects.filter(Prefix=s3_path):
-        target = obj.key if local_cache_path is None \
-            else os.path.join(local_cache_path, os.path.relpath(obj.key, s3_path))
-        if not os.path.exists(os.path.dirname(target)):
-            os.makedirs(os.path.dirname(target), exist_ok=True)
-        if obj.key[-1] == '/':
-            continue
-        bucket.download_file(obj.key, target)
+    s3_dir_path = f"{bucket}/{s3_dir}"
+    try:
+        res = fs.get(s3_dir_path, local_dir, recursive=True)
+        logger.info(f'{len(res)} objects downloaded from s3://{s3_dir_path} '
+                    f'to {local_dir}')
+    except FileNotFoundError:
+        logger.error(f'Directory not found: s3://{s3_file_path}')
+        return None
+
+
+def upload_dir_to_s3(local_dir='/root/capsule/scratch/saved_curriculums/',
+                     bucket='aind-behavior-data',
+                     s3_dir='foraging_auto_training/saved_curriculums/',
+                     ):
+    """
+    Copy a directory from local to S3
+    """
+    s3_dir_path = f"{bucket}/{s3_dir}"
+    try:
+        res = fs.put(local_dir, s3_dir_path, recursive=True)
+        logger.info(f'{len(res)} objects uploaded from {local_dir} '
+                    f'to s3://{s3_dir_path} ')
+    except FileNotFoundError:
+        logger.error(f'Directory not found: {local_dir}')
+        return None
 
 
 if __name__ == '__main__':
+    logger.addHandler(logging.StreamHandler())
+    logger.setLevel('DEBUG')
+
     # test
     import pandas as pd
     import numpy as np
@@ -151,3 +165,6 @@ if __name__ == '__main__':
                            )
 
     print(df)
+
+    download_dir_from_s3()
+    upload_dir_to_s3()
