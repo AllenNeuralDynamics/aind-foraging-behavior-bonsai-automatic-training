@@ -1,6 +1,9 @@
 '''
 Curriculum for Dynamic Foraging - Coupled Baiting
 https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHklEBDTXYGT3F-QtaN6iDGJLBmg?e=N10dya
+
+Run the code to generate the curriculum.json and graphs
+
 '''
 
 # %%
@@ -15,8 +18,12 @@ from aind_auto_train.schema.task import (
     AutoWaterMode, AdvancedBlockMode
 )
 
-curriculum_version = "0.1"
+task=Task.C1B1
 task_schema_version = "1.0"
+curriculum_version = "0.1"
+curriculum_description = '''Base curriculum for the coupled-baiting task
+    https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHklEBDTXYGT3F-QtaN6iDGJLBmg?e=N10dya
+    '''
 
 # --- Parameters ---
 # Notes on the STAGE_1:
@@ -31,7 +38,7 @@ paras_stage_1 = DynamicForagingParas(
     # Metainfo
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
-    task=Task.C1B1,
+    task=task,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
@@ -191,10 +198,11 @@ paras_stage_final = paras_stage_3.copy(update=dict(
 
 # --- Curriculum ---
 # %%
-coupled_baiting_curriculum = DynamicForagingCurriculum(
+curriculum = DynamicForagingCurriculum(
     task=Task.C1B1,
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
+    curriculum_description=curriculum_description,
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,
@@ -311,5 +319,15 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
 
 # %%
 if __name__ == '__main__':
-    coupled_baiting_curriculum.save_to_json(
-        path='/root/capsule/code/aind_auto_train/curriculums')
+    import os
+    
+    curriculum_path = '/root/capsule/results/saved_curriculums'
+    os.makedirs(curriculum_path, exist_ok=True)
+    
+    # Save curriculum json and diagrams
+    curriculum.save_to_json(path=curriculum_path)
+    curriculum.diagram_rules(path=curriculum_path,
+                             render_file_format='svg')
+    curriculum.diagram_paras(path=curriculum_path,
+                             render_file_format='svg',
+                             fontsize=12)
