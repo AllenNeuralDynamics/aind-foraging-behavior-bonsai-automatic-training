@@ -30,6 +30,12 @@ def draw_diagram_rules(curriculum):
 
     # Create Digraph object
     dot = Digraph(comment='Curriculum for Dynamic Foraging - Coupled Baiting')
+    dot.attr(label=f'Curriculum (v{curriculum.curriculum_version}) '
+                   f'for {curriculum.task.value} (v{curriculum.task_schema_version})\n '
+                   f'{curriculum.curriculum_description}',
+             labelloc='t',
+             fontsize='17'
+             )
 
     # From bottom to top layout
     dot.attr(rankdir='TB')

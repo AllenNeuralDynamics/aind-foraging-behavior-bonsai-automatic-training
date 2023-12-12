@@ -13,6 +13,7 @@ class Task(Enum):
     C0B0 = "Uncoupled Without Baiting"
     C1B0 = "Coupled Without Baiting"
     C0B1 = "Uncoupled Baiting"
+    DUMMY = "Dummy task"
     
 class AdvancedBlockMode(Enum):
     ''' Modes for advanced block '''
@@ -55,16 +56,26 @@ class TaskParas(AindModel):
     """Parent class for TaskParas. All other task parameters should inherit from this class
     """
     # Metadata
-    task: Task = Field(Task.C1B1, title="Task name")
-    task_schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI
-    curriculum_version: str = Field("0.1", title="Curriculum version")  # Corresponding to the curriculum
-    training_stage: TrainingStage = Field(TrainingStage.STAGE_1, title="Training stage")
+    task: Task = Field(..., title="Task name")
+    task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
+    curriculum_version: str = Field(..., title="Curriculum version")  # Corresponding to the curriculum
+    training_stage: TrainingStage = Field(..., title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
     class Config:
         validate_assignment = True
+
+    def to_GUI_format(self) -> dict:
+        '''Turn to the GUI format, especially convert numbers to strings
+        '''        
+        return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
+                      value.value if isinstance(value, Enum) else  # Enum --> use its name
+                      str(value))   # All other type -> str
+                for key, value in self.dict().items()
+                if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
+
     
-# Metrics class in Curriculum must be a subclass of Metrics
+# Task para class in Curriculum must be a subclass of TaskParas
 taskparas_class = TypeVar('taskparas_class', bound=TaskParas)
 
 class DynamicForagingParas(TaskParas):
@@ -142,13 +153,5 @@ class DynamicForagingParas(TaskParas):
     
     qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", const=True, exclude_from_GUI=True)  # TODO:What is this???
     
-    def to_GUI_format(self) -> dict:
-        '''Turn to the GUI format, especially convert numbers to strings
-        '''        
-        return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
-                      value.value if isinstance(value, Enum) else  # Enum --> use its name
-                      str(value))   # All other type -> str
-                for key, value in self.dict().items()
-                if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
 
 
