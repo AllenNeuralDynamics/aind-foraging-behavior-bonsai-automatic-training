@@ -72,7 +72,8 @@ class TaskParas(AindModel):
                       value.value if isinstance(value, Enum) else  # Enum --> use its name
                       str(value))   # All other type -> str
                 for key, value in self.dict().items()
-                if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
+                if not self.__fields__[key].json_schema_extra or 
+                'exclude_from_GUI' not in self.__fields__[key].json_schema_extra}  # When generate paras for the GUI, exclude those manually controled fields
 
     
 # Task para class in Curriculum must be a subclass of TaskParas
