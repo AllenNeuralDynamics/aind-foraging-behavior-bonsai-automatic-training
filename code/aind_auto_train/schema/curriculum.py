@@ -1,10 +1,9 @@
 # %%
 import json
-import logging
 import os
 import numpy as np
-from enum import Enum, auto
-from typing import List, Dict, Generic
+from enum import Enum
+from typing import List, Dict, Generic, Literal
 
 from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
@@ -43,11 +42,11 @@ class StageTransitions(BaseModel):
         validate_assignment = True
 
 
-class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
+class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     ''' A parent curriculum for AIND behavioral task '''
     # Version of this **schema**, hard-coded here only.
-    curriculum_schema_version: str = Field(
-        "0.1", title="Curriculum schema version", const=True)
+    curriculum_schema_version: Literal["0.1"] = Field(
+        "0.1", title="Curriculum schema version")
 
     task: Task
     # Version of the task schema (i.e., set of parameters accepted by the GUI)
@@ -100,8 +99,8 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
         if path == "":
             path = os.path.dirname(__file__)
         return path + \
-            (f"/curriculum_{self.task.value}_{self.task_schema_version}_"
-            f"{self.curriculum_schema_version}_{self.curriculum_version}")
+            (f"/curriculum_{self.task}_{self.task_schema_version}_"
+             f"{self.curriculum_schema_version}_{self.curriculum_version}")
 
     def save_to_json(self, path: str = ""):
         with open(self._get_export_file_name(path) + '.json', 'w') as f:
