@@ -10,12 +10,11 @@ from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
 
 from aind_auto_train.schema.task import (Task, TrainingStage,
-                                            taskparas_class, DynamicForagingParas,
-                                            metrics_class, DynamicForagingMetrics)
+                                         taskparas_class, DynamicForagingParas,
+                                         metrics_class, DynamicForagingMetrics)
 from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
-
 
 
 class Decision(Enum):
@@ -30,18 +29,18 @@ class TransitionRule(BaseModel):
     to_stage: TrainingStage
     condition: str = ""  # A string for lambda function
     condition_description: str = ""
-    
+
     class Config:
-        validate_assignment = True        
+        validate_assignment = True
 
 
 class StageTransitions(BaseModel):
     '''Transition rules for a certain stage'''
     from_stage: TrainingStage
     transition_rules: List[TransitionRule]
-    
+
     class Config:
-        validate_assignment = True        
+        validate_assignment = True
 
 
 class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
@@ -87,9 +86,9 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
             if func(metrics):
                 return transition.decision, transition.to_stage
         return Decision.STAY, current_stage  # By default, stay at the current stage
-    
-    def get_transition_rule(self, 
-                            from_stage: TrainingStage, 
+
+    def get_transition_rule(self,
+                            from_stage: TrainingStage,
                             to_stage: TrainingStage):
         ''' Get the transition rule between two stages '''
         for rule in self.curriculum[from_stage].transition_rules:
@@ -101,7 +100,8 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
         if path == "":
             path = os.path.dirname(__file__)
         return path + \
-            f"/curriculum_{self.task.value}_{self.curriculum_version}_{self.task_schema_version}"
+            (f"/curriculum_{self.task.value}_{self.task_schema_version}_"
+            f"{self.curriculum_schema_version}_{self.curriculum_version}")
 
     def save_to_json(self, path: str = ""):
         with open(self._get_export_file_name(path) + '.json', 'w') as f:
@@ -143,21 +143,20 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
         return dot_paras
 
     class Config:
-        validate_assignment = True        
+        validate_assignment = True
 
 
 class DynamicForagingCurriculum(BehaviorCurriculum[DynamicForagingParas,
                                                    DynamicForagingMetrics]):
     # Override parameters
     parameters: Dict[TrainingStage, DynamicForagingParas]
-    
+
     # Override metrics
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
                              metrics: DynamicForagingMetrics  # Note the dynamical type here
                              ) -> TrainingStage:
         return super().evaluate_transitions(current_stage, metrics)
-
 
 
 # ------------------ Helpers ------------------
