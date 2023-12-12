@@ -7,14 +7,13 @@ Run the code to generate the curriculum.json and graphs
 '''
 
 # %%
-import numpy as np
 
 from aind_auto_train.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    TrainingStage, Decision, Task,
+    Decision
 )
 from aind_auto_train.schema.task import (
-    Task, TrainingStage, DynamicForagingParas, DynamicForagingMetrics,
+    Task, TrainingStage, DynamicForagingParas, 
     AutoWaterMode, AdvancedBlockMode
 )
 
