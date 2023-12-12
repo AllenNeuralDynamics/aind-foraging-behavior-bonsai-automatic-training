@@ -20,7 +20,7 @@ dependencies = [
     'aind-data-schema',
     'pandas',
     'plotly',
-    'boto3',
+    's3fs',
     'graphviz',
     'nbformat==5.1.2',
 ]
