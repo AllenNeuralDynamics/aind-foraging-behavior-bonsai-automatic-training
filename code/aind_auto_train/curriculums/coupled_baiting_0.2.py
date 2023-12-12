@@ -9,8 +9,7 @@ Run the code to generate the curriculum.json and graphs
 # %%
 
 from aind_auto_train.schema.curriculum import (
-    DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    TrainingStage, Decision, Task,
+    TrainingStage
 )
 
 # Reuse the curriculum from 0.1

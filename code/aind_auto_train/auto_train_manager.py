@@ -2,16 +2,13 @@
 Get data from the behavior master table and give suggestions
 """
 # %%
-import os
 import logging
 
-import numpy as np
 import pandas as pd
-from typing import Any, Generic
 
 from aind_auto_train.schema.curriculum import TrainingStage
 from aind_auto_train.schema.task import metrics_class, Metrics, DynamicForagingMetrics
-from aind_auto_train.curriculums.coupled_baiting import coupled_baiting_curriculum
+from aind_auto_train.curriculums.coupled_baiting import curriculum as coupled_baiting_curriculum
 from aind_auto_train.util.aws_util import download_and_import_df, export_and_upload_df
 from aind_auto_train.plot.manager import plot_manager_all_progress
 

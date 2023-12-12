@@ -1,6 +1,6 @@
 # %%
 from pydantic import Field
-from typing import List, TypeVar
+from typing import List, TypeVar, Literal
 from enum import Enum
 
 from pydantic import BaseModel
@@ -139,19 +139,19 @@ class DynamicForagingParas(TaskParas):
     LeftValue_volume: float = Field(5.00, title="Left reward size (volume)", exclude_from_GUI=True)
     
     # --- Other GUI fields that will never be changed by the script (only clicked by the user) ---
-    NextBlock: bool = Field(False, title="(User clicks) Next block", const=True, exclude_from_GUI=True)
-    GiveLeft: bool = Field(False, title="(User clicks) Give left", const=True, exclude_from_GUI=True)
-    GiveRight: bool = Field(False, title="(User clicks) Give right", const=True, exclude_from_GUI=True)
-    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", const=True, exclude_from_GUI=True)
-    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", const=True, exclude_from_GUI=True)
-    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", const=True, exclude_from_GUI=True)
-    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", const=True, exclude_from_GUI=True)
-    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", const=True, exclude_from_GUI=True)
-    SaveTraining: bool = Field(True, title="(User clicks) Save training", const=True, exclude_from_GUI=True)
+    NextBlock: bool = Field(False, title="(User clicks) Next block", exclude_from_GUI=True)
+    GiveLeft: bool = Field(False, title="(User clicks) Give left", exclude_from_GUI=True)
+    GiveRight: bool = Field(False, title="(User clicks) Give right", exclude_from_GUI=True)
+    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", exclude_from_GUI=True)
+    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", exclude_from_GUI=True)
+    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", exclude_from_GUI=True)
+    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", exclude_from_GUI=True)
+    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", exclude_from_GUI=True)
+    SaveTraining: bool = Field(True, title="(User clicks) Save training", exclude_from_GUI=True)
     InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
-    Randomness: str = Field("Exponential", title="Randomness mode", const=True, exclude_from_GUI=True)
+    Randomness: str = Field("Exponential", title="Randomness mode", exclude_from_GUI=True)
     
-    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", const=True, exclude_from_GUI=True)  # TODO:What is this???
+    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", exclude_from_GUI=True)  # TODO:What is this???
     
 
 
