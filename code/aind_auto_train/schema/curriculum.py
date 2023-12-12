@@ -30,12 +30,18 @@ class TransitionRule(BaseModel):
     to_stage: TrainingStage
     condition: str = ""  # A string for lambda function
     condition_description: str = ""
+    
+    class Config:
+        validate_assignment = True        
 
 
 class StageTransitions(BaseModel):
     '''Transition rules for a certain stage'''
     from_stage: TrainingStage
     transition_rules: List[TransitionRule]
+    
+    class Config:
+        validate_assignment = True        
 
 
 class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
@@ -81,6 +87,15 @@ class BehaviorCurriculum(Generic[taskparas_class, metrics_class], BaseModel):
             if func(metrics):
                 return transition.decision, transition.to_stage
         return Decision.STAY, current_stage  # By default, stay at the current stage
+    
+    def get_transition_rule(self, 
+                            from_stage: TrainingStage, 
+                            to_stage: TrainingStage):
+        ''' Get the transition rule between two stages '''
+        for rule in self.curriculum[from_stage].transition_rules:
+            if rule.to_stage == to_stage:
+                return rule
+        return None
 
     def _get_export_file_name(self, path: str = ""):
         if path == "":
