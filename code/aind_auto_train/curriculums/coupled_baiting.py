@@ -21,9 +21,7 @@ from aind_auto_train.schema.task import (
 task=Task.C1B1
 task_schema_version = "1.0"
 curriculum_version = "0.1"
-curriculum_description = '''Base curriculum for the coupled-baiting task
-    https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHklEBDTXYGT3F-QtaN6iDGJLBmg?e=N10dya
-    '''
+curriculum_description = '''Base curriculum for the coupled-baiting task'''
 
 # --- Parameters ---
 # Notes on the STAGE_1:
