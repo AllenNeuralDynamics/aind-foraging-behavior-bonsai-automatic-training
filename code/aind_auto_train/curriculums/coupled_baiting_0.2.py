@@ -8,9 +8,9 @@ Run the code to generate the curriculum.json and graphs
 
 # %%
 
-from aind_auto_train.schema.curriculum import (
-    TrainingStage
-)
+from aind_auto_train.schema.curriculum import TrainingStage
+from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
+
 
 # Reuse the curriculum from 0.1
 from aind_auto_train.curriculums.coupled_baiting import curriculum as curriculum_0_1
@@ -44,7 +44,7 @@ curriculum.get_transition_rule(
 if __name__ == '__main__':
     import os
 
-    curriculum_path = '/root/capsule/results/saved_curriculums'
+    curriculum_path = LOCAL_SAVED_CURRICULUM_ROOT
     os.makedirs(curriculum_path, exist_ok=True)
 
     # Save curriculum json and diagrams
