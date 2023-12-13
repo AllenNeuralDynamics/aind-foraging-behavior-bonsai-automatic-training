@@ -16,7 +16,7 @@ from aind_auto_train.schema.curriculum import (
 from aind_auto_train.curriculums.coupled_baiting import curriculum as curriculum_0_1
 
 # Override some parameters
-curriculum = curriculum_0_1.copy()
+curriculum = curriculum_0_1.model_copy()
 curriculum.curriculum_version = "0.2"
 curriculum.curriculum_description = "More stringent criteria before GRADUATED than 0.1"
 

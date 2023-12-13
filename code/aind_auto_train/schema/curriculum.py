@@ -105,8 +105,9 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
         if path == "":
             path = os.path.dirname(__file__)
         return path + \
-            (f"/curriculum_{self.task}_{self.task_schema_version}_"
-             f"{self.curriculum_schema_version}_{self.curriculum_version}")
+            (f"/{self.task}_v{self.task_schema_version}"
+             f"_curriculum_v{self.curriculum_version}"
+             f"_schema_v{self.curriculum_schema_version}")
 
     def save_to_json(self, path: str = ""):
         with open(self._get_export_file_name(path) + '.json', 'w') as f:
