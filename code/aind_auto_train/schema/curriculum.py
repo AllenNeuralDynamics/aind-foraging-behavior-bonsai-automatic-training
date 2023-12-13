@@ -42,8 +42,10 @@ class StageTransitions(BaseModel):
         validate_assignment = True
 
 
-class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
-    ''' A parent curriculum for AIND behavioral task '''
+class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
+    ''' A parent curriculum for AIND behavioral task 
+    '''
+    curriculum_schema_name: str = Field(..., title="Class name the has generated this curriculum")
     # Version of this **schema**, hard-coded here only.
     curriculum_schema_version: Literal["0.1"] = Field(
         "0.1", title="Curriculum schema version")
@@ -64,6 +66,10 @@ class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
 
     # Core automatic training stage transition logic
     curriculum: Dict[TrainingStage, StageTransitions]
+
+    def __init__(self, **data):
+        # Add class name automatically
+        super().__init__(curriculum_schema_name=self.__class__.__name__, **data)
 
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
@@ -145,8 +151,8 @@ class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
         validate_assignment = True
 
 
-class DynamicForagingCurriculum(BehaviorCurriculum[DynamicForagingParas,
-                                                   DynamicForagingMetrics]):
+class DynamicForagingCurriculum(Curriculum[DynamicForagingParas,
+                                           DynamicForagingMetrics]):
     # Override parameters
     parameters: Dict[TrainingStage, DynamicForagingParas]
 

@@ -4,7 +4,7 @@
 from typing import List, Dict
 
 from aind_auto_train.schema.task import Task, TrainingStage, Metrics, TaskParas
-from aind_auto_train.schema.curriculum import BehaviorCurriculum, StageTransitions, TransitionRule, Decision
+from aind_auto_train.schema.curriculum import Curriculum, StageTransitions, TransitionRule, Decision
 
 
 # Override the metrics class
@@ -13,16 +13,12 @@ class DummyTaskMetrics(Metrics):
     dummy_metric_int: List[int]
 
 # Override the task parameters class
-
-
 class DummyTaskParas(TaskParas):
     dummy_para_bool: bool
     dummy_para_float: float
 
 # Override the curriculum class
-
-
-class DummyTaskCurriculum(BehaviorCurriculum[DummyTaskParas, DummyTaskMetrics]):
+class DummyTaskCurriculum(Curriculum[DummyTaskParas, DummyTaskMetrics]):
     # Override parameters
     parameters: Dict[TrainingStage, DummyTaskParas]
 
