@@ -35,11 +35,28 @@ class CurriculumManager:
         self.saved_curriculums_on_s3 = saved_curriculums_on_s3
         self.saved_curriculums_local = saved_curriculums_local
 
-    def get_df_curriculums(self) -> pd.DataFrame:
+    def df_curriculums(self) -> pd.DataFrame:
         """ Return the master table of all curriculums
         """
-        # Get
-        pass
+
+        json_files = glob.glob(
+            self.saved_curriculums_local + '/*curriculum*.json')
+
+        df_curriculums = pd.DataFrame(columns=[
+                                      'task', 'task_schema_version', 'curriculum_version', 'curriculum_schema_version'])
+        for f in json_files:
+            match = re.search(r'(.+)_v([\d.]+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
+                              os.path.basename(f))
+            task, task_schema_version, curriculum_version, curriculum_schema_version = match.groups()
+            df_curriculums = pd.concat([df_curriculums,
+                                        pd.DataFrame.from_records([dict(task=task,
+                                                                        task_schema_version=task_schema_version,
+                                                                        curriculum_version=curriculum_version,
+                                                                        curriculum_schema_version=curriculum_schema_version)]
+                                                                  )
+                                        ], ignore_index=True)
+
+        return df_curriculums
 
     def generate_curriculums(self):
         pass
@@ -58,5 +75,6 @@ class CurriculumManager:
 if __name__ == "__main__":
     curriculum_manager = CurriculumManager()
     curriculum_manager.download_curriculums()
-    curriculum_manager.upload_curriculums()
+    logger.info(curriculum_manager.df_curriculums())
+    # curriculum_manager.upload_curriculums()
 # %%
