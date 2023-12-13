@@ -1,9 +1,10 @@
 {
+    "curriculum_schema_name": "DynamicForagingCurriculum",
     "curriculum_schema_version": "0.1",
     "task": "Coupled Baiting",
     "task_schema_version": "1.0",
     "curriculum_version": "0.1",
-    "curriculum_description": "",
+    "curriculum_description": "Base curriculum for the coupled-baiting task",
     "parameters": {
         "Stage 1": {
             "task": "Coupled Baiting",
@@ -229,7 +230,7 @@
                     "decision": "progress",
                     "to_stage": "Stage 3",
                     "condition": "lambda metrics:\n                        metrics.finished_trials[-1] >= 300\n                        and\n                        metrics.foraging_efficiency[-1] >= 0.65\n                        ",
-                    "condition_description": "Finished trials >= 300 and efficiency > 0.65"
+                    "condition_description": "Finished trials >= 300 and efficiency >= 0.65"
                 },
                 {
                     "decision": "rollback",

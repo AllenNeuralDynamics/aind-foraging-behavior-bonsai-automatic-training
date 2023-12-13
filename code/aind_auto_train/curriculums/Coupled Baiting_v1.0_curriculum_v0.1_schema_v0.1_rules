@@ -1,5 +1,7 @@
 // Curriculum for Dynamic Foraging - Coupled Baiting
 digraph {
+	fontsize=17 label="Curriculum (v0.1) for Coupled Baiting (v1.0)
+ Base curriculum for the coupled-baiting task" labelloc=t
 	rankdir=TB
 	STAGE_1 [label=STAGE_1 fillcolor=red shape=ellipse style=filled tooltip="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])"]
 	STAGE_2 [label=STAGE_2 fillcolor=orange shape=ellipse style=filled tooltip="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])"]
@@ -12,7 +14,7 @@ and
 metrics.foraging_efficiency[-1] >= 0.6
 " minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
 	STAGE_2 -> STAGE_3 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Finished trials >= 300 and
- efficiency > 0.65" headtooltip="metrics.finished_trials[-1] >= 300
+ efficiency >= 0.65" headtooltip="metrics.finished_trials[-1] >= 300
 and
 metrics.foraging_efficiency[-1] >= 0.65
 " minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
