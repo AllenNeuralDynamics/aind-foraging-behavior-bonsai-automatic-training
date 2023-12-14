@@ -45,6 +45,8 @@ class StageTransitions(BaseModel):
 
 class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     ''' A parent curriculum for AIND behavioral task 
+    When adding a new curriculum, please inherit from this class and 
+    specify the {taskparas_class} and {metrics_class} in the generic type
     '''
     curriculum_schema_name: str = Field(..., title="Class name the has generated this curriculum")
     # Version of this **schema**, hard-coded here only.
@@ -69,8 +71,10 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     curriculum: Dict[TrainingStage, StageTransitions]
 
     def __init__(self, **data):
-        # Add class name automatically
-        super().__init__(curriculum_schema_name=self.__class__.__name__, **data)
+        # Add class name automatically if needed (i.e., when creating a new curriculum, not loading from file)
+        if "curriculum_schema_name" not in data:
+            data["curriculum_schema_name"] = self.__class__.__name__
+        super().__init__(**data)
 
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
@@ -172,13 +176,16 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
 
 class DynamicForagingCurriculum(Curriculum[DynamicForagingParas,
                                            DynamicForagingMetrics]):
+    """ Task-specific curriculum for dynamic foraging task
+    Note that the two generic types {taskparas_class} and {metrics_class} are specified here
+    """
     # Override parameters
     parameters: Dict[TrainingStage, DynamicForagingParas]
 
     # Override metrics
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
-                             metrics: DynamicForagingMetrics  # Note the dynamical type here
+                             metrics: DynamicForagingMetrics
                              ) -> TrainingStage:
         return super().evaluate_transitions(current_stage, metrics)
 
