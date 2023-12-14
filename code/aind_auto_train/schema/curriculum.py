@@ -48,7 +48,6 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     When adding a new curriculum, please inherit from this class and 
     specify the {taskparas_class} and {metrics_class} in the generic type
     '''
-    curriculum_schema_name: str = Field(..., title="Class name the has generated this curriculum")
     # Version of this **schema**, hard-coded here only.
     curriculum_schema_version: Literal["0.1"] = Field(
         "0.1", title="Curriculum schema version")
@@ -69,12 +68,6 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
 
     # Core automatic training stage transition logic
     curriculum: Dict[TrainingStage, StageTransitions]
-
-    def __init__(self, **data):
-        # Add class name automatically if needed (i.e., when creating a new curriculum, not loading from file)
-        if "curriculum_schema_name" not in data:
-            data["curriculum_schema_name"] = self.__class__.__name__
-        super().__init__(**data)
 
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
@@ -112,7 +105,7 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                 f"_schema_v{self.curriculum_schema_version}")
 
     def _get_export_schema_name(self):
-        return (f"/{self.curriculum_schema_name}_v{self.curriculum_schema_version}")
+        return (f"/{self.__class__.__name__}_v{self.curriculum_schema_version}")
 
     def save_to_json(self, path: str = ""):
         path = path or os.path.dirname(__file__)
@@ -132,7 +125,14 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
         # Transform the model dict before serialization
         transformed_dict = transform_dict_with_enum_keys(
             self.dict(by_alias=True))
-        return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
+        
+        # Add the schema name (only) when exporting to json
+        transformed_dict = {'curriculum_schema_name':self.__class__.__name__,
+                            **transformed_dict}
+        
+        return json.dumps(transformed_dict, 
+                          indent=4, 
+                          default=pydantic_encoder)
 
     def diagram_rules(self,
                       render_file_format='svg',
@@ -145,7 +145,7 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
             f_name = path + self._get_export_model_name() + '_rules'
             dot_rules.render(f_name,
                              format=render_file_format)
-        logger.info(f"Curriculum rules diagram saved to {f_name}")
+            logger.info(f"Curriculum rules diagram saved to {f_name}")
         return dot_rules
 
     def diagram_paras(self,
