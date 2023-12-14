@@ -121,7 +121,7 @@ def download_dir_from_s3(bucket='aind-behavior-data',
     s3_dir_path = f"{bucket}/{s3_dir}"
     try:
         res = fs.get(s3_dir_path, local_dir, recursive=True)
-        logger.info(f'{len(res)} objects downloaded from s3://{s3_dir_path} '
+        logger.info(f'{len(res)-2} objects downloaded from s3://{s3_dir_path} '
                     f'to {local_dir}')
     except FileNotFoundError:
         logger.error(f'Directory not found: s3://{s3_file_path}')

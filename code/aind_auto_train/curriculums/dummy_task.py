@@ -3,8 +3,9 @@
 # %%
 from typing import List, Dict
 
+from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
 from aind_auto_train.schema.task import Task, TrainingStage, Metrics, TaskParas
-from aind_auto_train.schema.curriculum import BehaviorCurriculum, StageTransitions, TransitionRule, Decision
+from aind_auto_train.schema.curriculum import Curriculum, StageTransitions, TransitionRule, Decision
 
 
 # Override the metrics class
@@ -13,16 +14,12 @@ class DummyTaskMetrics(Metrics):
     dummy_metric_int: List[int]
 
 # Override the task parameters class
-
-
 class DummyTaskParas(TaskParas):
     dummy_para_bool: bool
     dummy_para_float: float
 
 # Override the curriculum class
-
-
-class DummyTaskCurriculum(BehaviorCurriculum[DummyTaskParas, DummyTaskMetrics]):
+class DummyTaskCurriculum(Curriculum[DummyTaskParas, DummyTaskMetrics]):
     # Override parameters
     parameters: Dict[TrainingStage, DummyTaskParas]
 
@@ -119,7 +116,7 @@ curriculum = DummyTaskCurriculum(
 if __name__ == '__main__':
     import os
 
-    curriculum_path = '/root/capsule/results/saved_curriculums'
+    curriculum_path = LOCAL_SAVED_CURRICULUM_ROOT
     os.makedirs(curriculum_path, exist_ok=True)
 
     # Save curriculum json and diagrams

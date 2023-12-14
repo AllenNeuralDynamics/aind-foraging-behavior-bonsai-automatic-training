@@ -1,6 +1,7 @@
 # %%
 import json
 import os
+import logging
 import numpy as np
 from enum import Enum
 from typing import List, Dict, Generic, Literal
@@ -14,7 +15,7 @@ from aind_auto_train.schema.task import (Task, TrainingStage,
 from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
-
+logger = logging.getLogger(__name__)
 
 class Decision(Enum):
     STAY: str = "stay"
@@ -42,8 +43,11 @@ class StageTransitions(BaseModel):
         validate_assignment = True
 
 
-class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
-    ''' A parent curriculum for AIND behavioral task '''
+class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
+    ''' A parent curriculum for AIND behavioral task 
+    When adding a new curriculum, please inherit from this class and 
+    specify the {taskparas_class} and {metrics_class} in the generic type
+    '''
     # Version of this **schema**, hard-coded here only.
     curriculum_schema_version: Literal["0.1"] = Field(
         "0.1", title="Curriculum schema version")
@@ -95,31 +99,53 @@ class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                 return rule
         return None
 
-    def _get_export_file_name(self, path: str = ""):
-        if path == "":
-            path = os.path.dirname(__file__)
-        return path + \
-            (f"/curriculum_{self.task}_{self.task_schema_version}_"
-             f"{self.curriculum_schema_version}_{self.curriculum_version}")
+    def _get_export_model_name(self):
+        return (f"/{self.task}_v{self.task_schema_version}"
+                f"_curriculum_v{self.curriculum_version}"
+                f"_schema_v{self.curriculum_schema_version}")
+
+    def _get_export_schema_name(self):
+        return (f"/{self.__class__.__name__}_v{self.curriculum_schema_version}")
 
     def save_to_json(self, path: str = ""):
-        with open(self._get_export_file_name(path) + '.json', 'w') as f:
+        path = path or os.path.dirname(__file__)
+        f_name_model = path + self._get_export_model_name() + '.json'
+        # Dump the model
+        with open(f_name_model, 'w') as f:
             f.write(self.to_json())
+        logger.info(f"Curriculum saved to {f_name_model}")
+        
+        # Dump the schema as well
+        f_name_schema = path + self._get_export_schema_name() + '.json'
+        with open(f_name_schema, 'w') as f:
+            f.write(self.schema_json(indent=4))
+        logger.info(f"Curriculum schema saved to {f_name_schema}")
 
     def to_json(self):
         # Transform the model dict before serialization
         transformed_dict = transform_dict_with_enum_keys(
             self.dict(by_alias=True))
-        return json.dumps(transformed_dict, indent=4, default=pydantic_encoder)
+        
+        # Add the schema name (only) when exporting to json
+        transformed_dict = {'curriculum_schema_name':self.__class__.__name__,
+                            **transformed_dict}
+        
+        return json.dumps(transformed_dict, 
+                          indent=4, 
+                          default=pydantic_encoder)
 
     def diagram_rules(self,
                       render_file_format='svg',
                       path=''):
         ''' Show the diagram of the curriculum '''
+        path = path or os.path.dirname(__file__)
         dot_rules = draw_diagram_rules(self)
+        
         if render_file_format != '':
-            dot_rules.render(self._get_export_file_name(path) + '_rules',
+            f_name = path + self._get_export_model_name() + '_rules'
+            dot_rules.render(f_name,
                              format=render_file_format)
+            logger.info(f"Curriculum rules diagram saved to {f_name}")
         return dot_rules
 
     def diagram_paras(self,
@@ -130,14 +156,17 @@ class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                       path='',
                       ):
         ''' Show the table for all parameters in all stages'''
+        path = path or os.path.dirname(__file__)
         dot_paras = draw_diagram_paras(self,
                                        min_value_width=min_value_width,
                                        min_var_name_width=min_var_name_width,
                                        fontsize=fontsize
                                        )
         if render_file_format != '':
-            dot_paras.render(self._get_export_file_name(path) + '_paras',
+            f_name = path + self._get_export_model_name() + '_paras'
+            dot_paras.render(f_name,
                              format=render_file_format)
+            logger.info(f"Curriculum parameters diagram saved to {f_name}")
 
         return dot_paras
 
@@ -145,15 +174,18 @@ class BehaviorCurriculum(BaseModel, Generic[taskparas_class, metrics_class]):
         validate_assignment = True
 
 
-class DynamicForagingCurriculum(BehaviorCurriculum[DynamicForagingParas,
-                                                   DynamicForagingMetrics]):
+class DynamicForagingCurriculum(Curriculum[DynamicForagingParas,
+                                           DynamicForagingMetrics]):
+    """ Task-specific curriculum for dynamic foraging task
+    Note that the two generic types {taskparas_class} and {metrics_class} are specified here
+    """
     # Override parameters
     parameters: Dict[TrainingStage, DynamicForagingParas]
 
     # Override metrics
     def evaluate_transitions(self,
                              current_stage: TrainingStage,
-                             metrics: DynamicForagingMetrics  # Note the dynamical type here
+                             metrics: DynamicForagingMetrics
                              ) -> TrainingStage:
         return super().evaluate_transitions(current_stage, metrics)
 

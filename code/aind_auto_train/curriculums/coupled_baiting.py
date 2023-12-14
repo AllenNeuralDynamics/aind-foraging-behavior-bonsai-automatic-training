@@ -7,6 +7,7 @@ Run the code to generate the curriculum.json and graphs
 '''
 
 # %%
+from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
 
 from aind_auto_train.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
@@ -85,7 +86,7 @@ paras_stage_1 = DynamicForagingParas(
 )
 
 # "Phase C" in Han's slides
-paras_stage_2 = paras_stage_1.copy(update=dict(
+paras_stage_2 = paras_stage_1.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_2,
     description="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])",
 
@@ -124,7 +125,7 @@ paras_stage_2 = paras_stage_1.copy(update=dict(
 ))
 
 # "Phase D" in Han's slides
-paras_stage_3 = paras_stage_2.copy(update=dict(
+paras_stage_3 = paras_stage_2.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_3,
     description="Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])",
 
@@ -151,7 +152,7 @@ paras_stage_3 = paras_stage_2.copy(update=dict(
 ))
 
 # "Phase E" in Han's slides
-paras_stage_final = paras_stage_3.copy(update=dict(
+paras_stage_final = paras_stage_3.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_FINAL,
     description="Phase E in Han's slides (full task: block = [20, 60, 20], p_sum = 0.45, p_ratio = [8:1], [6:1], [3:1], [1:1])",
 
@@ -318,7 +319,7 @@ curriculum = DynamicForagingCurriculum(
 if __name__ == '__main__':
     import os
     
-    curriculum_path = '/root/capsule/results/saved_curriculums'
+    curriculum_path = LOCAL_SAVED_CURRICULUM_ROOT
     os.makedirs(curriculum_path, exist_ok=True)
     
     # Save curriculum json and diagrams
