@@ -1,6 +1,6 @@
 # %%
 from pydantic import Field
-from typing import List, TypeVar
+from typing import List, TypeVar, Literal
 from enum import Enum
 
 from pydantic import BaseModel
@@ -13,6 +13,7 @@ class Task(Enum):
     C0B0 = "Uncoupled Without Baiting"
     C1B0 = "Coupled Without Baiting"
     C0B1 = "Uncoupled Baiting"
+    DUMMY = "Dummy task"
     
 class AdvancedBlockMode(Enum):
     ''' Modes for advanced block '''
@@ -55,16 +56,27 @@ class TaskParas(AindModel):
     """Parent class for TaskParas. All other task parameters should inherit from this class
     """
     # Metadata
-    task: Task = Field(Task.C1B1, title="Task name")
-    task_schema_version: str = Field("0.1", title="Schema version")  # Corresponding to the GUI
-    curriculum_version: str = Field("0.1", title="Curriculum version")  # Corresponding to the curriculum
-    training_stage: TrainingStage = Field(TrainingStage.STAGE_1, title="Training stage")
+    task: Task = Field(..., title="Task name")
+    task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
+    curriculum_version: str = Field(..., title="Curriculum version")  # Corresponding to the curriculum
+    training_stage: TrainingStage = Field(..., title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
     class Config:
         validate_assignment = True
+
+    def to_GUI_format(self) -> dict:
+        '''Turn to the GUI format, especially convert numbers to strings
+        '''        
+        return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
+                      value.value if isinstance(value, Enum) else  # Enum --> use its name
+                      str(value))   # All other type -> str
+                for key, value in self.dict().items()
+                if not self.__fields__[key].json_schema_extra or 
+                'exclude_from_GUI' not in self.__fields__[key].json_schema_extra}  # When generate paras for the GUI, exclude those manually controled fields
+
     
-# Metrics class in Curriculum must be a subclass of Metrics
+# Task para class in Curriculum must be a subclass of TaskParas
 taskparas_class = TypeVar('taskparas_class', bound=TaskParas)
 
 class DynamicForagingParas(TaskParas):
@@ -128,27 +140,19 @@ class DynamicForagingParas(TaskParas):
     LeftValue_volume: float = Field(5.00, title="Left reward size (volume)", exclude_from_GUI=True)
     
     # --- Other GUI fields that will never be changed by the script (only clicked by the user) ---
-    NextBlock: bool = Field(False, title="(User clicks) Next block", const=True, exclude_from_GUI=True)
-    GiveLeft: bool = Field(False, title="(User clicks) Give left", const=True, exclude_from_GUI=True)
-    GiveRight: bool = Field(False, title="(User clicks) Give right", const=True, exclude_from_GUI=True)
-    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", const=True, exclude_from_GUI=True)
-    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", const=True, exclude_from_GUI=True)
-    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", const=True, exclude_from_GUI=True)
-    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", const=True, exclude_from_GUI=True)
-    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", const=True, exclude_from_GUI=True)
-    SaveTraining: bool = Field(True, title="(User clicks) Save training", const=True, exclude_from_GUI=True)
+    NextBlock: bool = Field(False, title="(User clicks) Next block", exclude_from_GUI=True)
+    GiveLeft: bool = Field(False, title="(User clicks) Give left", exclude_from_GUI=True)
+    GiveRight: bool = Field(False, title="(User clicks) Give right", exclude_from_GUI=True)
+    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", exclude_from_GUI=True)
+    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", exclude_from_GUI=True)
+    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", exclude_from_GUI=True)
+    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", exclude_from_GUI=True)
+    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", exclude_from_GUI=True)
+    SaveTraining: bool = Field(True, title="(User clicks) Save training", exclude_from_GUI=True)
     InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
-    Randomness: str = Field("Exponential", title="Randomness mode", const=True, exclude_from_GUI=True)
+    Randomness: str = Field("Exponential", title="Randomness mode", exclude_from_GUI=True)
     
-    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", const=True, exclude_from_GUI=True)  # TODO:What is this???
+    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", exclude_from_GUI=True)  # TODO:What is this???
     
-    def to_GUI_format(self) -> dict:
-        '''Turn to the GUI format, especially convert numbers to strings
-        '''        
-        return {key: (value if isinstance(value, bool) else  # Boolean --> keep it as it is
-                      value.value if isinstance(value, Enum) else  # Enum --> use its name
-                      str(value))   # All other type -> str
-                for key, value in self.dict().items()
-                if 'exclude_from_GUI' not in self.__fields__[key].field_info.extra}  # When generate paras for the GUI, exclude those manually controled fields
 
 

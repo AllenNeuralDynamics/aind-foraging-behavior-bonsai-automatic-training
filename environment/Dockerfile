@@ -8,12 +8,7 @@ ARG GIT_ACCESS_TOKEN
 COPY git-askpass /
 
 RUN pip install -U --no-cache-dir \
-    aind-data-schema==0.15.25 \
-	pandas\
-	ipykernel\
-	plotly\
-	boto3\
-	graphviz
+	ipykernel
 
 ADD "https://github.com/coder/code-server/releases/download/v4.9.0/code-server-4.9.0-linux-amd64.tar.gz" /.code-server/code-server.tar.gz
 	

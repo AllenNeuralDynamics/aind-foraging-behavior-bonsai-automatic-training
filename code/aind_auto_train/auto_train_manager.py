@@ -2,24 +2,20 @@
 Get data from the behavior master table and give suggestions
 """
 # %%
-import os
 import logging
 
-import numpy as np
 import pandas as pd
-from typing import Any, Generic
 
 from aind_auto_train.schema.curriculum import TrainingStage
 from aind_auto_train.schema.task import metrics_class, Metrics, DynamicForagingMetrics
-from aind_auto_train.curriculums.coupled_baiting import coupled_baiting_curriculum
-from aind_auto_train.util.aws_util import download_and_import_df, export_and_upload_df
+from aind_auto_train.curriculums.coupled_baiting import curriculum as coupled_baiting_curriculum
+from aind_auto_train.util.aws_util import import_df_from_s3, export_df_to_s3
 from aind_auto_train.plot.manager import plot_manager_all_progress
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
 # Directory for caching df_maseter tables
-LOCAL_CACHE_ROOT = '/root/capsule/results/auto_train_manager/'
 task_mapper = {'coupled_block_baiting': 'Coupled Baiting',
                'Coupled Baiting': 'Coupled Baiting'}
 
@@ -267,10 +263,9 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
 
     def download_from_database(self):
         # --- load df_auto_train_manager and df_behavior from s3 ---
-        df_behavior = download_and_import_df(bucket=self.df_behavior_on_s3['bucket'],
+        df_behavior = import_df_from_s3(bucket=self.df_behavior_on_s3['bucket'],
                                              s3_path=self.df_behavior_on_s3['root'],
                                              file_name=self.df_behavior_on_s3['file_name'],
-                                             local_cache_path=LOCAL_CACHE_ROOT,
                                              )
 
         if df_behavior is None:
@@ -298,10 +293,9 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
             columns={'foraging_eff': 'foraging_efficiency'}, inplace=True)
 
         # --- Load curriculum manager table; if not exist, create a new one ---
-        df_manager = download_and_import_df(bucket=self.df_manager_root_on_s3['bucket'],
+        df_manager = import_df_from_s3(bucket=self.df_manager_root_on_s3['bucket'],
                                             s3_path=self.df_manager_root_on_s3['root'],
                                             file_name=self.df_manager_name,
-                                            local_cache_path=LOCAL_CACHE_ROOT,
                                             )
 
         return df_behavior, df_manager
@@ -313,11 +307,10 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
                         self.df_manager_stats_name: self.df_manager_stats}
 
         for file_name, df in df_to_upload.items():
-            export_and_upload_df(df=df,
+            export_df_to_s3(df=df,
                                  bucket='aind-behavior-data',
                                  s3_path=self.df_manager_root_on_s3['root'],
                                  file_name=file_name,
-                                 local_cache_path=LOCAL_CACHE_ROOT,
                                  )
 
 

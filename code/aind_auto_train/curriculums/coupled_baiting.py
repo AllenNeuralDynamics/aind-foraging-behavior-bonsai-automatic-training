@@ -1,22 +1,27 @@
 '''
 Curriculum for Dynamic Foraging - Coupled Baiting
 https://alleninstitute.sharepoint.com/:p:/s/NeuralDynamics/EQwuU0I4PBtGsU2wilCHklEBDTXYGT3F-QtaN6iDGJLBmg?e=N10dya
+
+Run the code to generate the curriculum.json and graphs
+
 '''
 
 # %%
-import numpy as np
+from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
 
 from aind_auto_train.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,
-    TrainingStage, Decision, Task,
+    Decision
 )
 from aind_auto_train.schema.task import (
-    Task, TrainingStage, DynamicForagingParas, DynamicForagingMetrics,
+    Task, TrainingStage, DynamicForagingParas, 
     AutoWaterMode, AdvancedBlockMode
 )
 
-curriculum_version = "0.1"
+task=Task.C1B1
 task_schema_version = "1.0"
+curriculum_version = "0.1"
+curriculum_description = '''Base curriculum for the coupled-baiting task'''
 
 # --- Parameters ---
 # Notes on the STAGE_1:
@@ -31,7 +36,7 @@ paras_stage_1 = DynamicForagingParas(
     # Metainfo
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
-    task=Task.C1B1,
+    task=task,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
     description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
@@ -81,7 +86,7 @@ paras_stage_1 = DynamicForagingParas(
 )
 
 # "Phase C" in Han's slides
-paras_stage_2 = paras_stage_1.copy(update=dict(
+paras_stage_2 = paras_stage_1.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_2,
     description="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])",
 
@@ -120,7 +125,7 @@ paras_stage_2 = paras_stage_1.copy(update=dict(
 ))
 
 # "Phase D" in Han's slides
-paras_stage_3 = paras_stage_2.copy(update=dict(
+paras_stage_3 = paras_stage_2.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_3,
     description="Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])",
 
@@ -147,7 +152,7 @@ paras_stage_3 = paras_stage_2.copy(update=dict(
 ))
 
 # "Phase E" in Han's slides
-paras_stage_final = paras_stage_3.copy(update=dict(
+paras_stage_final = paras_stage_3.model_copy(update=dict(
     training_stage=TrainingStage.STAGE_FINAL,
     description="Phase E in Han's slides (full task: block = [20, 60, 20], p_sum = 0.45, p_ratio = [8:1], [6:1], [3:1], [1:1])",
 
@@ -191,10 +196,11 @@ paras_stage_final = paras_stage_3.copy(update=dict(
 
 # --- Curriculum ---
 # %%
-coupled_baiting_curriculum = DynamicForagingCurriculum(
+curriculum = DynamicForagingCurriculum(
     task=Task.C1B1,
     curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
+    curriculum_description=curriculum_description,
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,
@@ -226,7 +232,7 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
                 TransitionRule(
                     decision=Decision.PROGRESS,
                     to_stage=TrainingStage.STAGE_3,
-                    condition_description="Finished trials >= 300 and efficiency > 0.65",
+                    condition_description="Finished trials >= 300 and efficiency >= 0.65",
                     condition="""lambda metrics:
                         metrics.finished_trials[-1] >= 300
                         and
@@ -311,5 +317,15 @@ coupled_baiting_curriculum = DynamicForagingCurriculum(
 
 # %%
 if __name__ == '__main__':
-    coupled_baiting_curriculum.save_to_json(
-        path='/root/capsule/code/aind_auto_train/curriculums')
+    import os
+    
+    curriculum_path = LOCAL_SAVED_CURRICULUM_ROOT
+    os.makedirs(curriculum_path, exist_ok=True)
+    
+    # Save curriculum json and diagrams
+    curriculum.save_to_json(path=curriculum_path)
+    curriculum.diagram_rules(path=curriculum_path,
+                             render_file_format='svg')
+    curriculum.diagram_paras(path=curriculum_path,
+                             render_file_format='svg',
+                             fontsize=12)

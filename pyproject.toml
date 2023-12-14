@@ -17,11 +17,12 @@ readme = "README.md"
 dynamic = ["version"]
 
 dependencies = [
-    'aind-data-schema==0.15.25',
+    'aind-data-schema',
     'pandas',
     'plotly',
-    'boto3',
-    'graphviz'
+    's3fs',
+    'graphviz',
+    'nbformat==5.1.2',
 ]
 
 [tool.setuptools.packages.find]
