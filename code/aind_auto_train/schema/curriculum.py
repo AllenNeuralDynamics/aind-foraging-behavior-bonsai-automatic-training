@@ -1,6 +1,7 @@
 # %%
 import json
 import os
+import logging
 import numpy as np
 from enum import Enum
 from typing import List, Dict, Generic, Literal
@@ -14,7 +15,7 @@ from aind_auto_train.schema.task import (Task, TrainingStage,
 from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
-
+logger = logging.getLogger(__name__)
 
 class Decision(Enum):
     STAY: str = "stay"
@@ -101,17 +102,27 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                 return rule
         return None
 
-    def _get_export_file_name(self, path: str = ""):
-        if path == "":
-            path = os.path.dirname(__file__)
-        return path + \
-            (f"/{self.task}_v{self.task_schema_version}"
-             f"_curriculum_v{self.curriculum_version}"
-             f"_schema_v{self.curriculum_schema_version}")
+    def _get_export_model_name(self):
+        return (f"/{self.task}_v{self.task_schema_version}"
+                f"_curriculum_v{self.curriculum_version}"
+                f"_schema_v{self.curriculum_schema_version}")
+
+    def _get_export_schema_name(self):
+        return (f"/{self.curriculum_schema_name}_v{self.curriculum_schema_version}")
 
     def save_to_json(self, path: str = ""):
-        with open(self._get_export_file_name(path) + '.json', 'w') as f:
+        path = path or os.path.dirname(__file__)
+        f_name_model = path + self._get_export_model_name() + '.json'
+        # Dump the model
+        with open(f_name_model, 'w') as f:
             f.write(self.to_json())
+        logger.info(f"Curriculum saved to {f_name_model}")
+        
+        # Dump the schema as well
+        f_name_schema = path + self._get_export_schema_name() + '.json'
+        with open(f_name_schema, 'w') as f:
+            f.write(self.schema_json(indent=4))
+        logger.info(f"Curriculum schema saved to {f_name_schema}")
 
     def to_json(self):
         # Transform the model dict before serialization
@@ -123,10 +134,14 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                       render_file_format='svg',
                       path=''):
         ''' Show the diagram of the curriculum '''
+        path = path or os.path.dirname(__file__)
         dot_rules = draw_diagram_rules(self)
+        
         if render_file_format != '':
-            dot_rules.render(self._get_export_file_name(path) + '_rules',
+            f_name = path + self._get_export_model_name() + '_rules'
+            dot_rules.render(f_name,
                              format=render_file_format)
+        logger.info(f"Curriculum rules diagram saved to {f_name}")
         return dot_rules
 
     def diagram_paras(self,
@@ -137,14 +152,17 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
                       path='',
                       ):
         ''' Show the table for all parameters in all stages'''
+        path = path or os.path.dirname(__file__)
         dot_paras = draw_diagram_paras(self,
                                        min_value_width=min_value_width,
                                        min_var_name_width=min_var_name_width,
                                        fontsize=fontsize
                                        )
         if render_file_format != '':
-            dot_paras.render(self._get_export_file_name(path) + '_paras',
+            f_name = path + self._get_export_model_name() + '_paras'
+            dot_paras.render(f_name,
                              format=render_file_format)
+            logger.info(f"Curriculum parameters diagram saved to {f_name}")
 
         return dot_paras
 
