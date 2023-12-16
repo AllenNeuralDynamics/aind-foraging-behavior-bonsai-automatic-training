@@ -63,8 +63,9 @@ class AutoTrainManager:
                                                     'curriculum_version', 'task_schema_version',
                                                     *self.task_specific_metrics_keys,
                                                     'metrics', 'current_stage_suggested', 'current_stage_actual',
-                                                    'if_closed_loop', 'if_overriden_by_trainer', 
+                                                    'if_closed_loop', 'if_overriden_by_trainer',
                                                     'decision', 'next_stage_suggested'])
+
 
     def download_from_database(self) -> (pd.DataFrame, pd.DataFrame):
         """The user must override this method! 
@@ -164,8 +165,9 @@ class AutoTrainManager:
                     'if_closed_loop': False}
 
         # If not in simulation mode, use the actual stage
-        current_stage_actual = self.df_behavior.query(f'subject_id == "{subject_id}"')[
-            'current_stage_actual'].iloc[0]
+        current_stage_actual = self.df_behavior.query(
+            f'subject_id == "{subject_id}" and session == {session}'
+            )['current_stage_actual'].iloc[0]
 
         # If current_stage_actual not in TrainingStage (including None), then we are in open loop for this specific session
         if current_stage_actual not in TrainingStage.__members__:
@@ -192,7 +194,7 @@ class AutoTrainManager:
         current_stage_suggested = _current_stages['current_stage_suggested']
         current_stage_actual = _current_stages['current_stage_actual']
         if_closed_loop = _current_stages['if_closed_loop']
-        
+
         # Skip if current_stage_suggested is not defined
         if current_stage_suggested is None:
             return
@@ -220,6 +222,7 @@ class AutoTrainManager:
         # TODO: to use the correct version of curriculum
         # Should we allow change of curriculum version during a training? maybe not...
         # But we should definitely allow different curriculum versions for different
+
         decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
             current_stage=TrainingStage[current_stage_actual],
             metrics=DynamicForagingMetrics(**metrics))
@@ -238,7 +241,8 @@ class AutoTrainManager:
                  task_schema_version='1.0',  # Allows changing task schema during training
                  session_at_current_stage=session_at_current_stage,
                  current_stage_suggested=current_stage_suggested,
-                 current_stage_actual=current_stage_actual,  # Note this could be from simulation or invalid feedback-induced open loop session
+                 # Note this could be from simulation or invalid feedback-induced open loop session
+                 current_stage_actual=current_stage_actual,
                  if_closed_loop=if_closed_loop,
                  if_overriden_by_trainer=current_stage_actual != current_stage_suggested if if_closed_loop else False,
 
