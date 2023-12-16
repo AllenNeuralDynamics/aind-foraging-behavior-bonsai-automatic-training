@@ -192,6 +192,10 @@ class AutoTrainManager:
         current_stage_suggested = _current_stages['current_stage_suggested']
         current_stage_actual = _current_stages['current_stage_actual']
         if_closed_loop = _current_stages['if_closed_loop']
+        
+        # Skip if current_stage_suggested is not defined
+        if current_stage_suggested is None:
+            return
 
         # Get metrics history (already sorted by session)
         df_history = self.df_behavior.query(
