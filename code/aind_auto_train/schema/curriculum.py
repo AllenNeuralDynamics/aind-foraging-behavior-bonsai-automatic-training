@@ -187,6 +187,9 @@ class DynamicForagingCurriculum(Curriculum[DynamicForagingParas,
                              current_stage: TrainingStage,
                              metrics: DynamicForagingMetrics
                              ) -> TrainingStage:
+        if not isinstance(metrics, DynamicForagingMetrics):
+            raise TypeError(f"Expected metrics to be an instance of DynamicForagingMetrics, got {type(metrics).__name__} instead.")
+
         return super().evaluate_transitions(current_stage, metrics)
 
 

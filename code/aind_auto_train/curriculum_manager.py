@@ -8,6 +8,7 @@ import re
 import glob
 import json
 import importlib
+import inspect
 
 import numpy as np
 import pandas as pd
@@ -16,6 +17,7 @@ from typing import Any, Generic
 from aind_auto_train.schema.task import Task
 from aind_auto_train.util.aws_util import download_dir_from_s3, upload_dir_to_s3
 import aind_auto_train.schema.curriculum as curriculum_schemas
+import aind_auto_train.schema.task as task_schemas
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +65,8 @@ class CurriculumManager:
                        task: Task,
                        task_schema_version: str,
                        curriculum_schema_version: str,
-                       curriculum_version: str):
+                       curriculum_version: str
+                       ) -> dict:
         """ Get a curriculum from the saved_curriculums directory"""
 
         json_name = (f"{task}_v{task_schema_version}_"
@@ -75,7 +78,8 @@ class CurriculumManager:
             with open(self.saved_curriculums_local + json_name, 'r') as f:
                 loaded_json = json.load(f)
         except FileNotFoundError:
-            logger.error(f"Could not find {json_name} in {self.saved_curriculums_local}")
+            logger.error(
+                f"Could not find {json_name} in {self.saved_curriculums_local}")
             return None
 
         # Sanity check
@@ -89,23 +93,40 @@ class CurriculumManager:
 
         # Retrieve the curriculum schema
         curriculum_schema_name = loaded_json['curriculum_schema_name']
-        
+
         # Check whether the required curriculum schema is available
         assert hasattr(curriculum_schemas, curriculum_schema_name), \
             f"'{curriculum_schema_name}' not found in aind_auto_train.schema.curriculum"
-        
+
         curriculum_schema = getattr(curriculum_schemas, curriculum_schema_name)
 
         # Check the schema version
         schema_version = curriculum_schema.model_fields['curriculum_schema_version'].default
         assert loaded_json['curriculum_schema_version'] == schema_version, \
             f"schema version in the loaded json ({loaded_json['curriculum_schema_version']}) does not match the loaded schema ({schema_version})!"
-        
-        # Create the curriculum object    
-        curriculum = curriculum_schema(**loaded_json)
-        logger.info(f"Loaded a {curriculum_schema_name} model from '{json_name}'.")
 
-        return curriculum
+        # Create the curriculum object
+        curriculum = curriculum_schema(**loaded_json)
+        logger.info(
+            f"Loaded a {curriculum_schema_name} model from '{json_name}'.")
+
+        # Get the metrics_class name from the typehint of curriculum.evaluate_transitions
+        metrics_schema = inspect.getfullargspec(
+            curriculum.evaluate_transitions
+        ).annotations.get('metrics', None)
+        
+        metrics_schema_name = metrics_schema.__name__ if metrics_schema else None
+        
+        # Check whether the required metrics schema is available
+        assert hasattr(task_schemas, metrics_schema_name), \
+            f"'{metrics_schema_name}' not found in aind_auto_train.schema.task"
+       
+        metrics = getattr(task_schemas, metrics_schema_name)
+
+        return {'curriculum': curriculum,
+                'curriculum_json_name': json_name,
+                'metrics': metrics,
+                }
 
     def download_curriculums(self):
         download_dir_from_s3(bucket=self.saved_curriculums_on_s3['bucket'],
@@ -133,7 +154,7 @@ if __name__ == "__main__":
         curriculum_schema_version='0.1',
         curriculum_version='0.2'
     )
-    
+
     curriculum.diagram_rules(render_file_format='svg')
     # curriculum_manager.upload_curriculums()
 # %%
