@@ -32,6 +32,7 @@ class AutoTrainManager:
 
     def __init__(self,
                  manager_name: str,
+                 if_rerun_all: bool = False,
                  ):
         """
         manager_name: str
@@ -54,7 +55,8 @@ class AutoTrainManager:
         else:
             self.if_simulation_mode = False
 
-        self.df_manager = None
+        if if_rerun_all:
+            self.df_manager = None  # Rerun for debugging purpose
 
         # Create a new table if df_manager is empty
         if self.df_manager is None:
@@ -331,6 +333,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
     def __init__(
             self,
             manager_name: str = 'Janelia_demo',
+            if_rerun_all: bool = False,
             df_behavior_on_s3: dict = dict(bucket='aind-behavior-data',
                                            root='Han/ephys/report/all_sessions/export_all_nwb/',
                                            file_name='df_sessions.pkl'),
@@ -352,7 +355,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         self.df_manager_root_on_s3 = df_manager_root_on_s3
         self.df_behavior_on_s3 = df_behavior_on_s3
 
-        super().__init__(manager_name=manager_name)
+        super().__init__(manager_name=manager_name, if_rerun_all=if_rerun_all)
 
     def download_from_database(self):
         # --- load df_auto_train_manager and df_behavior from s3 ---
@@ -413,7 +416,8 @@ if __name__ == "__main__":
                                                                      root='foraging_nwb_bonsai_processed/',
                                                                      file_name='df_sessions.pkl'),
                                               df_manager_root_on_s3=dict(bucket='aind-behavior-data',
-                                                                         root='foraging_auto_training/')
+                                                                         root='foraging_auto_training/'),
+                                              if_rerun_all=True
                                               )
     manager.update()
     manager.plot_all_progress()
