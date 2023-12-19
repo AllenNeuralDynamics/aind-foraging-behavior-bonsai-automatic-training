@@ -11,6 +11,7 @@ from aind_auto_train.schema.task import metrics_class, Metrics, DynamicForagingM
 from aind_auto_train.curriculums.coupled_baiting import curriculum as coupled_baiting_curriculum
 from aind_auto_train.util.aws_util import import_df_from_s3, export_df_to_s3
 from aind_auto_train.plot.manager import plot_manager_all_progress
+from aind_auto_train.curriculum_manager import CurriculumManager
 
 logger = logging.getLogger(__name__)
 
@@ -60,12 +61,16 @@ class AutoTrainManager:
             logger.warning('No df_manager found, creating a new one...')
             self.df_manager = pd.DataFrame(columns=['subject_id', 'session_date', 'task',
                                                     'session', 'session_at_current_stage',
-                                                    'curriculum_version', 'task_schema_version',
+                                                    'curriculum_task', 'task_schema_version', 'curriculum_version', 'curriculum_schema_version',
+                                                    'curriculum_json_name',
                                                     *self.task_specific_metrics_keys,
                                                     'metrics', 'current_stage_suggested', 'current_stage_actual',
                                                     'if_closed_loop', 'if_overriden_by_trainer',
                                                     'decision', 'next_stage_suggested'])
 
+        # Initialize CurriculumManager
+        # Use default s3 path to saved_curriculums
+        self.curriculum_manager = CurriculumManager()
 
     def download_from_database(self) -> (pd.DataFrame, pd.DataFrame):
         """The user must override this method! 
@@ -167,7 +172,7 @@ class AutoTrainManager:
         # If not in simulation mode, use the actual stage
         current_stage_actual = self.df_behavior.query(
             f'subject_id == "{subject_id}" and session == {session}'
-            )['current_stage_actual'].iloc[0]
+        )['current_stage_actual'].iloc[0]
 
         # If current_stage_actual not in TrainingStage (including None), then we are in open loop for this specific session
         if current_stage_actual not in TrainingStage.__members__:
@@ -186,6 +191,27 @@ class AutoTrainManager:
         return {'current_stage_suggested': current_stage_suggested,
                 'current_stage_actual': current_stage_actual,
                 'if_closed_loop': True}
+
+    def _get_curriculum_to_use(self, df_this):
+        dict_this = df_this.to_dict(orient='records')[0]
+        if 'curriculum_version' in dict_this:
+            return self.curriculum_manager.get_curriculum(
+                # Note the distinguish between 'curriculum_task' and 'task'
+                task=dict_this['curriculum_task'],
+                task_schema_version=dict_this['task_schema_version'],
+                curriculum_schema_version=dict_this['curriculum_schema_version'],
+                curriculum_version=dict_this['curriculum_version'],
+            )
+        else:  # Use default curriculum (for simulation)
+            logger.warning(
+                msg=f'No curriculum_version specified in df_behavior, use default curriculum '
+                f'"Coupled Baiting_v1.0_curriculum_v0.1_schema_v0.1"')
+            return self.curriculum_manager.get_curriculum(
+                task='Coupled Baiting',
+                task_schema_version='1.0',
+                curriculum_schema_version='0.1',
+                curriculum_version='0.1'
+            )
 
     def add_and_evaluate_session(self, subject_id, session):
         """ Add a session to the curriculum manager and evaluate the transition """
@@ -222,10 +248,16 @@ class AutoTrainManager:
         # TODO: to use the correct version of curriculum
         # Should we allow change of curriculum version during a training? maybe not...
         # But we should definitely allow different curriculum versions for different
+        df_this = self.df_behavior.query(
+            f'subject_id == "{subject_id}" and session == {session}')
+        _curr = self._get_curriculum_to_use(df_this)
+        curriculum_to_use = _curr['curriculum']
+        curriculum_json = _curr['curriculum_json_name']
+        metrics_to_use = _curr['metrics']
 
-        decision, next_stage_suggested = coupled_baiting_curriculum.evaluate_transitions(
+        decision, next_stage_suggested = curriculum_to_use.evaluate_transitions(
             current_stage=TrainingStage[current_stage_actual],
-            metrics=DynamicForagingMetrics(**metrics))
+            metrics=metrics_to_use(**metrics))
 
         # Add to the manager
         df_this = self.df_behavior.query(
@@ -237,8 +269,11 @@ class AutoTrainManager:
                  session_date=df_this.session_date,
                  session=session,
                  task=task_mapper[df_this.task],
-                 curriculum_version='0.1',  # Allows changing curriculum during training
-                 task_schema_version='1.0',  # Allows changing task schema during training
+                 task_schema_version=curriculum_to_use.task_schema_version,
+                 curriculum_task=curriculum_to_use.task,
+                 curriculum_schema_version=curriculum_to_use.curriculum_schema_version,
+                 curriculum_version=curriculum_to_use.curriculum_version,
+                 curriculum_json_name=curriculum_json,
                  session_at_current_stage=session_at_current_stage,
                  current_stage_suggested=current_stage_suggested,
                  # Note this could be from simulation or invalid feedback-induced open loop session
@@ -343,7 +378,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
             str)
         # TODO: do not hard code the task name
         df_behavior = df_behavior.query(
-            f"task in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
+            f"curriculum_task in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
 
         # Rename columns to the same as in DynamicForagingMetrics
