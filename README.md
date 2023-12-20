@@ -22,12 +22,12 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 ## Usage
 1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L199-L204) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L223-L247).
    - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py) for the dynamic foraging task.
-   - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/Coupled%20Baiting_v1.0_curriculum_v0.1_schema_v0.1.json) 
+   - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.2.json) 
    - Here are automatically rendered diagrams for stage transitions rules and parameters (click the images to try the hover feature :blush:)
 
 | rules | parameters |
 |--|--|
-|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_v1.0_curriculum_v0.1_schema_v0.1_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_v1.0_curriculum_v0.1_schema_v0.1_paras.svg">|
+|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.2_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.2_paras.svg">|
 
 2. Create `AutoTrainManager` and connect it to the behavior database `df_behavior`.
 3. Feed all necessary metrics to `Auto train manager` and let it run.
@@ -37,9 +37,9 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 4. To add other tasks, users should add their own task and curriculum schemas.
 
 ## Demo
-- Demo notebook for the [curriculum schema](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_schema.ipynb).
-- Demo notebook for [a full automation workflow (auto train manager)](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_auto_train_manager.ipynb)
-- Demo notebook for the [curriculum manager](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_curriculum_manager.ipynb)
+- Demo notebook for the [curriculum schema](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_schema.ipynb).
+- Demo notebook for [a full automation workflow (auto train manager)](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_auto_train_manager.ipynb)
+- Demo notebook for the [curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_curriculum_manager.ipynb)
 
 ## Compared with SLIMS/mTrack
 <!-- markdown-link-check-disable-next-line -->

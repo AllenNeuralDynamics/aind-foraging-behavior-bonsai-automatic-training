@@ -31,7 +31,7 @@ def draw_diagram_rules(curriculum):
     # Create Digraph object
     dot = Digraph(comment='Curriculum for Dynamic Foraging - Coupled Baiting')
     dot.attr(label=f'Curriculum (v{curriculum.curriculum_version}) '
-                   f'for {curriculum.task} (v{curriculum.task_schema_version})\n '
+                   f'for {curriculum.curriculum_task}\n '
                    f'{curriculum.curriculum_description}',
              labelloc='t',
              fontsize='17'
@@ -47,7 +47,8 @@ def draw_diagram_rules(curriculum):
                  shape='ellipse',
                  style='filled',
                  fillcolor=stage_color_mapper[stage.name],
-                 tooltip=curriculum.parameters[stage].description)
+                 tooltip=curriculum.parameters[stage].description + \
+                     f'\nstage_task = {curriculum.parameters[stage].task}')
 
     # Add the Graduated node
     dot.node(name='GRADUATED',
@@ -123,7 +124,7 @@ def draw_diagram_paras(curriculum,
         paras.append(dict_paras)  # Cache the parameters
         dict_paras = {k: v for k, v in dict_paras.items()
                       if k not in ('task', 'task_schema_version', 'curriculum_version',
-                                   'training_stage', 'description', 'UncoupledReward')}
+                                   'training_stage', 'description')}
 
         for i_para, (para_name, para_value) in enumerate(dict_paras.items()):
             # Hightlight the changed parameters
@@ -154,7 +155,8 @@ def draw_diagram_paras(curriculum,
         dot.node(name=f'cell_0_{i_stage+1}',
                  fillcolor=stage_color_mapper[stage.name],
                  label=stage.name,
-                 tooltip=curriculum.parameters[stage].description,
+                 tooltip=curriculum.parameters[stage].description + \
+                     f'\nstage_task = {curriculum.parameters[stage].task}',
                  width=str(min_value_width),
         )
 

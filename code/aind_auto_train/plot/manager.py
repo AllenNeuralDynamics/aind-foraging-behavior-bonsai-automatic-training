@@ -60,7 +60,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     # Create the figure
     fig = go.Figure(data=traces)
     fig.update_layout(
-        title=f'Training Progress of All Mice ({manager.manager_name}, task = {manager.df_manager.task[0]})',
+        title=f'Training Progress of All Mice ({manager.manager_name}, curriculum_task = {manager.df_manager.curriculum_task[0]})',
         xaxis_title='Session',
         yaxis_title='Mouse',
         height=1200

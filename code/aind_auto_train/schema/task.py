@@ -52,6 +52,11 @@ class DynamicForagingMetrics(Metrics):
     foraging_efficiency: List[float]  # Full history of foraging efficiency
     finished_trials: List[int]  # Full history of finished trials
     
+# For dummy task
+class DummyTaskMetrics(Metrics):
+    dummy_metric_float: List[float]
+    dummy_metric_int: List[int]
+    
 class TaskParas(AindModel):
     """Parent class for TaskParas. All other task parameters should inherit from this class
     """
@@ -155,4 +160,9 @@ class DynamicForagingParas(TaskParas):
     qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", exclude_from_GUI=True)  # TODO:What is this???
     
 
+
+# For dummy task
+class DummyTaskParas(TaskParas):
+    dummy_para_bool: bool
+    dummy_para_float: float
 

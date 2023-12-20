@@ -4,31 +4,8 @@
 from typing import List, Dict
 
 from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
-from aind_auto_train.schema.task import Task, TrainingStage, Metrics, TaskParas
-from aind_auto_train.schema.curriculum import Curriculum, StageTransitions, TransitionRule, Decision
-
-
-# Override the metrics class
-class DummyTaskMetrics(Metrics):
-    dummy_metric_float: List[float]
-    dummy_metric_int: List[int]
-
-# Override the task parameters class
-class DummyTaskParas(TaskParas):
-    dummy_para_bool: bool
-    dummy_para_float: float
-
-# Override the curriculum class
-class DummyTaskCurriculum(Curriculum[DummyTaskParas, DummyTaskMetrics]):
-    # Override parameters
-    parameters: Dict[TrainingStage, DummyTaskParas]
-
-    # Override metrics
-    def evaluate_transitions(self,
-                             current_stage: TrainingStage,
-                             metrics: DummyTaskMetrics  # Note the dynamical type here
-                             ) -> TrainingStage:
-        return super().evaluate_transitions(current_stage, metrics)
+from aind_auto_train.schema.task import Task, TrainingStage, DummyTaskParas, DummyTaskMetrics
+from aind_auto_train.schema.curriculum import DummyTaskCurriculum, StageTransitions, TransitionRule, Decision
 
 
 meta = dict(curriculum_version="0.1",
@@ -57,7 +34,8 @@ paras_stage_2 = DummyTaskParas(
 )
 
 curriculum = DummyTaskCurriculum(
-    **meta,
+    curriculum_task=Task.DUMMY,
+    curriculum_version="0.1",
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,

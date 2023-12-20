@@ -1,8 +1,7 @@
 {
     "curriculum_schema_name": "DynamicForagingCurriculum",
-    "curriculum_schema_version": "0.1",
-    "task": "Coupled Baiting",
-    "task_schema_version": "1.0",
+    "curriculum_schema_version": "0.2",
+    "curriculum_task": "Coupled Baiting",
     "curriculum_version": "0.1",
     "curriculum_description": "Base curriculum for the coupled-baiting task",
     "parameters": {
