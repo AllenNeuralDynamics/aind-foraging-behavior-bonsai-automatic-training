@@ -152,5 +152,5 @@ if __name__ == "__main__":
 
     print(_curr)
     # _curr['curriculum'].diagram_rules(render_file_format='svg')
-    # curriculum_manager.upload_curriculums()
+    curriculum_manager.upload_curriculums()
 # %%

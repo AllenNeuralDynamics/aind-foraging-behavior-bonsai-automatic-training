@@ -158,7 +158,7 @@ class AutoTrainManager:
 
         # Else, throw an error
         logger.error(
-            msg=f"Cannot find subject {subject_id} any session < {session}")
+            msg=f"Cannot find subject {subject_id} any session < {session} in df_manager!")
         return None
 
     def _get_current_stages(self, subject_id, session) -> dict:
@@ -199,8 +199,7 @@ class AutoTrainManager:
         if 'curriculum_version' in dict_this:
             return self.curriculum_manager.get_curriculum(
                 # Note the distinguish between 'curriculum_task' and 'task'
-                task=dict_this['curriculum_task'],
-                task_schema_version=dict_this['task_schema_version'],
+                curriculum_task=dict_this['curriculum_task'],
                 curriculum_schema_version=dict_this['curriculum_schema_version'],
                 curriculum_version=dict_this['curriculum_version'],
             )
@@ -209,8 +208,7 @@ class AutoTrainManager:
                 msg=f'No curriculum_version specified in df_behavior, use default curriculum '
                 f'"Coupled Baiting_v1.0_curriculum_v0.1_schema_v0.1"')
             return self.curriculum_manager.get_curriculum(
-                task='Coupled Baiting',
-                task_schema_version='1.0',
+                curriculum_task='Coupled Baiting',
                 curriculum_schema_version='0.1',
                 curriculum_version='0.1'
             )
@@ -225,9 +223,10 @@ class AutoTrainManager:
 
         # Skip if current_stage_suggested is not defined
         if current_stage_suggested is None:
+            logger.error(f'Skipping this session...')
             return
 
-        # Get metrics history (already sorted by session)
+        # Get metrics history (sorted by session)
         df_history = self.df_behavior.query(
             f'subject_id == "{subject_id}" and session <= {session}'
         ).sort_values(by=['session'], ascending=True)
@@ -253,6 +252,12 @@ class AutoTrainManager:
         df_this = self.df_behavior.query(
             f'subject_id == "{subject_id}" and session == {session}')
         _curr = self._get_curriculum_to_use(df_this)
+
+        if _curr is None:  # If no curriculum is found
+            logger.error(
+                f'No update on {subject_id}, session {session} due to missing curriculum.json')
+            return
+
         curriculum_to_use = _curr['curriculum']
         curriculum_json = _curr['curriculum_json_name']
         metrics_to_use = _curr['metrics']
@@ -271,7 +276,6 @@ class AutoTrainManager:
                  session_date=df_this.session_date,
                  session=session,
                  task=task_mapper[df_this.task],
-                 task_schema_version=curriculum_to_use.task_schema_version,
                  curriculum_task=curriculum_to_use.curriculum_task,
                  curriculum_schema_version=curriculum_to_use.curriculum_schema_version,
                  curriculum_version=curriculum_to_use.curriculum_version,
@@ -374,11 +378,11 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
             df_behavior.columns = df_behavior.columns.droplevel(
                 level=0)
         # Remove session number with NaN, if any
-        df_behavior = df_behavior.reset_index().dropna(
-            subset=['session'])
+        df_behavior = df_behavior.reset_index().dropna(subset=['session'])
+
         # Turn subject_id to str for maximum compatibility
-        df_behavior['subject_id'] = df_behavior['subject_id'].astype(
-            str)
+        df_behavior['subject_id'] = df_behavior['subject_id'].astype(str)
+
         # TODO: do not hard code the task name
         df_behavior = df_behavior.query(
             f"curriculum_task in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
@@ -417,7 +421,7 @@ if __name__ == "__main__":
                                                                      file_name='df_sessions.pkl'),
                                               df_manager_root_on_s3=dict(bucket='aind-behavior-data',
                                                                          root='foraging_auto_training/'),
-                                              if_rerun_all=True
+                                              if_rerun_all=False
                                               )
     manager.update()
     manager.plot_all_progress()
