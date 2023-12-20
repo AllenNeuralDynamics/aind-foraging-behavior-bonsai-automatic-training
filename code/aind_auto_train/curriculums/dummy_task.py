@@ -57,7 +57,8 @@ paras_stage_2 = DummyTaskParas(
 )
 
 curriculum = DummyTaskCurriculum(
-    **meta,
+    curriculum_task=Task.DUMMY,
+    curriculum_version="0.1",
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,

@@ -18,6 +18,7 @@ from aind_auto_train.schema.task import (
     AutoWaterMode, AdvancedBlockMode
 )
 
+curriculum_task = Task.C1B1
 task=Task.C1B1
 task_schema_version = "1.0"
 curriculum_version = "0.1"
@@ -197,9 +198,8 @@ paras_stage_final = paras_stage_3.model_copy(update=dict(
 # --- Curriculum ---
 # %%
 curriculum = DynamicForagingCurriculum(
-    task=Task.C1B1,
+    curriculum_task=curriculum_task,
     curriculum_version=curriculum_version,
-    task_schema_version=task_schema_version,
     curriculum_description=curriculum_description,
 
     parameters={

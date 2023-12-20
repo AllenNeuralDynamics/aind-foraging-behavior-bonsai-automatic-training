@@ -272,7 +272,7 @@ class AutoTrainManager:
                  session=session,
                  task=task_mapper[df_this.task],
                  task_schema_version=curriculum_to_use.task_schema_version,
-                 curriculum_task=curriculum_to_use.task,
+                 curriculum_task=curriculum_to_use.curriculum_task,
                  curriculum_schema_version=curriculum_to_use.curriculum_schema_version,
                  curriculum_version=curriculum_to_use.curriculum_version,
                  curriculum_json_name=curriculum_json,
