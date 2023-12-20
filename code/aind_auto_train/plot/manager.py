@@ -13,6 +13,7 @@ stage_color_mapper = {
     TrainingStage.GRADUATED.name: 'green'
 }
 
+
 def plot_manager_all_progress(manager: 'AutoTrainManager',
                               if_show_fig=True
                               ):
@@ -44,15 +45,18 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             ),
             name=f'Mouse {subject_id}',
             hovertemplate=(f"<b>Subject {subject_id} ({h2o})"
-                           "<br>Session %{x}"
-                           "<br>%{customdata[0]}</b>"
-                           "<br>foraging_eff = %{customdata[1]}"
-                           "<br>finished_trials = %{customdata[2]}"
+                           "<br>Session %{x}, %{customdata[4]}</b>"
+                           "<br>suggested <b>%{customdata[0]}</b>"
+                           "<br>actual <b>%{customdata[1]}</b>"
+                           "<br>foraging_eff = %{customdata[2]}"
+                           "<br>finished_trials = %{customdata[3]}"
                            "<extra></extra>"),
             customdata=np.stack(
                 (df_subject.current_stage_suggested,
-                    df_subject.foraging_efficiency,
-                    df_subject.finished_trials), axis=-1),
+                 df_subject.current_stage_actual,
+                 np.round(df_subject.foraging_efficiency, 3),
+                 df_subject.finished_trials,
+                 df_subject.session_date), axis=-1),
             showlegend=False
         )
         traces.append(trace)
