@@ -200,17 +200,17 @@ class AutoTrainManager:
             return self.curriculum_manager.get_curriculum(
                 # Note the distinguish between 'curriculum_task' and 'task'
                 curriculum_task=dict_this['curriculum_task'],
-                curriculum_schema_version=dict_this['curriculum_schema_version'],
                 curriculum_version=dict_this['curriculum_version'],
+                curriculum_schema_version=dict_this['curriculum_schema_version'],
             )
         else:  # Use default curriculum (for simulation)
             logger.warning(
                 msg=f'No curriculum_version specified in df_behavior, use default curriculum '
-                f'"Coupled Baiting_v1.0_curriculum_v0.1_schema_v0.1"')
+                f'"Coupled Baiting_curriculum_v0.1_schema_v0.2"')
             return self.curriculum_manager.get_curriculum(
                 curriculum_task='Coupled Baiting',
-                curriculum_schema_version='0.1',
-                curriculum_version='0.1'
+                curriculum_version='0.1',
+                curriculum_schema_version='0.2',
             )
 
     def add_and_evaluate_session(self, subject_id, session):
@@ -382,6 +382,10 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
 
         # Turn subject_id to str for maximum compatibility
         df_behavior['subject_id'] = df_behavior['subject_id'].astype(str)
+        
+        # Add curriculum_task if not present (backward compatibility)
+        if 'curriculum_task' not in df_behavior.columns:
+            df_behavior['curriculum_task'] = df_behavior['task']
 
         # TODO: do not hard code the task name
         df_behavior = df_behavior.query(
