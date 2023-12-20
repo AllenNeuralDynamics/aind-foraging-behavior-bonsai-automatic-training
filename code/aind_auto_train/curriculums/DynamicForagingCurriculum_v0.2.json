@@ -1,0 +1,436 @@
+{
+    "$defs": {
+        "AdvancedBlockMode": {
+            "description": "Modes for advanced block ",
+            "enum": [
+                "off",
+                "now",
+                "once"
+            ],
+            "title": "AdvancedBlockMode",
+            "type": "string"
+        },
+        "AutoWaterMode": {
+            "description": "Modes for auto water ",
+            "enum": [
+                "Natural",
+                "Both",
+                "High pro"
+            ],
+            "title": "AutoWaterMode",
+            "type": "string"
+        },
+        "Decision": {
+            "enum": [
+                "stay",
+                "progress",
+                "rollback"
+            ],
+            "title": "Decision",
+            "type": "string"
+        },
+        "DynamicForagingParas": {
+            "additionalProperties": false,
+            "description": "Training schema for the dynamic foraging GUI.\n\n\nThis fully defines a set of training parameters that could be used in the GUI.\nFor simplicity, let's start with a flat structure and use exactly the same names as in the GUI.",
+            "properties": {
+                "task": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/Task"
+                        }
+                    ],
+                    "title": "Task name"
+                },
+                "task_schema_version": {
+                    "title": "Schema version",
+                    "type": "string"
+                },
+                "curriculum_version": {
+                    "title": "Curriculum version",
+                    "type": "string"
+                },
+                "training_stage": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/TrainingStage"
+                        }
+                    ],
+                    "title": "Training stage"
+                },
+                "description": {
+                    "default": "",
+                    "title": "Description of this set of parameters",
+                    "type": "string"
+                },
+                "BaseRewardSum": {
+                    "title": "Sum of p_reward",
+                    "type": "number"
+                },
+                "RewardFamily": {
+                    "title": "Reward family",
+                    "type": "integer"
+                },
+                "RewardParisN": {
+                    "title": "Number of pairs",
+                    "type": "integer"
+                },
+                "UncoupledReward": {
+                    "default": "0.1,0.3,0.7",
+                    "title": "Uncoupled reward",
+                    "type": "string"
+                },
+                "BlockMin": {
+                    "title": "Block length (min)",
+                    "type": "integer"
+                },
+                "BlockMax": {
+                    "title": "Block length (max)",
+                    "type": "integer"
+                },
+                "BlockBeta": {
+                    "title": "Block length (beta)",
+                    "type": "integer"
+                },
+                "BlockMinReward": {
+                    "default": 1,
+                    "title": "Minimal rewards in a block to switch",
+                    "type": "integer"
+                },
+                "DelayMin": {
+                    "title": "Delay period (min) ",
+                    "type": "number"
+                },
+                "DelayMax": {
+                    "title": "Delay period (max) ",
+                    "type": "number"
+                },
+                "DelayBeta": {
+                    "title": "Delay period (beta)",
+                    "type": "number"
+                },
+                "AutoReward": {
+                    "title": "Auto reward switch",
+                    "type": "boolean"
+                },
+                "AutoWaterType": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/AutoWaterMode"
+                        }
+                    ],
+                    "default": "Natural",
+                    "title": "Auto water mode"
+                },
+                "Multiplier": {
+                    "title": "Multiplier for auto reward",
+                    "type": "number"
+                },
+                "Unrewarded": {
+                    "title": "Number of unrewarded trials before auto water",
+                    "type": "integer"
+                },
+                "Ignored": {
+                    "title": "Number of ignored trials before auto water",
+                    "type": "integer"
+                },
+                "ITIMin": {
+                    "title": "ITI (min)",
+                    "type": "number"
+                },
+                "ITIMax": {
+                    "title": "ITI (max)",
+                    "type": "number"
+                },
+                "ITIBeta": {
+                    "title": "ITI (beta)",
+                    "type": "number"
+                },
+                "ITIIncrease": {
+                    "default": 0.0,
+                    "title": "ITI increase",
+                    "type": "number"
+                },
+                "ResponseTime": {
+                    "title": "Response time",
+                    "type": "number"
+                },
+                "RewardConsumeTime": {
+                    "description": "Time of the no-lick period before trial end",
+                    "title": "Reward consume time",
+                    "type": "number"
+                },
+                "StopIgnores": {
+                    "title": "Number of ignored trials before stop",
+                    "type": "integer"
+                },
+                "AdvancedBlockAuto": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/AdvancedBlockMode"
+                        }
+                    ],
+                    "title": "Auto block mode"
+                },
+                "SwitchThr": {
+                    "title": "Switch threshold for auto block",
+                    "type": "number"
+                },
+                "PointsInARow": {
+                    "title": "Points in a row for auto block",
+                    "type": "integer"
+                },
+                "MaxTrial": {
+                    "title": "Maximal number of trials",
+                    "type": "integer"
+                },
+                "MaxTime": {
+                    "title": "Maximal session time (min)",
+                    "type": "integer"
+                },
+                "RightValue": {
+                    "default": 0.05,
+                    "exclude_from_GUI": true,
+                    "title": "Right reward size (valve open time in sec)",
+                    "type": "number"
+                },
+                "LeftValue": {
+                    "default": 0.05,
+                    "exclude_from_GUI": true,
+                    "title": "Left reward size (valve open time in sec)",
+                    "type": "number"
+                },
+                "RightValue_volume": {
+                    "default": 5.0,
+                    "exclude_from_GUI": true,
+                    "title": "Right reward size (volume)",
+                    "type": "number"
+                },
+                "LeftValue_volume": {
+                    "default": 5.0,
+                    "exclude_from_GUI": true,
+                    "title": "Left reward size (volume)",
+                    "type": "number"
+                },
+                "NextBlock": {
+                    "default": false,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Next block",
+                    "type": "boolean"
+                },
+                "GiveLeft": {
+                    "default": false,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Give left",
+                    "type": "boolean"
+                },
+                "GiveRight": {
+                    "default": false,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Give right",
+                    "type": "boolean"
+                },
+                "GiveWaterL": {
+                    "default": 0.03,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Size of give water left",
+                    "type": "number"
+                },
+                "GiveWaterR": {
+                    "default": 0.03,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Size of give water right",
+                    "type": "number"
+                },
+                "GiveWaterL_volume": {
+                    "default": 3.0,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Size of give water left (volume)",
+                    "type": "number"
+                },
+                "GiveWaterR_volume": {
+                    "default": 3.0,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Size of give water right (volume)",
+                    "type": "number"
+                },
+                "IncludeAutoReward": {
+                    "default": false,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Include auto reward",
+                    "type": "boolean"
+                },
+                "SaveTraining": {
+                    "default": true,
+                    "exclude_from_GUI": true,
+                    "title": "(User clicks) Save training",
+                    "type": "boolean"
+                },
+                "InitiallyInactiveN": {
+                    "default": 2,
+                    "exclude_from_GUI": true,
+                    "title": "Initially inactive trials",
+                    "type": "integer"
+                },
+                "Randomness": {
+                    "default": "Exponential",
+                    "exclude_from_GUI": true,
+                    "title": "Randomness mode",
+                    "type": "string"
+                },
+                "qt_spinbox_lineedit": {
+                    "default": 5.0,
+                    "exclude_from_GUI": true,
+                    "title": "qt_spinbox_lineedit??",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "task",
+                "task_schema_version",
+                "curriculum_version",
+                "training_stage",
+                "BaseRewardSum",
+                "RewardFamily",
+                "RewardParisN",
+                "BlockMin",
+                "BlockMax",
+                "BlockBeta",
+                "DelayMin",
+                "DelayMax",
+                "DelayBeta",
+                "AutoReward",
+                "Multiplier",
+                "Unrewarded",
+                "Ignored",
+                "ITIMin",
+                "ITIMax",
+                "ITIBeta",
+                "ResponseTime",
+                "RewardConsumeTime",
+                "StopIgnores",
+                "AdvancedBlockAuto",
+                "SwitchThr",
+                "PointsInARow",
+                "MaxTrial",
+                "MaxTime"
+            ],
+            "title": "DynamicForagingParas",
+            "type": "object"
+        },
+        "StageTransitions": {
+            "description": "Transition rules for a certain stage",
+            "properties": {
+                "from_stage": {
+                    "$ref": "#/$defs/TrainingStage"
+                },
+                "transition_rules": {
+                    "items": {
+                        "$ref": "#/$defs/TransitionRule"
+                    },
+                    "title": "Transition Rules",
+                    "type": "array"
+                }
+            },
+            "required": [
+                "from_stage",
+                "transition_rules"
+            ],
+            "title": "StageTransitions",
+            "type": "object"
+        },
+        "Task": {
+            "description": "Foraging tasks",
+            "enum": [
+                "Coupled Baiting",
+                "Uncoupled Without Baiting",
+                "Coupled Without Baiting",
+                "Uncoupled Baiting",
+                "Dummy task"
+            ],
+            "title": "Task",
+            "type": "string"
+        },
+        "TrainingStage": {
+            "enum": [
+                "Stage 1",
+                "Stage 2",
+                "Stage 3",
+                "Stage 4",
+                "Stage 5",
+                "Stage final",
+                "Graduated"
+            ],
+            "title": "TrainingStage",
+            "type": "string"
+        },
+        "TransitionRule": {
+            "description": "Individual transition rule",
+            "properties": {
+                "decision": {
+                    "$ref": "#/$defs/Decision"
+                },
+                "to_stage": {
+                    "$ref": "#/$defs/TrainingStage"
+                },
+                "condition": {
+                    "default": "",
+                    "title": "Condition",
+                    "type": "string"
+                },
+                "condition_description": {
+                    "default": "",
+                    "title": "Condition Description",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "decision",
+                "to_stage"
+            ],
+            "title": "TransitionRule",
+            "type": "object"
+        }
+    },
+    "description": "Task-specific curriculum for dynamic foraging task\nNote that the two generic types {taskparas_class} and {metrics_class} are specified here",
+    "properties": {
+        "curriculum_schema_version": {
+            "const": "0.2",
+            "default": "0.2",
+            "title": "Curriculum schema version"
+        },
+        "curriculum_task": {
+            "$ref": "#/$defs/Task"
+        },
+        "curriculum_version": {
+            "title": "Curriculum version",
+            "type": "string"
+        },
+        "curriculum_description": {
+            "default": "",
+            "title": "Description of this curriculum",
+            "type": "string"
+        },
+        "parameters": {
+            "additionalProperties": {
+                "$ref": "#/$defs/DynamicForagingParas"
+            },
+            "title": "Parameters",
+            "type": "object"
+        },
+        "curriculum": {
+            "additionalProperties": {
+                "$ref": "#/$defs/StageTransitions"
+            },
+            "title": "Curriculum",
+            "type": "object"
+        }
+    },
+    "required": [
+        "curriculum_task",
+        "curriculum_version",
+        "parameters",
+        "curriculum"
+    ],
+    "title": "DynamicForagingCurriculum",
+    "type": "object"
+}
