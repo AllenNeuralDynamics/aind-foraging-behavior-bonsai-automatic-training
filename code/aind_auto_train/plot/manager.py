@@ -38,25 +38,37 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             mode='markers',
             marker=dict(
                 size=10,
-                line=dict(width=1, color='black'),
-                color=df_subject['current_stage_suggested'].map(
+                line=dict(
+                    width=2,
+                    color=df_subject['current_stage_suggested'].map(
+                        stage_color_mapper)
+                ),
+                color=df_subject['current_stage_actual'].map(
                     stage_color_mapper),
                 # colorbar=dict(title='Training Stage'),
             ),
             name=f'Mouse {subject_id}',
             hovertemplate=(f"<b>Subject {subject_id} ({h2o})"
                            "<br>Session %{x}, %{customdata[4]}</b>"
-                           "<br>suggested <b>%{customdata[0]}</b>"
-                           "<br>actual <b>%{customdata[1]}</b>"
+                           "<br>Curriculum: <b>%{customdata[7]}_v%{customdata[8]}</b>"
+                           "<br>Suggested: <b>%{customdata[0]}</b>"
+                           "<br>Actual: <b>%{customdata[1]}</b>"
+                           "<br>Session task: <b>%{customdata[6]}</b>"
                            "<br>foraging_eff = %{customdata[2]}"
                            "<br>finished_trials = %{customdata[3]}"
+                           "<br>Decision = <b>%{customdata[5]}</b>"
                            "<extra></extra>"),
             customdata=np.stack(
                 (df_subject.current_stage_suggested,
                  df_subject.current_stage_actual,
                  np.round(df_subject.foraging_efficiency, 3),
                  df_subject.finished_trials,
-                 df_subject.session_date), axis=-1),
+                 df_subject.session_date,
+                 df_subject.decision,
+                 df_subject.task,
+                 df_subject.curriculum_task,
+                 df_subject.curriculum_version,
+                 ), axis=-1),
             showlegend=False
         )
         traces.append(trace)
@@ -67,7 +79,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
         title=f'Training Progress of All Mice ({manager.manager_name}, curriculum_task = {manager.df_manager.curriculum_task[0]})',
         xaxis_title='Session',
         yaxis_title='Mouse',
-        height=1200
+        height=1200,
     )
 
     # Set subject_id as y axis label
