@@ -124,8 +124,10 @@ class CurriculumManager:
         metrics = getattr(task_schemas, metrics_schema_name)
 
         return {'curriculum': curriculum,
-                'curriculum_json_name': json_name,
                 'metrics': metrics,
+                'curriculum_json_name': self.saved_curriculums_local + json_name,
+                'diagram_paras_name':  self.saved_curriculums_local + json_name.replace('.json', '_paras.svg'),
+                'diagram_rules_name': self.saved_curriculums_local + json_name.replace('.json', '_rules.svg'),
                 }
 
     def download_curriculums(self):
