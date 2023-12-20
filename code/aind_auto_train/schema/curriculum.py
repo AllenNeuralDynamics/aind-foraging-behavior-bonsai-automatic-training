@@ -10,8 +10,8 @@ from pydantic import BaseModel, Field
 from pydantic.json import pydantic_encoder
 
 from aind_auto_train.schema.task import (Task, TrainingStage,
-                                         taskparas_class, DynamicForagingParas,
-                                         metrics_class, DynamicForagingMetrics)
+                                         taskparas_class, DynamicForagingParas, DummyTaskParas,
+                                         metrics_class, DynamicForagingMetrics, DummyTaskMetrics)
 from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_paras
 
 # %%
@@ -191,6 +191,18 @@ class DynamicForagingCurriculum(Curriculum[DynamicForagingParas,
 
         return super().evaluate_transitions(current_stage, metrics)
 
+
+class DummyTaskCurriculum(Curriculum[DummyTaskParas, DummyTaskMetrics]):
+    # Override parameters
+    parameters: Dict[TrainingStage, DummyTaskParas]
+
+    # Override metrics
+    def evaluate_transitions(self,
+                             current_stage: TrainingStage,
+                             metrics: DummyTaskMetrics  # Note the dynamical type here
+                             ) -> TrainingStage:
+        return super().evaluate_transitions(current_stage, metrics)
+    
 
 # ------------------ Helpers ------------------
 # A hack to serialize TrainingStage in the dictionary keys
