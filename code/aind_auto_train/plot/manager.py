@@ -1,5 +1,8 @@
+from datetime import datetime
+
 import numpy as np
 import plotly.graph_objects as go
+import pandas as pd
 
 from aind_auto_train.schema.curriculum import TrainingStage
 
@@ -15,7 +18,7 @@ stage_color_mapper = {
 
 
 def plot_manager_all_progress(manager: 'AutoTrainManager',
-                              x_axis: ['session', 'date'] = 'session',
+                              x_axis: ['session', 'date', 'relative_date'] = 'session',
                               if_show_fig=True
                               ):
     # %%
@@ -46,6 +49,9 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             x = df_subject['session']
         elif x_axis == 'date':
             x = df_subject['session_date']
+        elif x_axis == 'relative_date':
+            x = pd.to_datetime(df_subject['session_date'])
+            x = (x - x.iloc[0]).dt.days
         else:
             raise ValueError(f'x_axis can only be "session" or "date"')
 
