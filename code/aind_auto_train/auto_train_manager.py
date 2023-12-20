@@ -110,7 +110,7 @@ class AutoTrainManager:
         )['session'].agg([('session_spent', 'count'),  # Number of sessions spent at this stage
                           # First entry to this stage
                           ('first_entry', 'min'),
-                          # Last leave from this stage (Note that session_to_graduation = last_leave of STAGE_FINAL)
+                          # Last leave from this stage
                           ('last_leave', 'max'),
                           ])
 
@@ -134,8 +134,19 @@ class AutoTrainManager:
 
         self.df_manager_stats = df_stats
 
-    def plot_all_progress(self, if_show_fig=True):
-        return plot_manager_all_progress(self, if_show_fig=if_show_fig)
+    def plot_all_progress(
+        self,
+        x_axis: ['session', 'date', 'relative_date'] = 'session',
+        sort_by: ['subject_id', 'first_date',
+                  'last_date', 'progress_to_graduated'] = 'subject_id',
+        sort_order: ['ascending', 'descending'] = 'descending',
+        if_show_fig=True
+    ):
+        return plot_manager_all_progress(manager=self,
+                                         x_axis=x_axis,
+                                         sort_by=sort_by,
+                                         sort_order=sort_order,
+                                         if_show_fig=if_show_fig)
 
     def _get_next_stage_suggested_on_last_session(self, subject_id, session) -> str:
         df_this_mouse = self.df_manager.query(f'subject_id == "{subject_id}"')
@@ -382,7 +393,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
 
         # Turn subject_id to str for maximum compatibility
         df_behavior['subject_id'] = df_behavior['subject_id'].astype(str)
-        
+
         # Add curriculum_task if not present (backward compatibility)
         if 'curriculum_task' not in df_behavior.columns:
             df_behavior['curriculum_task'] = df_behavior['task']
