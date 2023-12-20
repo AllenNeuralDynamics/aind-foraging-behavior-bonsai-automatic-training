@@ -18,16 +18,50 @@ stage_color_mapper = {
 
 
 def plot_manager_all_progress(manager: 'AutoTrainManager',
-                              x_axis: ['session', 'date', 'relative_date'] = 'session',
+                              x_axis: ['session', 'date',
+                                       'relative_date'] = 'session',
+                              sort_by: ['subject_id', 'first_date',
+                                        'last_date', 'progress_to_graduated'] = 'subject_id',
+                              sort_order: ['ascending',
+                                           'descending'] = 'descending',
                               if_show_fig=True
                               ):
     # %%
-    # Plot the training history of a mouse
-    df_manager = manager.df_manager
+    # Set default order
+    df_manager = manager.df_manager.sort_values(by=['subject_id', 'session'],
+                                                ascending=[sort_order == 'ascending', False])
+
+    # Sort mice
+    if sort_by == 'subject_id':
+        subject_ids = df_manager.subject_id.unique()
+    elif sort_by == 'first_date':
+        subject_ids = df_manager.groupby('subject_id').session_date.min().sort_values(
+            ascending=sort_order == 'ascending').index
+    elif sort_by == 'last_date':
+        subject_ids = df_manager.groupby('subject_id').session_date.max().sort_values(
+            ascending=sort_order == 'ascending').index
+    elif sort_by == 'progress_to_graduated':
+        manager.compute_stats()
+        df_stats = manager.df_manager_stats
+        
+        # Sort by 'first_entry' of GRADUATED
+        subject_ids = df_stats.reset_index().set_index(
+            'subject_id'
+        ).query(
+            f'current_stage_actual == "GRADUATED"'
+        )['first_entry'].sort_values(
+            ascending=sort_order != 'ascending').index.to_list()
+        
+        # Append subjects that have not graduated
+        subject_ids = subject_ids + [s for s in df_manager.subject_id.unique() if s not in subject_ids]
+        
+    else:
+        raise ValueError(
+            f'sort_by must be in {["subject_id", "first_date", "last_date", "progress"]}')
 
     # Preparing the scatter plot
     traces = []
-    for n, subject_id in enumerate(df_manager['subject_id'].unique()):
+    for n, subject_id in enumerate(subject_ids):
         df_subject = df_manager[df_manager['subject_id'] == subject_id]
         # Get h2o if available
         if 'h2o' in manager.df_behavior:
@@ -43,7 +77,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
         color_actual[open_loop_ids] = 'lightgrey'
         stage_actual = df_subject.current_stage_actual.values
         stage_actual[open_loop_ids] = 'unknown (open loop)'
-        
+
         # Select x
         if x_axis == 'session':
             x = df_subject['session']
@@ -51,9 +85,10 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             x = df_subject['session_date']
         elif x_axis == 'relative_date':
             x = pd.to_datetime(df_subject['session_date'])
-            x = (x - x.iloc[0]).dt.days
+            x = (x - x.min()).dt.days
         else:
-            raise ValueError(f'x_axis can only be "session" or "date"')
+            raise ValueError(
+                f"x_axis can only be in ['session', 'date', 'relative_date']")
 
         traces.append(go.Scattergl(
             x=x,
@@ -70,27 +105,29 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
                 # colorbar=dict(title='Training Stage'),
             ),
             name=f'Mouse {subject_id}',
-            hovertemplate=(f"<b>Subject {subject_id} ({h2o})"
-                           "<br>Session %{customdata[9]}, %{customdata[4]}</b>"
-                           "<br>Curriculum: <b>%{customdata[7]}_v%{customdata[8]}</b>"
-                           "<br>Suggested: <b>%{customdata[0]}</b>"
-                           "<br>Actual: <b>%{customdata[1]}</b>"
+            hovertemplate=(f"<b>Subject {subject_id} ({h2o})</b>"
+                           "<br><b>Session %{customdata[0]}, %{customdata[1]}</b>"
+                           "<br>Curriculum: <b>%{customdata[2]}_v%{customdata[3]}</b>"
+                           "<br>Suggested: <b>%{customdata[4]}</b>"
+                           "<br>Actual: <b>%{customdata[5]}</b>"
                            "<br>Session task: <b>%{customdata[6]}</b>"
-                           "<br>foraging_eff = %{customdata[2]}"
-                           "<br>finished_trials = %{customdata[3]}"
-                           "<br>Decision = <b>%{customdata[5]}</b>"
+                           "<br>foraging_eff = %{customdata[7]}"
+                           "<br>finished_trials = %{customdata[8]}"
+                           "<br>Decision = <b>%{customdata[9]}</b>"
+                           "<br>Next suggested: <b>%{customdata[10]}</b>"
                            "<extra></extra>"),
             customdata=np.stack(
-                (df_subject.current_stage_suggested,
-                 stage_actual,
-                 np.round(df_subject.foraging_efficiency, 3),
-                 df_subject.finished_trials,
+                (df_subject.session,
                  df_subject.session_date,
-                 df_subject.decision,
-                 df_subject.task,
                  df_subject.curriculum_task,
                  df_subject.curriculum_version,
-                 df_subject.session,
+                 df_subject.current_stage_suggested,
+                 stage_actual,
+                 df_subject.task,
+                 np.round(df_subject.foraging_efficiency, 3),
+                 df_subject.finished_trials,
+                 df_subject.decision,
+                 df_subject.next_stage_suggested,
                  ), axis=-1),
             showlegend=False
         )
@@ -114,7 +151,8 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     # Create the figure
     fig = go.Figure(data=traces)
     fig.update_layout(
-        title=f'Training Progress of All Mice ({manager.manager_name}, curriculum_task = {manager.df_manager.curriculum_task[0]})',
+        title=f"Training progress ({manager.manager_name}, "
+              f"curriculum_task = {manager.df_manager.curriculum_task[0]})",
         xaxis_title=x_axis,
         yaxis_title='Mouse',
         height=1200,
@@ -125,7 +163,8 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
         yaxis=dict(
             tickmode='array',
             tickvals=np.arange(0, n + 1),  # Original y-axis values
-            ticktext=df_manager['subject_id'].unique()  # New labels
+            ticktext=subject_ids,  # New labels
+            autorange='reversed',
         )
     )
 
