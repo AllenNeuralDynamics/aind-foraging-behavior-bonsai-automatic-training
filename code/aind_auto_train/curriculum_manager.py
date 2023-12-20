@@ -50,6 +50,10 @@ class CurriculumManager:
         for f in self.json_files:
             match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
                               os.path.basename(f))
+            if match is None:
+                logger.warning(
+                    f"Could not parse {os.path.basename(f)} as a curriculum json file.")
+                continue
             curriculum_task, curriculum_version, curriculum_schema_version = match.groups()
             df_curriculums = pd.concat([df_curriculums,
                                         pd.DataFrame.from_records([dict(curriculum_task=curriculum_task,
@@ -130,7 +134,7 @@ class CurriculumManager:
                              local_dir=self.saved_curriculums_local)
 
         self.json_files = glob.glob(
-            self.saved_curriculums_local + '/*curriculum*.json')
+            self.saved_curriculums_local + '/*_curriculum_*.json')
 
         logger.info(
             f"Found {len(self.json_files)} curriculums in {self.saved_curriculums_local}")
