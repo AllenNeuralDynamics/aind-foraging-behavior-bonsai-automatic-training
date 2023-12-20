@@ -46,7 +46,10 @@ class CurriculumManager:
         """
 
         df_curriculums = pd.DataFrame(columns=[
-                                      'curriculum_task', 'curriculum_version', 'curriculum_schema_version'])
+                                      'curriculum_task',
+                                      'curriculum_version',
+                                      'curriculum_schema_version',
+                                      'curriculum_description'])
         for f in self.json_files:
             match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
                               os.path.basename(f))
@@ -55,12 +58,16 @@ class CurriculumManager:
                     f"Could not parse {os.path.basename(f)} as a curriculum json file.")
                 continue
             curriculum_task, curriculum_version, curriculum_schema_version = match.groups()
-            df_curriculums = pd.concat([df_curriculums,
-                                        pd.DataFrame.from_records([dict(curriculum_task=curriculum_task,
-                                                                        curriculum_version=curriculum_version,
-                                                                        curriculum_schema_version=curriculum_schema_version)]
-                                                                  )
-                                        ], ignore_index=True)
+            df_curriculums = pd.concat(
+                [df_curriculums,
+                 pd.DataFrame.from_records([dict(curriculum_task=curriculum_task,
+                                                 curriculum_version=curriculum_version,
+                                                 curriculum_schema_version=curriculum_schema_version,
+                                                 curriculum_description=json.load(
+                                                     open(f, 'r'))['curriculum_description']
+                                                 )]
+                                           )
+                 ], ignore_index=True)
 
         return df_curriculums
 
@@ -85,7 +92,8 @@ class CurriculumManager:
             return None
 
         # Sanity check
-        assert loaded_json['curriculum_task'] == curriculum_task, f"curriculum_task in json ({loaded_json['curriculum_task']}) does not match file name ({curriculum_task})!"
+        assert loaded_json[
+            'curriculum_task'] == curriculum_task, f"curriculum_task in json ({loaded_json['curriculum_task']}) does not match file name ({curriculum_task})!"
         assert loaded_json['curriculum_schema_version'] == curriculum_schema_version, \
             f"curriculum_schema_version in json ({loaded_json['curriculum_schema_version']}) does not match file name ({curriculum_schema_version})!"
         assert loaded_json['curriculum_version'] == curriculum_version, \
@@ -114,13 +122,13 @@ class CurriculumManager:
         metrics_schema = inspect.getfullargspec(
             curriculum.evaluate_transitions
         ).annotations.get('metrics', None)
-        
+
         metrics_schema_name = metrics_schema.__name__ if metrics_schema else None
-        
+
         # Check whether the required metrics schema is available
         assert hasattr(task_schemas, metrics_schema_name), \
             f"'{metrics_schema_name}' not found in aind_auto_train.schema.task"
-       
+
         metrics = getattr(task_schemas, metrics_schema_name)
 
         return {'curriculum': curriculum,
