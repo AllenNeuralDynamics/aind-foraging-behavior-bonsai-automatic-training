@@ -134,8 +134,8 @@ class AutoTrainManager:
 
         self.df_manager_stats = df_stats
 
-    def plot_all_progress(self, if_show_fig=True):
-        return plot_manager_all_progress(self, if_show_fig=if_show_fig)
+    def plot_all_progress(self, **kwargs):
+        return plot_manager_all_progress(self, **kwargs)
 
     def _get_next_stage_suggested_on_last_session(self, subject_id, session) -> str:
         df_this_mouse = self.df_manager.query(f'subject_id == "{subject_id}"')

@@ -15,6 +15,7 @@ stage_color_mapper = {
 
 
 def plot_manager_all_progress(manager: 'AutoTrainManager',
+                              x_axis: ['session', 'date'] = 'session',
                               if_show_fig=True
                               ):
     # %%
@@ -32,16 +33,24 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
         else:
             h2o = None
 
-        # Set fill color (none if not closed loop)
+        # Handle open loop sessions
         open_loop_ids = df_subject.if_closed_loop == False
         color_actual = df_subject['current_stage_actual'].map(
             stage_color_mapper)
         color_actual[open_loop_ids] = 'lightgrey'
         stage_actual = df_subject.current_stage_actual.values
         stage_actual[open_loop_ids] = 'unknown (open loop)'
+        
+        # Select x
+        if x_axis == 'session':
+            x = df_subject['session']
+        elif x_axis == 'date':
+            x = df_subject['session_date']
+        else:
+            raise ValueError(f'x_axis can only be "session" or "date"')
 
         traces.append(go.Scattergl(
-            x=df_subject['session'],
+            x=x,
             y=[n] * len(df_subject),
             mode='markers',
             marker=dict(
@@ -56,7 +65,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             ),
             name=f'Mouse {subject_id}',
             hovertemplate=(f"<b>Subject {subject_id} ({h2o})"
-                           "<br>Session %{x}, %{customdata[4]}</b>"
+                           "<br>Session %{customdata[9]}, %{customdata[4]}</b>"
                            "<br>Curriculum: <b>%{customdata[7]}_v%{customdata[8]}</b>"
                            "<br>Suggested: <b>%{customdata[0]}</b>"
                            "<br>Actual: <b>%{customdata[1]}</b>"
@@ -75,6 +84,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
                  df_subject.task,
                  df_subject.curriculum_task,
                  df_subject.curriculum_version,
+                 df_subject.session,
                  ), axis=-1),
             showlegend=False
         )
@@ -82,8 +92,8 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
 
         # Add "x" for open loop sessions
         traces.append(go.Scattergl(
-            x=df_subject['session'][open_loop_ids],
-            y=[n] * len(df_subject['session'][open_loop_ids]),
+            x=x[open_loop_ids],
+            y=[n] * len(x[open_loop_ids]),
             mode='markers',
             marker=dict(
                 size=5,
@@ -99,7 +109,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     fig = go.Figure(data=traces)
     fig.update_layout(
         title=f'Training Progress of All Mice ({manager.manager_name}, curriculum_task = {manager.df_manager.curriculum_task[0]})',
-        xaxis_title='Session',
+        xaxis_title=x_axis,
         yaxis_title='Mouse',
         height=1200,
     )
