@@ -43,7 +43,7 @@ def draw_diagram_rules(curriculum):
     # Add nodes (stages)
     for stage in stages:
         dot.node(name=stage.name,
-                 label=stage.name,
+                 label=f'{stage.name}\n{curriculum.parameters[stage].task}',
                  shape='ellipse',
                  style='filled',
                  fillcolor=stage_color_mapper[stage.name],
