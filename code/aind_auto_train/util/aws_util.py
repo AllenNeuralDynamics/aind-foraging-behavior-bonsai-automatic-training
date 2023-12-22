@@ -43,7 +43,7 @@ def get_aws_credentials(profile='default'):
     # Check if credentials file exists
     if not os.path.exists(credentials_path):
         logger.error(
-            "AWS credentials file not found at ~/.aws/credentials either!")
+            "AWS credential error! AWS credentials file not found at ~/.aws/credentials either!")
         return None
 
     # Read the credentials file
@@ -60,14 +60,18 @@ def get_aws_credentials(profile='default'):
             'aws_secret_access_key': aws_secret_access_key
         }
 
-    logger.error(f"Profile '{profile}' not found in credentials file.")
+    logger.error(f"AWS credential error! Profile '{profile}' not found in credentials file.")
     return None
 
 
 # Setup s3fs filesystem
 aws_credentials = get_aws_credentials()
-fs = s3fs.S3FileSystem(key=aws_credentials['aws_access_key_id'],
-                       secret=aws_credentials['aws_secret_access_key'])
+if aws_credentials is not None:
+    fs = s3fs.S3FileSystem(key=aws_credentials['aws_access_key_id'],
+                        secret=aws_credentials['aws_secret_access_key'])
+else:
+    fs = None
+    logger.error(f'AWS S3 not connected!')
 
 
 # Function to export DataFrame to S3
@@ -76,6 +80,10 @@ def export_df_to_s3(df,
                     bucket='aind-behavior-data',
                     s3_path='foraging_auto_training/'
                     ):
+    if fs is None:
+        logger.error(f'AWS S3 not connected!')
+        return None
+
     try:
         s3_file_path = f"{bucket}/{s3_path}{file_name}"
         if file_name.endswith('.pkl'):
@@ -93,6 +101,10 @@ def import_df_from_s3(file_name,
                       bucket='aind-behavior-data',
                       s3_path='foraging_auto_training/'
                       ):
+
+    if fs is None:
+        logger.error(f'AWS S3 not connected!')
+        return None
 
     s3_file_path = f"{bucket}/{s3_path}{file_name}"
     try:
@@ -118,13 +130,17 @@ def download_dir_from_s3(bucket='aind-behavior-data',
     """
     Copy a directory from S3 to local
     """
+    if fs is None:
+        logger.error(f'AWS S3 not connected!')
+        return None
+    
     s3_dir_path = f"{bucket}/{s3_dir}"
     try:
         res = fs.get(s3_dir_path, local_dir, recursive=True)
         logger.info(f'{len(res)-2} objects downloaded from s3://{s3_dir_path} '
                     f'to {local_dir}')
     except FileNotFoundError:
-        logger.error(f'Directory not found: s3://{s3_file_path}')
+        logger.error(f'Directory not found: s3://{s3_dir_path}')
         return None
 
 
@@ -135,6 +151,10 @@ def upload_dir_to_s3(local_dir='/root/capsule/scratch/saved_curriculums/',
     """
     Copy a directory from local to S3
     """
+    if fs is None:
+        logger.error(f'AWS S3 not connected!')
+        return None
+
     s3_dir_path = f"{bucket}/{s3_dir}"
     try:
         res = fs.put(local_dir, s3_dir_path, recursive=True)
