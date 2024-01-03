@@ -156,7 +156,11 @@ class CurriculumManager:
 
 
 if __name__ == "__main__":
+    from aind_auto_train import setup_logging
+    setup_logging()
+
     curriculum_manager = CurriculumManager()
+    
     logger.info(curriculum_manager.df_curriculums())
     _curr = curriculum_manager.get_curriculum(
         curriculum_task='Coupled Baiting',

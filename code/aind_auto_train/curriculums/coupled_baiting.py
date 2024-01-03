@@ -45,7 +45,7 @@ paras_stage_1 = DynamicForagingParas(
     # p_sum = 0.8, p_ratio = [1:0]
     BaseRewardSum=0.8,
     RewardFamily=3,
-    RewardParisN=1,
+    RewardPairsN=1,
 
     # block = [10, 20, 5]
     BlockMin=10,
@@ -96,7 +96,7 @@ paras_stage_2 = paras_stage_1.model_copy(update=dict(
     # p_sum = 0.8 --> 0.6, p_ratio = [1:0] -> [8:1]
     BaseRewardSum=0.6,
     RewardFamily=1,
-    RewardParisN=1,
+    RewardPairsN=1,
 
     # block length [10, 20, 5] --> [10, 40, 10]
     BlockMin=10,
@@ -162,7 +162,7 @@ paras_stage_final = paras_stage_3.model_copy(update=dict(
     # p_sum = 0.45, p_ratio = [8:1] --> [8:1], [6:1], [3:1], [1:1]
     BaseRewardSum=0.45,
     RewardFamily=1,
-    RewardParisN=4,
+    RewardPairsN=4,
 
     # block = [10, 20, 5] (mean ~ 33 trials)
     BlockMin=20,

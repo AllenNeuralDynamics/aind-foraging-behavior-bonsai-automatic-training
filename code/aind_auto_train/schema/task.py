@@ -95,7 +95,7 @@ class DynamicForagingParas(TaskParas):
     # Reward probability
     BaseRewardSum: float = Field(..., title="Sum of p_reward")
     RewardFamily: int = Field(..., title="Reward family")  # Should be explicit here
-    RewardParisN: int = Field(..., title="Number of pairs")  # Should be explicit here
+    RewardPairsN: int = Field(..., title="Number of pairs")  # Should be explicit here
     
     UncoupledReward: str = Field("0.1,0.3,0.7", title="Uncoupled reward")  # For uncoupled tasks only
     
