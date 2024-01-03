@@ -31,7 +31,7 @@ def draw_diagram_rules(curriculum):
     # Create Digraph object
     dot = Digraph(comment='Curriculum for Dynamic Foraging - Coupled Baiting')
     dot.attr(label=f'Curriculum (v{curriculum.curriculum_version}) '
-                   f'for {curriculum.curriculum_task}\n '
+                   f'for {curriculum.curriculum_name}\n '
                    f'{curriculum.curriculum_description}',
              labelloc='t',
              fontsize='17'

@@ -34,7 +34,7 @@ paras_stage_2 = DummyTaskParas(
 )
 
 curriculum = DummyTaskCurriculum(
-    curriculum_task=Task.DUMMY,
+    curriculum_name=Task.DUMMY,
     curriculum_version="0.1",
 
     parameters={

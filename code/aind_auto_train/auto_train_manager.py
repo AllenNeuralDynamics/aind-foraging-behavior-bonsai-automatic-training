@@ -63,7 +63,7 @@ class AutoTrainManager:
             logger.warning('No df_manager found, creating a new one...')
             self.df_manager = pd.DataFrame(columns=['subject_id', 'session_date', 'task',
                                                     'session', 'session_at_current_stage',
-                                                    'curriculum_task', 'task_schema_version', 'curriculum_version', 'curriculum_schema_version',
+                                                    'curriculum_name', 'task_schema_version', 'curriculum_version', 'curriculum_schema_version',
                                                     'curriculum_json_name',
                                                     *self.task_specific_metrics_keys,
                                                     'metrics', 'current_stage_suggested', 'current_stage_actual',
@@ -209,8 +209,8 @@ class AutoTrainManager:
         dict_this = df_this.to_dict(orient='records')[0]
         if 'curriculum_version' in dict_this:
             return self.curriculum_manager.get_curriculum(
-                # Note the distinguish between 'curriculum_task' and 'task'
-                curriculum_task=dict_this['curriculum_task'],
+                # Note the distinguish between 'curriculum_name' and 'task'
+                curriculum_name=dict_this['curriculum_name'],
                 curriculum_version=dict_this['curriculum_version'],
                 curriculum_schema_version=dict_this['curriculum_schema_version'],
             )
@@ -219,7 +219,7 @@ class AutoTrainManager:
                 msg=f'No curriculum_version specified in df_behavior, use default curriculum '
                 f'"Coupled Baiting_curriculum_v0.1_schema_v0.2"')
             return self.curriculum_manager.get_curriculum(
-                curriculum_task='Coupled Baiting',
+                curriculum_name='Coupled Baiting',
                 curriculum_version='0.1',
                 curriculum_schema_version='0.2',
             )
@@ -287,7 +287,7 @@ class AutoTrainManager:
                  session_date=df_this.session_date,
                  session=session,
                  task=task_mapper[df_this.task],
-                 curriculum_task=curriculum_to_use.curriculum_task,
+                 curriculum_name=curriculum_to_use.curriculum_name,
                  curriculum_schema_version=curriculum_to_use.curriculum_schema_version,
                  curriculum_version=curriculum_to_use.curriculum_version,
                  curriculum_json_name=curriculum_json,
@@ -394,13 +394,13 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         # Turn subject_id to str for maximum compatibility
         df_behavior['subject_id'] = df_behavior['subject_id'].astype(str)
 
-        # Add curriculum_task if not present (backward compatibility)
-        if 'curriculum_task' not in df_behavior.columns:
-            df_behavior['curriculum_task'] = df_behavior['task']
+        # Add curriculum_name if not present (backward compatibility)
+        if 'curriculum_name' not in df_behavior.columns:
+            df_behavior['curriculum_name'] = df_behavior['task']
 
         # TODO: do not hard code the task name
         df_behavior = df_behavior.query(
-            f"curriculum_task in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
+            f"curriculum_name in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
 
         # Rename columns to the same as in DynamicForagingMetrics

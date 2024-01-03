@@ -46,7 +46,7 @@ class CurriculumManager:
         """
 
         df_curriculums = pd.DataFrame(columns=[
-                                      'curriculum_task',
+                                      'curriculum_name',
                                       'curriculum_version',
                                       'curriculum_schema_version',
                                       'curriculum_description'])
@@ -57,10 +57,10 @@ class CurriculumManager:
                 logger.warning(
                     f"Could not parse {os.path.basename(f)} as a curriculum json file.")
                 continue
-            curriculum_task, curriculum_version, curriculum_schema_version = match.groups()
+            curriculum_name, curriculum_version, curriculum_schema_version = match.groups()
             df_curriculums = pd.concat(
                 [df_curriculums,
-                 pd.DataFrame.from_records([dict(curriculum_task=curriculum_task,
+                 pd.DataFrame.from_records([dict(curriculum_name=curriculum_name,
                                                  curriculum_version=curriculum_version,
                                                  curriculum_schema_version=curriculum_schema_version,
                                                  curriculum_description=json.load(
@@ -72,13 +72,13 @@ class CurriculumManager:
         return df_curriculums
 
     def get_curriculum(self,
-                       curriculum_task: Task,
+                       curriculum_name: Task,
                        curriculum_schema_version: str,
                        curriculum_version: str
                        ) -> dict:
         """ Get a curriculum from the saved_curriculums directory"""
 
-        json_name = (f"{curriculum_task}_"
+        json_name = (f"{curriculum_name}_"
                      f"curriculum_v{curriculum_version}_"
                      f"schema_v{curriculum_schema_version}.json")
 
@@ -93,7 +93,7 @@ class CurriculumManager:
 
         # Sanity check
         assert loaded_json[
-            'curriculum_task'] == curriculum_task, f"curriculum_task in json ({loaded_json['curriculum_task']}) does not match file name ({curriculum_task})!"
+            'curriculum_name'] == curriculum_name, f"curriculum_name in json ({loaded_json['curriculum_name']}) does not match file name ({curriculum_name})!"
         assert loaded_json['curriculum_schema_version'] == curriculum_schema_version, \
             f"curriculum_schema_version in json ({loaded_json['curriculum_schema_version']}) does not match file name ({curriculum_schema_version})!"
         assert loaded_json['curriculum_version'] == curriculum_version, \
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     
     logger.info(curriculum_manager.df_curriculums())
     _curr = curriculum_manager.get_curriculum(
-        curriculum_task='Coupled Baiting',
+        curriculum_name='Coupled Baiting',
         curriculum_version='0.2',
         curriculum_schema_version='0.2',
     )
