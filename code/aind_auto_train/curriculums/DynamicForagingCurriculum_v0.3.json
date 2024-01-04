@@ -33,6 +33,14 @@
             "additionalProperties": false,
             "description": "Training schema for the dynamic foraging GUI.\n\n\nThis fully defines a set of training parameters that could be used in the GUI.\nFor simplicity, let's start with a flat structure and use exactly the same names as in the GUI.",
             "properties": {
+                "training_stage": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/TrainingStage"
+                        }
+                    ],
+                    "title": "Training stage"
+                },
                 "task": {
                     "allOf": [
                         {
@@ -44,18 +52,6 @@
                 "task_schema_version": {
                     "title": "Schema version",
                     "type": "string"
-                },
-                "curriculum_version": {
-                    "title": "Curriculum version",
-                    "type": "string"
-                },
-                "training_stage": {
-                    "allOf": [
-                        {
-                            "$ref": "#/$defs/TrainingStage"
-                        }
-                    ],
-                    "title": "Training stage"
                 },
                 "description": {
                     "default": "",
@@ -70,7 +66,7 @@
                     "title": "Reward family",
                     "type": "integer"
                 },
-                "RewardParisN": {
+                "RewardPairsN": {
                     "title": "Number of pairs",
                     "type": "integer"
                 },
@@ -285,13 +281,12 @@
                 }
             },
             "required": [
+                "training_stage",
                 "task",
                 "task_schema_version",
-                "curriculum_version",
-                "training_stage",
                 "BaseRewardSum",
                 "RewardFamily",
-                "RewardParisN",
+                "RewardPairsN",
                 "BlockMin",
                 "BlockMax",
                 "BlockBeta",
@@ -394,12 +389,13 @@
     "description": "Task-specific curriculum for dynamic foraging task\nNote that the two generic types {taskparas_class} and {metrics_class} are specified here",
     "properties": {
         "curriculum_schema_version": {
-            "const": "0.2",
-            "default": "0.2",
+            "const": "0.3",
+            "default": "0.3",
             "title": "Curriculum schema version"
         },
-        "curriculum_task": {
-            "$ref": "#/$defs/Task"
+        "curriculum_name": {
+            "title": "Curriculum Name",
+            "type": "string"
         },
         "curriculum_version": {
             "title": "Curriculum version",
@@ -426,7 +422,7 @@
         }
     },
     "required": [
-        "curriculum_task",
+        "curriculum_name",
         "curriculum_version",
         "parameters",
         "curriculum"
