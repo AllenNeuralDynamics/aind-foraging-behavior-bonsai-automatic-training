@@ -98,6 +98,9 @@ class DynamicForagingParas(TaskParas):
     
     UncoupledReward: str = Field("0.1,0.3,0.7", title="Uncoupled reward")  # For uncoupled tasks only
     
+    # Randomness
+    Randomness: str = Field('Exponential', title="Randomness mode")  # Exponential by default
+    
     # Block length
     BlockMin:  int = Field(..., title="Block length (min)")
     BlockMax:  int = Field(..., title="Block length (max)")
@@ -108,6 +111,9 @@ class DynamicForagingParas(TaskParas):
     DelayMin:  float = Field(..., title="Delay period (min) ") 
     DelayMax: float = Field(..., title="Delay period (max) ")
     DelayBeta: float = Field(..., title="Delay period (beta)")
+    
+    # Reward delay
+    RewardDelay: float = Field(..., title="Reward delay (sec)")
     
     # Auto water
     AutoReward: bool = Field(..., title="Auto reward switch")
@@ -154,9 +160,6 @@ class DynamicForagingParas(TaskParas):
     IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", exclude_from_GUI=True)
     SaveTraining: bool = Field(True, title="(User clicks) Save training", exclude_from_GUI=True)
     InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
-    Randomness: str = Field("Exponential", title="Randomness mode", exclude_from_GUI=True)
-    
-    qt_spinbox_lineedit: float = Field(5.0, title="qt_spinbox_lineedit??", exclude_from_GUI=True)  # TODO:What is this???
     
 
 
