@@ -38,7 +38,7 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 
 ## Demo
 - Demo notebook for the [curriculum schema](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_schema.ipynb).
-- Demo notebook for [a full automation workflow (auto train manager)](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_auto_train_manager.ipynb)
+- Demo notebook for [a full automation workflow (auto train manager)](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_auto_train_manager.ipynb)
 - Demo notebook for the [curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_curriculum_manager.ipynb)
 
 ## Compared with SLIMS/mTrack
