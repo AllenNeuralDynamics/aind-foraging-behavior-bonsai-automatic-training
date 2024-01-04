@@ -46,7 +46,10 @@ class CurriculumManager:
         """
 
         df_curriculums = pd.DataFrame(columns=[
-                                      'curriculum_task', 'curriculum_version', 'curriculum_schema_version'])
+                                      'curriculum_name',
+                                      'curriculum_version',
+                                      'curriculum_schema_version',
+                                      'curriculum_description'])
         for f in self.json_files:
             match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
                               os.path.basename(f))
@@ -54,24 +57,28 @@ class CurriculumManager:
                 logger.warning(
                     f"Could not parse {os.path.basename(f)} as a curriculum json file.")
                 continue
-            curriculum_task, curriculum_version, curriculum_schema_version = match.groups()
-            df_curriculums = pd.concat([df_curriculums,
-                                        pd.DataFrame.from_records([dict(curriculum_task=curriculum_task,
-                                                                        curriculum_version=curriculum_version,
-                                                                        curriculum_schema_version=curriculum_schema_version)]
-                                                                  )
-                                        ], ignore_index=True)
+            curriculum_name, curriculum_version, curriculum_schema_version = match.groups()
+            df_curriculums = pd.concat(
+                [df_curriculums,
+                 pd.DataFrame.from_records([dict(curriculum_name=curriculum_name,
+                                                 curriculum_version=curriculum_version,
+                                                 curriculum_schema_version=curriculum_schema_version,
+                                                 curriculum_description=json.load(
+                                                     open(f, 'r'))['curriculum_description']
+                                                 )]
+                                           )
+                 ], ignore_index=True)
 
         return df_curriculums
 
     def get_curriculum(self,
-                       curriculum_task: Task,
+                       curriculum_name: Task,
                        curriculum_schema_version: str,
                        curriculum_version: str
                        ) -> dict:
         """ Get a curriculum from the saved_curriculums directory"""
 
-        json_name = (f"{curriculum_task}_"
+        json_name = (f"{curriculum_name}_"
                      f"curriculum_v{curriculum_version}_"
                      f"schema_v{curriculum_schema_version}.json")
 
@@ -85,7 +92,8 @@ class CurriculumManager:
             return None
 
         # Sanity check
-        assert loaded_json['curriculum_task'] == curriculum_task, f"curriculum_task in json ({loaded_json['curriculum_task']}) does not match file name ({curriculum_task})!"
+        assert loaded_json[
+            'curriculum_name'] == curriculum_name, f"curriculum_name in json ({loaded_json['curriculum_name']}) does not match file name ({curriculum_name})!"
         assert loaded_json['curriculum_schema_version'] == curriculum_schema_version, \
             f"curriculum_schema_version in json ({loaded_json['curriculum_schema_version']}) does not match file name ({curriculum_schema_version})!"
         assert loaded_json['curriculum_version'] == curriculum_version, \
@@ -114,18 +122,20 @@ class CurriculumManager:
         metrics_schema = inspect.getfullargspec(
             curriculum.evaluate_transitions
         ).annotations.get('metrics', None)
-        
+
         metrics_schema_name = metrics_schema.__name__ if metrics_schema else None
-        
+
         # Check whether the required metrics schema is available
         assert hasattr(task_schemas, metrics_schema_name), \
             f"'{metrics_schema_name}' not found in aind_auto_train.schema.task"
-       
+
         metrics = getattr(task_schemas, metrics_schema_name)
 
         return {'curriculum': curriculum,
-                'curriculum_json_name': json_name,
                 'metrics': metrics,
+                'curriculum_json_name': self.saved_curriculums_local + json_name,
+                'diagram_paras_name':  self.saved_curriculums_local + json_name.replace('.json', '_paras.svg'),
+                'diagram_rules_name': self.saved_curriculums_local + json_name.replace('.json', '_rules.svg'),
                 }
 
     def download_curriculums(self):
@@ -146,12 +156,16 @@ class CurriculumManager:
 
 
 if __name__ == "__main__":
+    from aind_auto_train import setup_logging
+    setup_logging()
+
     curriculum_manager = CurriculumManager()
+    
     logger.info(curriculum_manager.df_curriculums())
     _curr = curriculum_manager.get_curriculum(
-        curriculum_task='Coupled Baiting',
+        curriculum_name='Coupled Baiting',
         curriculum_version='0.2',
-        curriculum_schema_version='0.2',
+        curriculum_schema_version='0.3',
     )
 
     print(_curr)

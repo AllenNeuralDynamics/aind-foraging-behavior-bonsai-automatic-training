@@ -49,12 +49,16 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     specify the {taskparas_class} and {metrics_class} in the generic type
     '''
     # Version of this **schema**, hard-coded here only.
-    curriculum_schema_version: Literal["0.2"] = Field(
-        "0.2", title="Curriculum schema version")
+    curriculum_schema_version: Literal["0.3"] = Field(
+        "0.3", title="Curriculum schema version")
 
-    # `curriculum_task`` could be different from `task` (session_task)
+    # `curriculum_name` could be any arbitrary string now
+    # I dissociated it from `task` because one curriculum could have stages that use different tasks
+    # For example, the C0B0 curriculum (decoupled and no baiting) includes some initial C1B1 sessions,
+    # and one can even create a curriculum called "dynamic + VR foraging" that includes both dynamic 
+    # foraging and VR foraging tasks in different stages.
     # See this issue: https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/issues/40
-    curriculum_task: Task
+    curriculum_name: str
 
     # Version of an instance of the curriculum schema (i.e., one curriculum)
     curriculum_version: str = Field(...,
@@ -99,7 +103,7 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
         return None
 
     def _get_export_model_name(self):
-        return (f"/{self.curriculum_task}"
+        return (f"/{self.curriculum_name}"
                 f"_curriculum_v{self.curriculum_version}"
                 f"_schema_v{self.curriculum_schema_version}")
 

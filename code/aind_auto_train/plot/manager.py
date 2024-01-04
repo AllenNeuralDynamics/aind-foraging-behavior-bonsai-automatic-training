@@ -119,7 +119,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             customdata=np.stack(
                 (df_subject.session,
                  df_subject.session_date,
-                 df_subject.curriculum_task,
+                 df_subject.curriculum_name,
                  df_subject.curriculum_version,
                  df_subject.current_stage_suggested,
                  stage_actual,
@@ -152,7 +152,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     fig = go.Figure(data=traces)
     fig.update_layout(
         title=f"Training progress ({manager.manager_name}, "
-              f"curriculum_task = {manager.df_manager.curriculum_task[0]})",
+              f"curriculum_name = {manager.df_manager.curriculum_name[0]})",
         xaxis_title=x_axis,
         yaxis_title='Mouse',
         height=1200,

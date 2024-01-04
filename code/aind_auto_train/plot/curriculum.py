@@ -30,8 +30,9 @@ def draw_diagram_rules(curriculum):
 
     # Create Digraph object
     dot = Digraph(comment='Curriculum for Dynamic Foraging - Coupled Baiting')
-    dot.attr(label=f'Curriculum (v{curriculum.curriculum_version}) '
-                   f'for {curriculum.curriculum_task}\n '
+    dot.attr(label=f"{curriculum.curriculum_name} "
+                   f"(v{curriculum.curriculum_version} "
+                   f"@ schema v{curriculum.curriculum_schema_version})\n"
                    f'{curriculum.curriculum_description}',
              labelloc='t',
              fontsize='17'
@@ -43,7 +44,7 @@ def draw_diagram_rules(curriculum):
     # Add nodes (stages)
     for stage in stages:
         dot.node(name=stage.name,
-                 label=stage.name,
+                 label=f'{stage.name}\n{curriculum.parameters[stage].task}',
                  shape='ellipse',
                  style='filled',
                  fillcolor=stage_color_mapper[stage.name],

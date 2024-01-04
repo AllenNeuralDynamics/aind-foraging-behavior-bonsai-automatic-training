@@ -8,8 +8,7 @@ from aind_auto_train.schema.task import Task, TrainingStage, DummyTaskParas, Dum
 from aind_auto_train.schema.curriculum import DummyTaskCurriculum, StageTransitions, TransitionRule, Decision
 
 
-meta = dict(curriculum_version="0.1",
-            task_schema_version="0.1",
+meta = dict(task_schema_version="0.1",
             task=Task.DUMMY
             )
 
@@ -34,7 +33,7 @@ paras_stage_2 = DummyTaskParas(
 )
 
 curriculum = DummyTaskCurriculum(
-    curriculum_task=Task.DUMMY,
+    curriculum_name=Task.DUMMY,
     curriculum_version="0.1",
 
     parameters={

@@ -61,10 +61,9 @@ class TaskParas(AindModel):
     """Parent class for TaskParas. All other task parameters should inherit from this class
     """
     # Metadata
+    training_stage: TrainingStage = Field(..., title="Training stage")
     task: Task = Field(..., title="Task name")
     task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
-    curriculum_version: str = Field(..., title="Curriculum version")  # Corresponding to the curriculum
-    training_stage: TrainingStage = Field(..., title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
     class Config:
@@ -95,7 +94,7 @@ class DynamicForagingParas(TaskParas):
     # Reward probability
     BaseRewardSum: float = Field(..., title="Sum of p_reward")
     RewardFamily: int = Field(..., title="Reward family")  # Should be explicit here
-    RewardParisN: int = Field(..., title="Number of pairs")  # Should be explicit here
+    RewardPairsN: int = Field(..., title="Number of pairs")  # Should be explicit here
     
     UncoupledReward: str = Field("0.1,0.3,0.7", title="Uncoupled reward")  # For uncoupled tasks only
     
