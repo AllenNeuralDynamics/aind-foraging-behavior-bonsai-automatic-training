@@ -61,10 +61,9 @@ class TaskParas(AindModel):
     """Parent class for TaskParas. All other task parameters should inherit from this class
     """
     # Metadata
+    training_stage: TrainingStage = Field(..., title="Training stage")
     task: Task = Field(..., title="Task name")
     task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
-    curriculum_version: str = Field(..., title="Curriculum version")  # Corresponding to the curriculum
-    training_stage: TrainingStage = Field(..., title="Training stage")
     description: str = Field("", title='Description of this set of parameters')
     
     class Config:

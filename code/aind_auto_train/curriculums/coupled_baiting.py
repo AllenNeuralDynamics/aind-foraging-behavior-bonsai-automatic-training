@@ -35,7 +35,6 @@ curriculum_description = '''Base curriculum for the coupled-baiting task'''
 # "Phase B" in Han's slides
 paras_stage_1 = DynamicForagingParas(
     # Metainfo
-    curriculum_version=curriculum_version,
     task_schema_version=task_schema_version,
     task=task,
     training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
