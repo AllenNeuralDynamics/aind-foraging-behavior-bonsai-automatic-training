@@ -221,7 +221,7 @@ class AutoTrainManager:
             return self.curriculum_manager.get_curriculum(
                 curriculum_name='Coupled Baiting',
                 curriculum_version='0.1',
-                curriculum_schema_version='0.2',
+                curriculum_schema_version='0.3',
             )
 
     def add_and_evaluate_session(self, subject_id, session):
@@ -257,9 +257,7 @@ class AutoTrainManager:
                        session_total=session,
                        session_at_current_stage=session_at_current_stage)
 
-        # TODO: to use the correct version of curriculum
-        # Should we allow change of curriculum version during a training? maybe not...
-        # But we should definitely allow different curriculum versions for different
+        # Get the curriculum to use
         df_this = self.df_behavior.query(
             f'subject_id == "{subject_id}" and session == {session}')
         _curr = self._get_curriculum_to_use(df_this)
@@ -273,6 +271,7 @@ class AutoTrainManager:
         curriculum_json = _curr['curriculum_json_name']
         metrics_to_use = _curr['metrics']
 
+        # Evaluate the transition with the desired curriculum
         decision, next_stage_suggested = curriculum_to_use.evaluate_transitions(
             current_stage=TrainingStage[current_stage_actual],
             metrics=metrics_to_use(**metrics))
@@ -398,7 +397,6 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         if 'curriculum_name' not in df_behavior.columns:
             df_behavior['curriculum_name'] = df_behavior['task']
 
-        # TODO: do not hard code the task name
         df_behavior = df_behavior.query(
             f"curriculum_name in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()

@@ -165,7 +165,7 @@ if __name__ == "__main__":
     _curr = curriculum_manager.get_curriculum(
         curriculum_name='Coupled Baiting',
         curriculum_version='0.2',
-        curriculum_schema_version='0.2',
+        curriculum_schema_version='0.3',
     )
 
     print(_curr)
