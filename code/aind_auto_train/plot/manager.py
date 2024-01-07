@@ -5,16 +5,7 @@ import plotly.graph_objects as go
 import pandas as pd
 
 from aind_auto_train.schema.curriculum import TrainingStage
-
-# Define color scale - mapping stages to colors from red to green
-# TODO: make this flexible
-stage_color_mapper = {
-    TrainingStage.STAGE_1.name: 'red',
-    TrainingStage.STAGE_2.name: 'orange',
-    TrainingStage.STAGE_3.name: 'yellow',
-    TrainingStage.STAGE_FINAL.name: 'lightgreen',
-    TrainingStage.GRADUATED.name: 'green'
-}
+from aind_auto_train.plot.curriculum import get_stage_color_mapper
 
 
 def plot_manager_all_progress(manager: 'AutoTrainManager',
@@ -26,6 +17,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
                                            'descending'] = 'descending',
                               if_show_fig=True
                               ):
+    
     # %%
     # Set default order
     df_manager = manager.df_manager.sort_values(by=['subject_id', 'session'],
@@ -63,6 +55,10 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     traces = []
     for n, subject_id in enumerate(subject_ids):
         df_subject = df_manager[df_manager['subject_id'] == subject_id]
+        
+        # Get stage_color_mapper
+        stage_color_mapper = get_stage_color_mapper(stage_list=list(TrainingStage.__members__))
+        
         # Get h2o if available
         if 'h2o' in manager.df_behavior:
             h2o = manager.df_behavior[
