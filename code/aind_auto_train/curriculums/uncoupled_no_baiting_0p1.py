@@ -107,33 +107,38 @@ transition_from_stage_1 = StageTransitions(
     ]
 )
 
-paras_stage_2 = paras_stage_1.model_copy(update=dict(
-    training_stage=TrainingStage.STAGE_2,
-    description="Coupled without baiting (block = [20, 35, 20], p_sum = 1.0, p_ratio = [8:1])",
+paras_stage_2 = DynamicForagingParas(
+    **{
+        **paras_stage_1.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_2,
+            description="Coupled without baiting (block = [20, 35, 20], p_sum = 1.0, p_ratio = [8:1])",
 
-    # --- Only include changes compared to stage_1 ---
-    # -- Essentials --
+            # --- Only include changes compared to stage_1 ---
+            # -- Essentials --
 
-    # Coupled no baiting
-    task=Task.C1B0,
+            # Coupled no baiting
+            task=Task.C1B0,
 
-    # p_sum = 0.8 --> 1.0, p_ratio [1:0] -> [8:1]
-    BaseRewardSum=1.0,
-    RewardFamily=1,
-    RewardPairsN=1,
+            # p_sum = 0.8 --> 1.0, p_ratio [1:0] -> [8:1]
+            BaseRewardSum=1.0,
+            RewardFamily=1,
+            RewardPairsN=1,
 
-    # block length [10, 30, 10] --> [20, 35, 20]
-    BlockMin=20,
-    BlockMax=35,
-    BlockBeta=20,
+            # block length [10, 30, 10] --> [20, 35, 20]
+            BlockMin=20,
+            BlockMax=35,
+            BlockBeta=20,
 
-    # ITI [1, 7, 3] --> [1, 25, 3]
-    ITIMax=25,
+            # ITI [1, 7, 3] --> [1, 25, 3]
+            ITIMax=25,
 
-    # -- Within session automation --
-    # Miscs
-    ResponseTime=2,  # Decrease response time: 5 --> 2
-))
+            # -- Within session automation --
+            # Miscs
+            ResponseTime=2,  # Decrease response time: 5 --> 2
+        )
+    }
+)
 
 transition_from_stage_2 = StageTransitions(
     from_stage=TrainingStage.STAGE_2,
@@ -163,23 +168,28 @@ transition_from_stage_2 = StageTransitions(
     ]
 )
 
-paras_stage_3 = paras_stage_2.model_copy(update=dict(
-    training_stage=TrainingStage.STAGE_3,
-    description="Coupled without baiting; remove auto water; add delay",
+paras_stage_3 = DynamicForagingParas(
+    **{
+        **paras_stage_2.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_3,
+            description="Coupled without baiting; remove auto water; add delay",
 
-    # -- Essentials --
+            # -- Essentials --
 
-    # Coupled no baiting
-    task=Task.C1B0,
+            # Coupled no baiting
+            task=Task.C1B0,
 
-    # Delay 0.0 --> 1.0
-    DelayMin=1.0,
-    DelayMax=1.0,
-    DelayBeta=0.5,
+            # Delay 0.0 --> 1.0
+            DelayMin=1.0,
+            DelayMax=1.0,
+            DelayBeta=0.5,
 
-    # Turn off auto water
-    AutoReward=False,
-))
+            # Turn off auto water
+            AutoReward=False,
+        )
+    }
+)
 
 transition_from_stage_3 = StageTransitions(
     from_stage=TrainingStage.STAGE_3,
@@ -209,28 +219,33 @@ transition_from_stage_3 = StageTransitions(
     ]
 )
 
-paras_stage_4 = paras_stage_3.model_copy(update=dict(
-    training_stage=TrainingStage.STAGE_4,
-    description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
+paras_stage_4 = DynamicForagingParas(
+    **{
+        **paras_stage_3.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_4,
+            description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
 
-    # -- Essentials --
-    # Coupled no baiting
-    task=Task.C0B0,
-    UncoupledReward="0.1, 0.4. 0.7",
+            # -- Essentials --
+            # Coupled no baiting
+            task=Task.C0B0,
+            UncoupledReward="0.1, 0.4, 0.7",
 
-    # Final block length for uncoupled task
-    BlockMin=20,
-    BlockMax=35,
-    BlockBeta=10,
+            # Final block length for uncoupled task
+            BlockMin=20,
+            BlockMax=35,
+            BlockBeta=10,
 
-    # Turn on auto water for the first day after switching to uncoupled task
-    AutoReward=True,
-    Unrewarded=10,
-    Ignored=1000,
+            # Turn on auto water for the first day after switching to uncoupled task
+            AutoReward=True,
+            Unrewarded=10,
+            Ignored=1000,
 
-    # Turn off auto block
-    AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
-))
+            # Turn off auto block
+            AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
+        )
+    }
+)
 
 transition_from_stage_4 = StageTransitions(
     from_stage=TrainingStage.STAGE_4,
@@ -247,42 +262,47 @@ transition_from_stage_4 = StageTransitions(
     ]
 )
 
-paras_stage_final = paras_stage_4.model_copy(update=dict(
-    training_stage=TrainingStage.STAGE_FINAL,
-    description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
+paras_stage_final = DynamicForagingParas(
+    **{
+        **paras_stage_4.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_FINAL,
+            description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
 
-    # Essentials
-    # Coupled no baiting
-    task=Task.C0B0,
-    UncoupledReward="0.1, 0.4. 0.7",
+            # Essentials
+            # Coupled no baiting
+            task=Task.C0B0,
+            UncoupledReward="0.1, 0.4, 0.7",
 
-    BlockMin=20,
-    BlockMax=35,
-    BlockBeta=10,
-    BlockMinReward=0,
+            BlockMin=20,
+            BlockMax=35,
+            BlockBeta=10,
+            BlockMinReward=0,
 
-    ITIMin=1,
-    ITIMax=25,
-    ITIBeta=3,
+            ITIMin=1.0,
+            ITIMax=25.0,
+            ITIBeta=3.0,
 
-    DelayMin=1.0,
-    DelayMax=1.0,
-    DelayBeta=0.5,
+            DelayMin=1.0,
+            DelayMax=1.0,
+            DelayBeta=0.5,
 
-    RewardDelay=0,
+            RewardDelay=0,
 
-    # Within session automation
-    AutoReward=False,  # Turn off auto water
-    AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
+            # Within session automation
+            AutoReward=False,  # Turn off auto water
+            AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
 
-    MaxTrial=1000,
-    MaxTime=90,
-    StopIgnores=20000,
+            MaxTrial=1000,
+            MaxTime=90,
+            StopIgnores=20000,
 
-    # Miscs
-    ResponseTime=2,
-    RewardConsumeTime=3,
-))
+            # Miscs
+            ResponseTime=2.0,
+            RewardConsumeTime=3.0,
+        )
+    }
+)
 
 transition_from_stage_final = StageTransitions(
     from_stage=TrainingStage.STAGE_FINAL,
