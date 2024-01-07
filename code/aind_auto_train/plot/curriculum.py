@@ -1,8 +1,19 @@
 import re
 
 from graphviz import Digraph
-from aind_auto_train.plot.manager import stage_color_mapper
+from matplotlib import pyplot as plt
+import matplotlib
 
+def get_stage_color_mapper(stage_list):
+    # Mapping stages to colors from red to green, return rgb values
+    # Interpolate between red and green using the number of stages
+    cmap = plt.cm.get_cmap('RdYlGn', 100)
+    stage_color_mapper = {
+        stage: matplotlib.colors.rgb2hex(
+            cmap(i / (len(stage_list) - 1))) 
+        for i, stage in enumerate(stage_list)
+    }
+    return stage_color_mapper
 
 def _format_lambda_full(string: str):
     return '\n'.join([line.lstrip()   # Remove the first line
@@ -25,8 +36,10 @@ def draw_diagram_rules(curriculum):
         curriculum (Curriculum): _description_
     """
 
-    # Script data extracted from the user's script
     stages = curriculum.parameters.keys()
+    stage_color_mapper = get_stage_color_mapper(
+        [s.name for s in list(stages)] + ['GRADUATED']
+    )
 
     # Create Digraph object
     dot = Digraph(comment='Curriculum for Dynamic Foraging - Coupled Baiting')
@@ -103,6 +116,11 @@ def draw_diagram_paras(curriculum,
     """Generate detailed parameter table by graphviz
     with change of parameters highlighted in green
     """
+
+    stages = curriculum.parameters.keys()
+    stage_color_mapper = get_stage_color_mapper(
+        [s.name for s in list(stages)] + ['GRADUATED']
+    )
 
     dot = Digraph('G')
 

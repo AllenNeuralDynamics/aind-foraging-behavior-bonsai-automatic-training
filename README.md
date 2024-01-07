@@ -20,8 +20,8 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 - [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculum_manager.py) manages all available pre-generated curriculums (on any S3 bucket).
 
 ## Usage
-1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L199-L204) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py#L223-L247).
-   - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting.py) for the dynamic foraging task.
+1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py#L199-L204) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py#L223-L247).
+   - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py) for the dynamic foraging task.
    - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.3.json) 
    - Here are automatically rendered diagrams for stage transitions rules and parameters (click the images to try the hover feature :blush:)
 
