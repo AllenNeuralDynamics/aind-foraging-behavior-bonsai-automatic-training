@@ -4,18 +4,18 @@ digraph {
 Base curriculum for the coupled-baiting task" labelloc=t
 	rankdir=TB
 	STAGE_1 [label="STAGE_1
-Coupled Baiting" fillcolor=red shape=ellipse style=filled tooltip="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])
+Coupled Baiting" fillcolor="#a50026" shape=ellipse style=filled tooltip="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])
 stage_task = Coupled Baiting"]
 	STAGE_2 [label="STAGE_2
-Coupled Baiting" fillcolor=orange shape=ellipse style=filled tooltip="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])
+Coupled Baiting" fillcolor="#f98f53" shape=ellipse style=filled tooltip="Phase C in Han's slides (block = [10, 40, 10], p_sum = 0.6, p_ratio = [8:1])
 stage_task = Coupled Baiting"]
 	STAGE_3 [label="STAGE_3
-Coupled Baiting" fillcolor=yellow shape=ellipse style=filled tooltip="Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])
+Coupled Baiting" fillcolor="#fdfebc" shape=ellipse style=filled tooltip="Phase D in Han's slides (block = [10, 40, 10], p_sum = 0.45, p_ratio = [8:1])
 stage_task = Coupled Baiting"]
 	STAGE_FINAL [label="STAGE_FINAL
-Coupled Baiting" fillcolor=lightgreen shape=ellipse style=filled tooltip="Phase E in Han's slides (full task: block = [20, 60, 20], p_sum = 0.45, p_ratio = [8:1], [6:1], [3:1], [1:1])
+Coupled Baiting" fillcolor="#81c966" shape=ellipse style=filled tooltip="Phase E in Han's slides (full task: block = [20, 60, 20], p_sum = 0.45, p_ratio = [8:1], [6:1], [3:1], [1:1])
 stage_task = Coupled Baiting"]
-	GRADUATED [label=GRADUATED fillcolor=green shape=box style=filled]
+	GRADUATED [label=GRADUATED fillcolor="#006837" shape=box style=filled]
 	STAGE_1 -> STAGE_2 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Finished trials >= 200 and
  efficiency >= 0.6" headtooltip="metrics.finished_trials[-1] >= 200
 and
