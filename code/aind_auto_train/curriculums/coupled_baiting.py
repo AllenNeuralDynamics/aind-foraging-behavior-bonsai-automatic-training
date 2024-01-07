@@ -61,6 +61,9 @@ paras_stage_1 = DynamicForagingParas(
     DelayMin=0.5,
     DelayMax=0.5,
     DelayBeta=0,
+    
+    # Reward delay
+    RewardDelay=0,
 
     # -- Within session automation --
     # Auto water
