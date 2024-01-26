@@ -140,12 +140,18 @@ class AutoTrainManager:
         sort_by: ['subject_id', 'first_date',
                   'last_date', 'progress_to_graduated'] = 'subject_id',
         sort_order: ['ascending', 'descending'] = 'descending',
+        marker_size=10,
+        marker_edge_width=2,
+        highlight_subjects=[],
         if_show_fig=True
     ):
         return plot_manager_all_progress(manager=self,
                                          x_axis=x_axis,
                                          sort_by=sort_by,
                                          sort_order=sort_order,
+                                         marker_size=marker_size,
+                                         marker_edge_width=marker_edge_width,
+                                         highlight_subjects=highlight_subjects,
                                          if_show_fig=if_show_fig)
 
     def _get_next_stage_suggested_on_last_session(self, subject_id, session) -> str:
