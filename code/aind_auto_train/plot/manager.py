@@ -15,13 +15,20 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
                                         'last_date', 'progress_to_graduated'] = 'subject_id',
                               sort_order: ['ascending',
                                            'descending'] = 'descending',
+                              marker_size=10,
+                              marker_edge_width=2,
+                              highlight_subjects=[],
                               if_show_fig=True
                               ):
+    
     
     # %%
     # Set default order
     df_manager = manager.df_manager.sort_values(by=['subject_id', 'session'],
                                                 ascending=[sort_order == 'ascending', False])
+    
+    if not len(df_manager):
+        return None
 
     # Sort mice
     if sort_by == 'subject_id':
@@ -78,22 +85,26 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
         if x_axis == 'session':
             x = df_subject['session']
         elif x_axis == 'date':
-            x = df_subject['session_date']
+            x = pd.to_datetime(df_subject['session_date'])
         elif x_axis == 'relative_date':
             x = pd.to_datetime(df_subject['session_date'])
             x = (x - x.min()).dt.days
         else:
             raise ValueError(
                 f"x_axis can only be in ['session', 'date', 'relative_date']")
+        
+        # Cache x range
+        xrange_min = x.min() if n == 0 else min(x.min(), xrange_min)
+        xrange_max = x.max() if n == 0 else max(x.max(), xrange_max)
 
         traces.append(go.Scattergl(
             x=x,
             y=[n] * len(df_subject),
             mode='markers',
             marker=dict(
-                size=10,
+                size=marker_size,
                 line=dict(
-                    width=2,
+                    width=marker_edge_width,
                     color=df_subject['current_stage_suggested'].map(
                         stage_color_mapper)
                 ),
@@ -135,10 +146,10 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
             y=[n] * len(x[open_loop_ids]),
             mode='markers',
             marker=dict(
-                size=5,
+                size=marker_size*0.8,
                 symbol='x-thin',
                 color='black',
-                line_width=1,
+                line_width=marker_edge_width*0.8,
             ),
             showlegend=False,
         )
@@ -147,8 +158,7 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
     # Create the figure
     fig = go.Figure(data=traces)
     fig.update_layout(
-        title=f"Training progress ({manager.manager_name}, "
-              f"curriculum_name = {manager.df_manager.curriculum_name[0]})",
+        title=f"Automatic training progress ({manager.manager_name})",
         xaxis_title=x_axis,
         yaxis_title='Mouse',
         height=1200,
@@ -156,13 +166,34 @@ def plot_manager_all_progress(manager: 'AutoTrainManager',
 
     # Set subject_id as y axis label
     fig.update_layout(
+        hovermode='closest',
         yaxis=dict(
             tickmode='array',
             tickvals=np.arange(0, n + 1),  # Original y-axis values
             ticktext=subject_ids,  # New labels
             autorange='reversed',
+            zeroline=False,
+            title=''
         )
     )
+    
+    # Highight the selected subject
+    for n, subject_id in enumerate(subject_ids):
+        if subject_id in highlight_subjects:
+            fig.add_shape(
+                type="rect",
+                y0=n-0.5,  
+                y1=n+0.5,
+                x0=xrange_min - (1 if x_axis != 'date' else pd.Timedelta(days=1)),
+                x1=xrange_max + (1 if x_axis != 'date' else pd.Timedelta(days=1)),
+                line=dict(
+                    width=0,
+                ),
+                fillcolor="Gray",
+                opacity=0.3,
+                layer="below"
+            )
+    
 
     # Show the plot
     if if_show_fig:
