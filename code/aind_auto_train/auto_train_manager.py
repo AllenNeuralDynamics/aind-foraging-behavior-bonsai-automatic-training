@@ -15,9 +15,13 @@ from aind_auto_train.curriculum_manager import CurriculumManager
 
 logger = logging.getLogger(__name__)
 
-# Directory for caching df_maseter tables
+# Directory for caching df_maseter table
+# Map from task name in df_behavior to curriculum name (for compatibility)
 task_mapper = {'coupled_block_baiting': 'Coupled Baiting',
-               'Coupled Baiting': 'Coupled Baiting'}
+               'Coupled Baiting': 'Coupled Baiting',
+               'Uncoupled Without Baiting': 'Uncoupled Without Baiting',
+               'Coupled Without Baiting': 'Coupled Without Baiting',
+               'Uncoupled Baiting': 'Uncoupled Baiting'}
 
 
 class AutoTrainManager:
@@ -403,8 +407,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         if 'curriculum_name' not in df_behavior.columns:
             df_behavior['curriculum_name'] = df_behavior['task']
 
-        df_behavior = df_behavior.query(
-            f"curriculum_name in {[key for key, value in task_mapper.items() if value == 'Coupled Baiting']}").sort_values(
+        df_behavior = df_behavior.sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
 
         # Rename columns to the same as in DynamicForagingMetrics

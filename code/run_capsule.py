@@ -1,16 +1,20 @@
 """ top level run script """
 import threading
 import time
+import logging
 
 from aind_auto_train import setup_logging
 from aind_auto_train.auto_train_manager import DynamicForagingAutoTrainManager
 setup_logging()
-
+logger = logging.getLogger(__name__)
 
 def update_auto_train_database(managers):
     while True:
-        for manager_name, manager in managers.items():
-            manager.update()
+        try:
+            for manager_name, manager in managers.items():
+                manager.update()
+        except Exception as e:
+             logger.error(e)
         time.sleep(10)
 
 def run():
