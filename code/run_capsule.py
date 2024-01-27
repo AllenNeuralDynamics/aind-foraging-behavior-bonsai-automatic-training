@@ -8,14 +8,14 @@ from aind_auto_train.auto_train_manager import DynamicForagingAutoTrainManager
 setup_logging()
 logger = logging.getLogger(__name__)
 
-def update_auto_train_database(managers):
+def update_auto_train_database(managers, interval=3600):
     while True:
         try:
             for manager_name, manager in managers.items():
                 manager.update()
         except Exception as e:
              logger.error(e)
-        time.sleep(10)
+        time.sleep(interval)
 
 def run():
     # Connect to databases
