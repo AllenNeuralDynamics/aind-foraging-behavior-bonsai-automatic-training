@@ -269,7 +269,7 @@ class AutoTrainManager:
 
         # Get the curriculum to use
         df_this = self.df_behavior.query(
-            f'subject_id == "{subject_id}" and session == {session}')
+            f'subject_id == "{subject_id}" and session == {session}')        
         _curr = self._get_curriculum_to_use(df_this)
 
         if _curr is None:  # If no curriculum is found
@@ -407,7 +407,7 @@ class DynamicForagingAutoTrainManager(AutoTrainManager):
         if 'curriculum_name' not in df_behavior.columns:
             df_behavior['curriculum_name'] = df_behavior['task']
 
-        df_behavior = df_behavior.sort_values(
+        df_behavior = df_behavior[df_behavior.curriculum_name.notna()].sort_values(
             by=['subject_id', 'session'], ascending=True).reset_index()
 
         # Rename columns to the same as in DynamicForagingMetrics
