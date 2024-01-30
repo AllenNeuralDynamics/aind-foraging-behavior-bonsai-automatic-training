@@ -391,7 +391,7 @@
 <title>cell_19_2</title>
 <g id="a_node49"><a xlink:title="ITIMin @ STAGE_2">
 <polygon fill="darkseagreen" stroke="black" points="305,-340 233,-340 233,-319 305,-319 305,-340"/>
-<text text-anchor="middle" x="269" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">2</text>
+<text text-anchor="middle" x="269" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">2.0</text>
 </a>
 </g>
 </g>
@@ -411,7 +411,7 @@
 <title>cell_20_2</title>
 <g id="a_node50"><a xlink:title="ITIMax @ STAGE_2">
 <polygon fill="darkseagreen" stroke="black" points="305,-311 233,-311 233,-290 305,-290 305,-311"/>
-<text text-anchor="middle" x="269" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">10</text>
+<text text-anchor="middle" x="269" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">10.0</text>
 </a>
 </g>
 </g>
@@ -431,7 +431,7 @@
 <title>cell_21_2</title>
 <g id="a_node51"><a xlink:title="ITIBeta @ STAGE_2">
 <polygon fill="darkseagreen" stroke="black" points="305,-282 233,-282 233,-261 305,-261 305,-282"/>
-<text text-anchor="middle" x="269" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5</text>
+<text text-anchor="middle" x="269" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5.0</text>
 </a>
 </g>
 </g>
@@ -471,7 +471,7 @@
 <title>cell_23_2</title>
 <g id="a_node53"><a xlink:title="ResponseTime @ STAGE_2">
 <polygon fill="darkseagreen" stroke="black" points="305,-224 233,-224 233,-203 305,-203 305,-224"/>
-<text text-anchor="middle" x="269" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">3</text>
+<text text-anchor="middle" x="269" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">3.0</text>
 </a>
 </g>
 </g>
@@ -809,7 +809,7 @@
 <title>cell_19_3</title>
 <g id="a_node79"><a xlink:title="ITIMin @ STAGE_3">
 <polygon fill="darkseagreen" stroke="black" points="384,-340 312,-340 312,-319 384,-319 384,-340"/>
-<text text-anchor="middle" x="348" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">3</text>
+<text text-anchor="middle" x="348" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">3.0</text>
 </a>
 </g>
 </g>
@@ -820,7 +820,7 @@
 <title>cell_20_3</title>
 <g id="a_node80"><a xlink:title="ITIMax @ STAGE_3">
 <polygon fill="darkseagreen" stroke="black" points="384,-311 312,-311 312,-290 384,-290 384,-311"/>
-<text text-anchor="middle" x="348" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">15</text>
+<text text-anchor="middle" x="348" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">15.0</text>
 </a>
 </g>
 </g>
@@ -831,7 +831,7 @@
 <title>cell_21_3</title>
 <g id="a_node81"><a xlink:title="ITIBeta @ STAGE_3">
 <polygon fill="lightgrey" stroke="black" points="384,-282 312,-282 312,-261 384,-261 384,-282"/>
-<text text-anchor="middle" x="348" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5</text>
+<text text-anchor="middle" x="348" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5.0</text>
 </a>
 </g>
 </g>
@@ -853,7 +853,7 @@
 <title>cell_23_3</title>
 <g id="a_node83"><a xlink:title="ResponseTime @ STAGE_3">
 <polygon fill="darkseagreen" stroke="black" points="384,-224 312,-224 312,-203 384,-203 384,-224"/>
-<text text-anchor="middle" x="348" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">2</text>
+<text text-anchor="middle" x="348" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">2.0</text>
 </a>
 </g>
 </g>
@@ -1059,8 +1059,8 @@
 <g id="node102" class="node">
 <title>cell_12_4</title>
 <g id="a_node102"><a xlink:title="DelayBeta @ STAGE_FINAL">
-<polygon fill="darkseagreen" stroke="black" points="463,-543 391,-543 391,-522 463,-522 463,-543"/>
-<text text-anchor="middle" x="427" y="-529.4" font-family="Times New Roman,serif" font-size="12.00">0</text>
+<polygon fill="lightgrey" stroke="black" points="463,-543 391,-543 391,-522 463,-522 463,-543"/>
+<text text-anchor="middle" x="427" y="-529.4" font-family="Times New Roman,serif" font-size="12.00">0.0</text>
 </a>
 </g>
 </g>
@@ -1137,7 +1137,7 @@
 <title>cell_19_4</title>
 <g id="a_node109"><a xlink:title="ITIMin @ STAGE_FINAL">
 <polygon fill="lightgrey" stroke="black" points="463,-340 391,-340 391,-319 463,-319 463,-340"/>
-<text text-anchor="middle" x="427" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">3</text>
+<text text-anchor="middle" x="427" y="-326.4" font-family="Times New Roman,serif" font-size="12.00">3.0</text>
 </a>
 </g>
 </g>
@@ -1148,7 +1148,7 @@
 <title>cell_20_4</title>
 <g id="a_node110"><a xlink:title="ITIMax @ STAGE_FINAL">
 <polygon fill="darkseagreen" stroke="black" points="463,-311 391,-311 391,-290 463,-290 463,-311"/>
-<text text-anchor="middle" x="427" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">30</text>
+<text text-anchor="middle" x="427" y="-297.4" font-family="Times New Roman,serif" font-size="12.00">30.0</text>
 </a>
 </g>
 </g>
@@ -1159,7 +1159,7 @@
 <title>cell_21_4</title>
 <g id="a_node111"><a xlink:title="ITIBeta @ STAGE_FINAL">
 <polygon fill="lightgrey" stroke="black" points="463,-282 391,-282 391,-261 463,-261 463,-282"/>
-<text text-anchor="middle" x="427" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5</text>
+<text text-anchor="middle" x="427" y="-268.4" font-family="Times New Roman,serif" font-size="12.00">5.0</text>
 </a>
 </g>
 </g>
@@ -1181,7 +1181,7 @@
 <title>cell_23_4</title>
 <g id="a_node113"><a xlink:title="ResponseTime @ STAGE_FINAL">
 <polygon fill="lightgrey" stroke="black" points="463,-224 391,-224 391,-203 463,-203 463,-224"/>
-<text text-anchor="middle" x="427" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">2</text>
+<text text-anchor="middle" x="427" y="-210.4" font-family="Times New Roman,serif" font-size="12.00">2.0</text>
 </a>
 </g>
 </g>
@@ -1191,8 +1191,8 @@
 <g id="node114" class="node">
 <title>cell_24_4</title>
 <g id="a_node114"><a xlink:title="RewardConsumeTime @ STAGE_FINAL">
-<polygon fill="darkseagreen" stroke="black" points="463,-195 391,-195 391,-174 463,-174 463,-195"/>
-<text text-anchor="middle" x="427" y="-181.4" font-family="Times New Roman,serif" font-size="12.00">3</text>
+<polygon fill="lightgrey" stroke="black" points="463,-195 391,-195 391,-174 463,-174 463,-195"/>
+<text text-anchor="middle" x="427" y="-181.4" font-family="Times New Roman,serif" font-size="12.00">3.0</text>
 </a>
 </g>
 </g>
