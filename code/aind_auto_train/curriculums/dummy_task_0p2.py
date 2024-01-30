@@ -58,7 +58,7 @@ paras_stage_final = DummyTaskParas(
 curriculum = DummyTaskCurriculum(
     curriculum_name=Task.DUMMY,
     curriculum_version="0.2",
-    curriculum_description = '''A dummy curriculum showing complex transitions''',
+    curriculum_description = '''A dummy curriculum showing complex transitions and no absorbing GRADUATED stage''',
 
     parameters={
         TrainingStage.STAGE_1: paras_stage_1,
@@ -152,18 +152,6 @@ curriculum = DummyTaskCurriculum(
         TrainingStage.STAGE_FINAL: StageTransitions(
             from_stage=TrainingStage.STAGE_2,
             transition_rules=[
-                TransitionRule(
-                    decision=Decision.PROGRESS,
-                    to_stage=TrainingStage.GRADUATED,
-                    condition_description="for the last 5 sessions, metric float > 0.7 and metric int > 10",
-                    condition="""lambda metrics: 
-                    metrics.session_total >= 5
-                    and
-                    np.mean(metrics.dummy_metric_float[-5:]) > 0.7 
-                    and 
-                    np.mean(metrics.dummy_metric_int[-5:] > 10
-                    """
-                ),
 
                 TransitionRule(
                     decision=Decision.ROLLBACK,
