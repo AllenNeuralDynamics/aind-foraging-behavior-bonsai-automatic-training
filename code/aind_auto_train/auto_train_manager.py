@@ -177,10 +177,14 @@ class AutoTrainManager:
 
             return df_this_mouse.loc[id_last_session, 'next_stage_suggested']
 
-        # Else, throw an error
-        logger.error(
-            msg=f"Cannot find subject {subject_id} any session < {session} in df_manager!")
-        return None
+        # Else, (i.e., if session > 1 and no previous session found),
+        # assuming "next_stage_suggested" of the last session = "actual_stage" of this session
+        # i.e., no override from the trainer
+        logger.warning(
+            msg=f"subject {subject_id} did not start AutoTrain from session 1.")
+        return self.df_behavior.query(
+            f'subject_id == "{subject_id}" and session == {session}'
+        ).iloc[0]['current_stage_actual']
 
     def _get_current_stages(self, subject_id, session) -> dict:
         current_stage_suggested = 'STAGE_1' if session == 1 \
