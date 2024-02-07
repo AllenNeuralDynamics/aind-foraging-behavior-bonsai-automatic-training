@@ -326,6 +326,10 @@ class AutoTrainManager:
 
     def update(self):
         """update each mouse's training stage"""
+        
+        # Update df_behavior
+        self.df_behavior, _ = self.download_from_database()
+        
         session_key = ['subject_id', 'session']
 
         # Diff the to dataframe to find the new mice / new sessions
