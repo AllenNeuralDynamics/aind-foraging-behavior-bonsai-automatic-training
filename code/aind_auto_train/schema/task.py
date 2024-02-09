@@ -143,24 +143,18 @@ class DynamicForagingParas(TaskParas):
     MaxTrial: int = Field(..., title="Maximal number of trials")
     MaxTime: int = Field(..., title="Maximal session time (min)")
                              
-    # Reward size. TODO: which one has higher priority? valve open time or volume?
-    RightValue: float = Field(0.05, title="Right reward size (valve open time in sec)", exclude_from_GUI=True)  # exclude_from_GUI means this will not sent to the GUI
-    LeftValue: float = Field(0.05, title="Left reward size (valve open time in sec)", exclude_from_GUI=True)
-    RightValue_volume: float = Field(5.00, title="Right reward size (volume)", exclude_from_GUI=True)
-    LeftValue_volume: float = Field(5.00, title="Left reward size (volume)", exclude_from_GUI=True)
+    # Reward size
+    RightValue_volume: float = Field(3.00, title="Right reward size (uL)")
+    LeftValue_volume: float = Field(3.00, title="Left reward size (uL)")
     
-    # --- Other GUI fields that will never be changed by the script (only clicked by the user) ---
-    NextBlock: bool = Field(False, title="(User clicks) Next block", exclude_from_GUI=True)
-    GiveLeft: bool = Field(False, title="(User clicks) Give left", exclude_from_GUI=True)
-    GiveRight: bool = Field(False, title="(User clicks) Give right", exclude_from_GUI=True)
-    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", exclude_from_GUI=True)
-    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", exclude_from_GUI=True)
-    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", exclude_from_GUI=True)
-    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", exclude_from_GUI=True)
-    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", exclude_from_GUI=True)
-    SaveTraining: bool = Field(True, title="(User clicks) Save training", exclude_from_GUI=True)
-    InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
+    # Warmup
+    warmup: bool = Field(False, title="Warmup master switch")
+    warm_min_trial: int = Field(50, title="Warmup finish criteria: minimal trials")
+    warm_max_choice_ratio_bias: float = Field(0.1, title="Warmup finish criteria: maximal choice ratio bias from 0.5")
+    warm_min_finish_ratio: float = Field(0.8, title="Warmup finish criteria: minimal finish ratio")
+    warm_windowsize: int = Field(20, title="Warmup finish criteria: window size to compute the bias and ratio")
     
+        
 
 
 # For dummy task
