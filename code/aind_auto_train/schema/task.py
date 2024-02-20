@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from aind_data_schema.base import AindModel
 
 # %%
-class Task(Enum):
+class Task(str, Enum):
     """Foraging tasks"""
     C1B1 = "Coupled Baiting"
     C0B0 = "Uncoupled Without Baiting"
@@ -15,19 +15,19 @@ class Task(Enum):
     C0B1 = "Uncoupled Baiting"
     DUMMY = "Dummy task"
     
-class AdvancedBlockMode(Enum):
+class AdvancedBlockMode(str, Enum):
     ''' Modes for advanced block '''
     OFF = "off"
     NOW = "now"
     ONCE = "once"
     
-class AutoWaterMode(Enum):
+class AutoWaterMode(str, Enum):
     ''' Modes for auto water '''
     NATURAL = "Natural"
     BOTH = "Both"
     HIGH_PRO = "High pro"
     
-class TrainingStage(Enum):
+class TrainingStage(str, Enum):
     STAGE_1 = "Stage 1"  # A special first stage that needed to be splitted into 1.1 and 1.2 on the GUI side
     STAGE_2 = "Stage 2"
     STAGE_3 = "Stage 3"

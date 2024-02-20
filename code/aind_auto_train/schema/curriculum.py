@@ -17,7 +17,7 @@ from aind_auto_train.plot.curriculum import draw_diagram_rules, draw_diagram_par
 # %%
 logger = logging.getLogger(__name__)
 
-class Decision(Enum):
+class Decision(str, Enum):
     STAY: str = "stay"
     PROGRESS: str = "progress"
     ROLLBACK: str = "rollback"
