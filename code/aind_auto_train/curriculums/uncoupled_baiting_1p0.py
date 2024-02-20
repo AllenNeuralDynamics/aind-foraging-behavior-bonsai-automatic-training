@@ -360,8 +360,8 @@ curriculum = DynamicForagingCurriculum(
         TrainingStage.STAGE_1: paras_stage_1,
         TrainingStage.STAGE_2: paras_stage_2,
         TrainingStage.STAGE_3: paras_stage_3,
-        # TrainingStage.STAGE_4: paras_stage_4,
         TrainingStage.STAGE_FINAL: paras_stage_final,
+        TrainingStage.GRADUATED: paras_stage_final,
     },
 
     curriculum={
@@ -369,7 +369,6 @@ curriculum = DynamicForagingCurriculum(
         TrainingStage.STAGE_1: transition_from_stage_1,
         TrainingStage.STAGE_2: transition_from_stage_2,
         TrainingStage.STAGE_3: transition_from_stage_3,
-        # TrainingStage.STAGE_4: transition_from_stage_4,
         TrainingStage.STAGE_FINAL: transition_from_stage_final,
     },
 
