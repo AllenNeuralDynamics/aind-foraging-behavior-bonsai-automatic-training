@@ -49,8 +49,8 @@ class Curriculum(BaseModel, Generic[taskparas_class, metrics_class]):
     specify the {taskparas_class} and {metrics_class} in the generic type
     '''
     # Version of this **schema**, hard-coded here only.
-    curriculum_schema_version: Literal["0.3"] = Field(
-        "0.3", title="Curriculum schema version")
+    curriculum_schema_version: Literal["1.0"] = Field(
+        "1.0", title="Curriculum schema version")
 
     # `curriculum_name` could be any arbitrary string now
     # I dissociated it from `task` because one curriculum could have stages that use different tasks

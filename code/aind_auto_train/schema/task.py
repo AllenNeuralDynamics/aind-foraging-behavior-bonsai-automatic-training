@@ -28,7 +28,8 @@ class AutoWaterMode(str, Enum):
     HIGH_PRO = "High pro"
     
 class TrainingStage(str, Enum):
-    STAGE_1 = "Stage 1"  # A special first stage that needed to be splitted into 1.1 and 1.2 on the GUI side
+    STAGE_1_WARMUP = "Stage 1 w/warmup"  # Stage 1 with warmup (classical Stage 1.1 + 1.2)
+    STAGE_1 = "Stage 1"   # Stage 1 without warmup (classical Stage 1.2)
     STAGE_2 = "Stage 2"
     STAGE_3 = "Stage 3"
     STAGE_4 = "Stage 4"
@@ -63,6 +64,7 @@ class TaskParas(AindModel):
     # Metadata
     training_stage: TrainingStage = Field(..., title="Training stage")
     task: Task = Field(..., title="Task name")
+    task_url: str = Field("", title="URL to the task description")
     task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
     description: str = Field("", title='Description of this set of parameters')
     
