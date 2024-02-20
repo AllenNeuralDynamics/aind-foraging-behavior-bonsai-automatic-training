@@ -50,6 +50,9 @@ class CurriculumManager:
                                       'curriculum_version',
                                       'curriculum_schema_version',
                                       'curriculum_description'])
+        
+        schema_version_code_base = curriculum_schemas.Curriculum.model_fields['curriculum_schema_version'].default
+        
         for f in self.json_files:
             match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
                               os.path.basename(f))
@@ -58,6 +61,11 @@ class CurriculumManager:
                     f"Could not parse {os.path.basename(f)} as a curriculum json file.")
                 continue
             curriculum_name, curriculum_version, curriculum_schema_version = match.groups()
+            
+            # Only show curriculums whose curriculum_schema_version matches the current codebase
+            if schema_version_code_base != curriculum_schema_version:
+                continue
+            
             df_curriculums = pd.concat(
                 [df_curriculums,
                  pd.DataFrame.from_records([dict(curriculum_name=curriculum_name,
@@ -111,7 +119,8 @@ class CurriculumManager:
         # Check the schema version
         schema_version = curriculum_schema.model_fields['curriculum_schema_version'].default
         assert loaded_json['curriculum_schema_version'] == schema_version, \
-            f"schema version in the loaded json ({loaded_json['curriculum_schema_version']}) does not match the loaded schema ({schema_version})!"
+            f"Schema version in the loaded json ({loaded_json['curriculum_schema_version']}) does not match the loaded schema ({schema_version})! "\
+            f"Please update your `aind_auto_train` repo!"
 
         # Create the curriculum object
         curriculum = curriculum_schema(**loaded_json)
@@ -164,8 +173,8 @@ if __name__ == "__main__":
     logger.info(curriculum_manager.df_curriculums())
     _curr = curriculum_manager.get_curriculum(
         curriculum_name='Coupled Baiting',
-        curriculum_version='0.2',
-        curriculum_schema_version='0.3',
+        curriculum_version='1.0',
+        curriculum_schema_version='1.0',
     )
 
     print(_curr)

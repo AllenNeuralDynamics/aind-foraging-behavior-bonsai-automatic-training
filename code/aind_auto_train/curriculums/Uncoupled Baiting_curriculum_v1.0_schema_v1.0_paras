@@ -1,0 +1,1140 @@
+digraph G {
+	rankdir=TB splines=ortho
+	nodesep=0.1 ranksep=0.0
+	node [fillcolor=lightgrey fontsize=12 height=0.2 shape=box style=filled width=2]
+	cell_1_1 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ STAGE_1_WARMUP" width=1]
+	cell_2_1 [label=3 fillcolor=lightgrey tooltip="RewardFamily @ STAGE_1_WARMUP" width=1]
+	cell_3_1 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ STAGE_1_WARMUP" width=1]
+	cell_4_1 [label="" fillcolor=lightgrey tooltip="UncoupledReward @ STAGE_1_WARMUP" width=1]
+	cell_5_1 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ STAGE_1_WARMUP" width=1]
+	cell_6_1 [label=10 fillcolor=lightgrey tooltip="BlockMin @ STAGE_1_WARMUP" width=1]
+	cell_7_1 [label=30 fillcolor=lightgrey tooltip="BlockMax @ STAGE_1_WARMUP" width=1]
+	cell_8_1 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ STAGE_1_WARMUP" width=1]
+	cell_9_1 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ STAGE_1_WARMUP" width=1]
+	cell_10_1 [label=0.5 fillcolor=lightgrey tooltip="DelayMin @ STAGE_1_WARMUP" width=1]
+	cell_11_1 [label=0.5 fillcolor=lightgrey tooltip="DelayMax @ STAGE_1_WARMUP" width=1]
+	cell_12_1 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ STAGE_1_WARMUP" width=1]
+	cell_13_1 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ STAGE_1_WARMUP" width=1]
+	cell_14_1 [label=True fillcolor=lightgrey tooltip="AutoReward @ STAGE_1_WARMUP" width=1]
+	cell_15_1 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ STAGE_1_WARMUP" width=1]
+	cell_16_1 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ STAGE_1_WARMUP" width=1]
+	cell_17_1 [label=3 fillcolor=lightgrey tooltip="Unrewarded @ STAGE_1_WARMUP" width=1]
+	cell_18_1 [label=3 fillcolor=lightgrey tooltip="Ignored @ STAGE_1_WARMUP" width=1]
+	cell_19_1 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ STAGE_1_WARMUP" width=1]
+	cell_20_1 [label=7.0 fillcolor=lightgrey tooltip="ITIMax @ STAGE_1_WARMUP" width=1]
+	cell_21_1 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ STAGE_1_WARMUP" width=1]
+	cell_22_1 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ STAGE_1_WARMUP" width=1]
+	cell_23_1 [label=5.0 fillcolor=lightgrey tooltip="ResponseTime @ STAGE_1_WARMUP" width=1]
+	cell_24_1 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ STAGE_1_WARMUP" width=1]
+	cell_25_1 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ STAGE_1_WARMUP" width=1]
+	cell_26_1 [label=now fillcolor=lightgrey tooltip="AdvancedBlockAuto @ STAGE_1_WARMUP" width=1]
+	cell_27_1 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ STAGE_1_WARMUP" width=1]
+	cell_28_1 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ STAGE_1_WARMUP" width=1]
+	cell_29_1 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ STAGE_1_WARMUP" width=1]
+	cell_30_1 [label=90 fillcolor=lightgrey tooltip="MaxTime @ STAGE_1_WARMUP" width=1]
+	cell_31_1 [label=5.0 fillcolor=lightgrey tooltip="RightValue_volume @ STAGE_1_WARMUP" width=1]
+	cell_32_1 [label=5.0 fillcolor=lightgrey tooltip="LeftValue_volume @ STAGE_1_WARMUP" width=1]
+	cell_33_1 [label=True fillcolor=lightgrey tooltip="warmup @ STAGE_1_WARMUP" width=1]
+	cell_34_1 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ STAGE_1_WARMUP" width=1]
+	cell_35_1 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ STAGE_1_WARMUP" width=1]
+	cell_36_1 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ STAGE_1_WARMUP" width=1]
+	cell_37_1 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ STAGE_1_WARMUP" width=1]
+	cell_1_2 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ STAGE_1" width=1]
+	cell_2_2 [label=3 fillcolor=lightgrey tooltip="RewardFamily @ STAGE_1" width=1]
+	cell_3_2 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ STAGE_1" width=1]
+	cell_4_2 [label="" fillcolor=lightgrey tooltip="UncoupledReward @ STAGE_1" width=1]
+	cell_5_2 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ STAGE_1" width=1]
+	cell_6_2 [label=10 fillcolor=lightgrey tooltip="BlockMin @ STAGE_1" width=1]
+	cell_7_2 [label=30 fillcolor=lightgrey tooltip="BlockMax @ STAGE_1" width=1]
+	cell_8_2 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ STAGE_1" width=1]
+	cell_9_2 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ STAGE_1" width=1]
+	cell_10_2 [label=0.5 fillcolor=lightgrey tooltip="DelayMin @ STAGE_1" width=1]
+	cell_11_2 [label=0.5 fillcolor=lightgrey tooltip="DelayMax @ STAGE_1" width=1]
+	cell_12_2 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ STAGE_1" width=1]
+	cell_13_2 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ STAGE_1" width=1]
+	cell_14_2 [label=True fillcolor=lightgrey tooltip="AutoReward @ STAGE_1" width=1]
+	cell_15_2 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ STAGE_1" width=1]
+	cell_16_2 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ STAGE_1" width=1]
+	cell_17_2 [label=3 fillcolor=lightgrey tooltip="Unrewarded @ STAGE_1" width=1]
+	cell_18_2 [label=3 fillcolor=lightgrey tooltip="Ignored @ STAGE_1" width=1]
+	cell_19_2 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ STAGE_1" width=1]
+	cell_20_2 [label=7.0 fillcolor=lightgrey tooltip="ITIMax @ STAGE_1" width=1]
+	cell_21_2 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ STAGE_1" width=1]
+	cell_22_2 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ STAGE_1" width=1]
+	cell_23_2 [label=5.0 fillcolor=lightgrey tooltip="ResponseTime @ STAGE_1" width=1]
+	cell_24_2 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ STAGE_1" width=1]
+	cell_25_2 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ STAGE_1" width=1]
+	cell_26_2 [label=now fillcolor=lightgrey tooltip="AdvancedBlockAuto @ STAGE_1" width=1]
+	cell_27_2 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ STAGE_1" width=1]
+	cell_28_2 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ STAGE_1" width=1]
+	cell_29_2 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ STAGE_1" width=1]
+	cell_30_2 [label=90 fillcolor=lightgrey tooltip="MaxTime @ STAGE_1" width=1]
+	cell_31_2 [label=3.0 fillcolor=darkseagreen tooltip="RightValue_volume @ STAGE_1" width=1]
+	cell_32_2 [label=3.0 fillcolor=darkseagreen tooltip="LeftValue_volume @ STAGE_1" width=1]
+	cell_33_2 [label=False fillcolor=darkseagreen tooltip="warmup @ STAGE_1" width=1]
+	cell_34_2 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ STAGE_1" width=1]
+	cell_35_2 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ STAGE_1" width=1]
+	cell_36_2 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ STAGE_1" width=1]
+	cell_37_2 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ STAGE_1" width=1]
+	cell_1_3 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ STAGE_2" width=1]
+	cell_2_3 [label=1 fillcolor=darkseagreen tooltip="RewardFamily @ STAGE_2" width=1]
+	cell_3_3 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ STAGE_2" width=1]
+	cell_4_3 [label="" fillcolor=lightgrey tooltip="UncoupledReward @ STAGE_2" width=1]
+	cell_5_3 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ STAGE_2" width=1]
+	cell_6_3 [label=20 fillcolor=darkseagreen tooltip="BlockMin @ STAGE_2" width=1]
+	cell_7_3 [label=35 fillcolor=darkseagreen tooltip="BlockMax @ STAGE_2" width=1]
+	cell_8_3 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ STAGE_2" width=1]
+	cell_9_3 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ STAGE_2" width=1]
+	cell_10_3 [label=1.0 fillcolor=darkseagreen tooltip="DelayMin @ STAGE_2" width=1]
+	cell_11_3 [label=1.0 fillcolor=darkseagreen tooltip="DelayMax @ STAGE_2" width=1]
+	cell_12_3 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ STAGE_2" width=1]
+	cell_13_3 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ STAGE_2" width=1]
+	cell_14_3 [label=True fillcolor=lightgrey tooltip="AutoReward @ STAGE_2" width=1]
+	cell_15_3 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ STAGE_2" width=1]
+	cell_16_3 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ STAGE_2" width=1]
+	cell_17_3 [label=3 fillcolor=lightgrey tooltip="Unrewarded @ STAGE_2" width=1]
+	cell_18_3 [label=3 fillcolor=lightgrey tooltip="Ignored @ STAGE_2" width=1]
+	cell_19_3 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ STAGE_2" width=1]
+	cell_20_3 [label=10.0 fillcolor=darkseagreen tooltip="ITIMax @ STAGE_2" width=1]
+	cell_21_3 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ STAGE_2" width=1]
+	cell_22_3 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ STAGE_2" width=1]
+	cell_23_3 [label=2.0 fillcolor=darkseagreen tooltip="ResponseTime @ STAGE_2" width=1]
+	cell_24_3 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ STAGE_2" width=1]
+	cell_25_3 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ STAGE_2" width=1]
+	cell_26_3 [label=now fillcolor=lightgrey tooltip="AdvancedBlockAuto @ STAGE_2" width=1]
+	cell_27_3 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ STAGE_2" width=1]
+	cell_28_3 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ STAGE_2" width=1]
+	cell_29_3 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ STAGE_2" width=1]
+	cell_30_3 [label=90 fillcolor=lightgrey tooltip="MaxTime @ STAGE_2" width=1]
+	cell_31_3 [label=3.0 fillcolor=lightgrey tooltip="RightValue_volume @ STAGE_2" width=1]
+	cell_32_3 [label=3.0 fillcolor=lightgrey tooltip="LeftValue_volume @ STAGE_2" width=1]
+	cell_33_3 [label=False fillcolor=lightgrey tooltip="warmup @ STAGE_2" width=1]
+	cell_34_3 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ STAGE_2" width=1]
+	cell_35_3 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ STAGE_2" width=1]
+	cell_36_3 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ STAGE_2" width=1]
+	cell_37_3 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ STAGE_2" width=1]
+	cell_1_4 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ STAGE_3" width=1]
+	cell_2_4 [label=1 fillcolor=lightgrey tooltip="RewardFamily @ STAGE_3" width=1]
+	cell_3_4 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ STAGE_3" width=1]
+	cell_4_4 [label="0.1, 0.4, 0.7" fillcolor=darkseagreen tooltip="UncoupledReward @ STAGE_3" width=1]
+	cell_5_4 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ STAGE_3" width=1]
+	cell_6_4 [label=20 fillcolor=lightgrey tooltip="BlockMin @ STAGE_3" width=1]
+	cell_7_4 [label=35 fillcolor=lightgrey tooltip="BlockMax @ STAGE_3" width=1]
+	cell_8_4 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ STAGE_3" width=1]
+	cell_9_4 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ STAGE_3" width=1]
+	cell_10_4 [label=1.5 fillcolor=darkseagreen tooltip="DelayMin @ STAGE_3" width=1]
+	cell_11_4 [label=1.5 fillcolor=darkseagreen tooltip="DelayMax @ STAGE_3" width=1]
+	cell_12_4 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ STAGE_3" width=1]
+	cell_13_4 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ STAGE_3" width=1]
+	cell_14_4 [label=True fillcolor=lightgrey tooltip="AutoReward @ STAGE_3" width=1]
+	cell_15_4 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ STAGE_3" width=1]
+	cell_16_4 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ STAGE_3" width=1]
+	cell_17_4 [label=10 fillcolor=darkseagreen tooltip="Unrewarded @ STAGE_3" width=1]
+	cell_18_4 [label=1000 fillcolor=darkseagreen tooltip="Ignored @ STAGE_3" width=1]
+	cell_19_4 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ STAGE_3" width=1]
+	cell_20_4 [label=15.0 fillcolor=darkseagreen tooltip="ITIMax @ STAGE_3" width=1]
+	cell_21_4 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ STAGE_3" width=1]
+	cell_22_4 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ STAGE_3" width=1]
+	cell_23_4 [label=2.0 fillcolor=lightgrey tooltip="ResponseTime @ STAGE_3" width=1]
+	cell_24_4 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ STAGE_3" width=1]
+	cell_25_4 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ STAGE_3" width=1]
+	cell_26_4 [label=off fillcolor=darkseagreen tooltip="AdvancedBlockAuto @ STAGE_3" width=1]
+	cell_27_4 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ STAGE_3" width=1]
+	cell_28_4 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ STAGE_3" width=1]
+	cell_29_4 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ STAGE_3" width=1]
+	cell_30_4 [label=90 fillcolor=lightgrey tooltip="MaxTime @ STAGE_3" width=1]
+	cell_31_4 [label=3.0 fillcolor=lightgrey tooltip="RightValue_volume @ STAGE_3" width=1]
+	cell_32_4 [label=3.0 fillcolor=lightgrey tooltip="LeftValue_volume @ STAGE_3" width=1]
+	cell_33_4 [label=False fillcolor=lightgrey tooltip="warmup @ STAGE_3" width=1]
+	cell_34_4 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ STAGE_3" width=1]
+	cell_35_4 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ STAGE_3" width=1]
+	cell_36_4 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ STAGE_3" width=1]
+	cell_37_4 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ STAGE_3" width=1]
+	cell_1_5 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ STAGE_FINAL" width=1]
+	cell_2_5 [label=1 fillcolor=lightgrey tooltip="RewardFamily @ STAGE_FINAL" width=1]
+	cell_3_5 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ STAGE_FINAL" width=1]
+	cell_4_5 [label="0.1, 0.4, 0.7" fillcolor=lightgrey tooltip="UncoupledReward @ STAGE_FINAL" width=1]
+	cell_5_5 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ STAGE_FINAL" width=1]
+	cell_6_5 [label=20 fillcolor=lightgrey tooltip="BlockMin @ STAGE_FINAL" width=1]
+	cell_7_5 [label=35 fillcolor=lightgrey tooltip="BlockMax @ STAGE_FINAL" width=1]
+	cell_8_5 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ STAGE_FINAL" width=1]
+	cell_9_5 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ STAGE_FINAL" width=1]
+	cell_10_5 [label=2.0 fillcolor=darkseagreen tooltip="DelayMin @ STAGE_FINAL" width=1]
+	cell_11_5 [label=2.0 fillcolor=darkseagreen tooltip="DelayMax @ STAGE_FINAL" width=1]
+	cell_12_5 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ STAGE_FINAL" width=1]
+	cell_13_5 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ STAGE_FINAL" width=1]
+	cell_14_5 [label=False fillcolor=darkseagreen tooltip="AutoReward @ STAGE_FINAL" width=1]
+	cell_15_5 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ STAGE_FINAL" width=1]
+	cell_16_5 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ STAGE_FINAL" width=1]
+	cell_17_5 [label=10 fillcolor=lightgrey tooltip="Unrewarded @ STAGE_FINAL" width=1]
+	cell_18_5 [label=1000 fillcolor=lightgrey tooltip="Ignored @ STAGE_FINAL" width=1]
+	cell_19_5 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ STAGE_FINAL" width=1]
+	cell_20_5 [label=30.0 fillcolor=darkseagreen tooltip="ITIMax @ STAGE_FINAL" width=1]
+	cell_21_5 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ STAGE_FINAL" width=1]
+	cell_22_5 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ STAGE_FINAL" width=1]
+	cell_23_5 [label=2.0 fillcolor=lightgrey tooltip="ResponseTime @ STAGE_FINAL" width=1]
+	cell_24_5 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ STAGE_FINAL" width=1]
+	cell_25_5 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ STAGE_FINAL" width=1]
+	cell_26_5 [label=off fillcolor=lightgrey tooltip="AdvancedBlockAuto @ STAGE_FINAL" width=1]
+	cell_27_5 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ STAGE_FINAL" width=1]
+	cell_28_5 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ STAGE_FINAL" width=1]
+	cell_29_5 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ STAGE_FINAL" width=1]
+	cell_30_5 [label=90 fillcolor=lightgrey tooltip="MaxTime @ STAGE_FINAL" width=1]
+	cell_31_5 [label=3.0 fillcolor=lightgrey tooltip="RightValue_volume @ STAGE_FINAL" width=1]
+	cell_32_5 [label=3.0 fillcolor=lightgrey tooltip="LeftValue_volume @ STAGE_FINAL" width=1]
+	cell_33_5 [label=False fillcolor=lightgrey tooltip="warmup @ STAGE_FINAL" width=1]
+	cell_34_5 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ STAGE_FINAL" width=1]
+	cell_35_5 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ STAGE_FINAL" width=1]
+	cell_36_5 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ STAGE_FINAL" width=1]
+	cell_37_5 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ STAGE_FINAL" width=1]
+	cell_1_6 [label=0.8 fillcolor=lightgrey tooltip="BaseRewardSum @ GRADUATED" width=1]
+	cell_2_6 [label=1 fillcolor=lightgrey tooltip="RewardFamily @ GRADUATED" width=1]
+	cell_3_6 [label=1 fillcolor=lightgrey tooltip="RewardPairsN @ GRADUATED" width=1]
+	cell_4_6 [label="0.1, 0.4, 0.7" fillcolor=lightgrey tooltip="UncoupledReward @ GRADUATED" width=1]
+	cell_5_6 [label=Exponential fillcolor=lightgrey tooltip="Randomness @ GRADUATED" width=1]
+	cell_6_6 [label=20 fillcolor=lightgrey tooltip="BlockMin @ GRADUATED" width=1]
+	cell_7_6 [label=35 fillcolor=lightgrey tooltip="BlockMax @ GRADUATED" width=1]
+	cell_8_6 [label=10 fillcolor=lightgrey tooltip="BlockBeta @ GRADUATED" width=1]
+	cell_9_6 [label=0 fillcolor=lightgrey tooltip="BlockMinReward @ GRADUATED" width=1]
+	cell_10_6 [label=2.0 fillcolor=lightgrey tooltip="DelayMin @ GRADUATED" width=1]
+	cell_11_6 [label=2.0 fillcolor=lightgrey tooltip="DelayMax @ GRADUATED" width=1]
+	cell_12_6 [label=0.0 fillcolor=lightgrey tooltip="DelayBeta @ GRADUATED" width=1]
+	cell_13_6 [label=0.0 fillcolor=lightgrey tooltip="RewardDelay @ GRADUATED" width=1]
+	cell_14_6 [label=False fillcolor=lightgrey tooltip="AutoReward @ GRADUATED" width=1]
+	cell_15_6 [label=Natural fillcolor=lightgrey tooltip="AutoWaterType @ GRADUATED" width=1]
+	cell_16_6 [label=0.5 fillcolor=lightgrey tooltip="Multiplier @ GRADUATED" width=1]
+	cell_17_6 [label=10 fillcolor=lightgrey tooltip="Unrewarded @ GRADUATED" width=1]
+	cell_18_6 [label=1000 fillcolor=lightgrey tooltip="Ignored @ GRADUATED" width=1]
+	cell_19_6 [label=1.0 fillcolor=lightgrey tooltip="ITIMin @ GRADUATED" width=1]
+	cell_20_6 [label=30.0 fillcolor=lightgrey tooltip="ITIMax @ GRADUATED" width=1]
+	cell_21_6 [label=3.0 fillcolor=lightgrey tooltip="ITIBeta @ GRADUATED" width=1]
+	cell_22_6 [label=0.0 fillcolor=lightgrey tooltip="ITIIncrease @ GRADUATED" width=1]
+	cell_23_6 [label=2.0 fillcolor=lightgrey tooltip="ResponseTime @ GRADUATED" width=1]
+	cell_24_6 [label=3.0 fillcolor=lightgrey tooltip="RewardConsumeTime @ GRADUATED" width=1]
+	cell_25_6 [label=20000 fillcolor=lightgrey tooltip="StopIgnores @ GRADUATED" width=1]
+	cell_26_6 [label=off fillcolor=lightgrey tooltip="AdvancedBlockAuto @ GRADUATED" width=1]
+	cell_27_6 [label=0.5 fillcolor=lightgrey tooltip="SwitchThr @ GRADUATED" width=1]
+	cell_28_6 [label=5 fillcolor=lightgrey tooltip="PointsInARow @ GRADUATED" width=1]
+	cell_29_6 [label=1000 fillcolor=lightgrey tooltip="MaxTrial @ GRADUATED" width=1]
+	cell_30_6 [label=90 fillcolor=lightgrey tooltip="MaxTime @ GRADUATED" width=1]
+	cell_31_6 [label=3.0 fillcolor=lightgrey tooltip="RightValue_volume @ GRADUATED" width=1]
+	cell_32_6 [label=3.0 fillcolor=lightgrey tooltip="LeftValue_volume @ GRADUATED" width=1]
+	cell_33_6 [label=False fillcolor=lightgrey tooltip="warmup @ GRADUATED" width=1]
+	cell_34_6 [label=50 fillcolor=lightgrey tooltip="warm_min_trial @ GRADUATED" width=1]
+	cell_35_6 [label=0.1 fillcolor=lightgrey tooltip="warm_max_choice_ratio_bias @ GRADUATED" width=1]
+	cell_36_6 [label=0.8 fillcolor=lightgrey tooltip="warm_min_finish_ratio @ GRADUATED" width=1]
+	cell_37_6 [label=20 fillcolor=lightgrey tooltip="warm_windowsize @ GRADUATED" width=1]
+	cell_1_0 [label=BaseRewardSum fillcolor=lightgrey tooltip="Sum of p_reward"]
+	cell_2_0 [label=RewardFamily fillcolor=lightgrey tooltip="Reward family"]
+	cell_3_0 [label=RewardPairsN fillcolor=lightgrey tooltip="Number of pairs"]
+	cell_4_0 [label=UncoupledReward fillcolor=lightgrey tooltip="Uncoupled reward"]
+	cell_5_0 [label=Randomness fillcolor=lightgrey tooltip="Randomness mode"]
+	cell_6_0 [label=BlockMin fillcolor=lightgrey tooltip="Block length (min)"]
+	cell_7_0 [label=BlockMax fillcolor=lightgrey tooltip="Block length (max)"]
+	cell_8_0 [label=BlockBeta fillcolor=lightgrey tooltip="Block length (beta)"]
+	cell_9_0 [label=BlockMinReward fillcolor=lightgrey tooltip="Minimal rewards in a block to switch"]
+	cell_10_0 [label=DelayMin fillcolor=lightgrey tooltip="Delay period (min) "]
+	cell_11_0 [label=DelayMax fillcolor=lightgrey tooltip="Delay period (max) "]
+	cell_12_0 [label=DelayBeta fillcolor=lightgrey tooltip="Delay period (beta)"]
+	cell_13_0 [label=RewardDelay fillcolor=lightgrey tooltip="Reward delay (sec)"]
+	cell_14_0 [label=AutoReward fillcolor=lightgrey tooltip="Auto reward switch"]
+	cell_15_0 [label=AutoWaterType fillcolor=lightgrey tooltip="Auto water mode"]
+	cell_16_0 [label=Multiplier fillcolor=lightgrey tooltip="Multiplier for auto reward"]
+	cell_17_0 [label=Unrewarded fillcolor=lightgrey tooltip="Number of unrewarded trials before auto water"]
+	cell_18_0 [label=Ignored fillcolor=lightgrey tooltip="Number of ignored trials before auto water"]
+	cell_19_0 [label=ITIMin fillcolor=lightgrey tooltip="ITI (min)"]
+	cell_20_0 [label=ITIMax fillcolor=lightgrey tooltip="ITI (max)"]
+	cell_21_0 [label=ITIBeta fillcolor=lightgrey tooltip="ITI (beta)"]
+	cell_22_0 [label=ITIIncrease fillcolor=lightgrey tooltip="ITI increase"]
+	cell_23_0 [label=ResponseTime fillcolor=lightgrey tooltip="Response time"]
+	cell_24_0 [label=RewardConsumeTime fillcolor=lightgrey tooltip="Reward consume time"]
+	cell_25_0 [label=StopIgnores fillcolor=lightgrey tooltip="Number of ignored trials before stop"]
+	cell_26_0 [label=AdvancedBlockAuto fillcolor=lightgrey tooltip="Auto block mode"]
+	cell_27_0 [label=SwitchThr fillcolor=lightgrey tooltip="Switch threshold for auto block"]
+	cell_28_0 [label=PointsInARow fillcolor=lightgrey tooltip="Points in a row for auto block"]
+	cell_29_0 [label=MaxTrial fillcolor=lightgrey tooltip="Maximal number of trials"]
+	cell_30_0 [label=MaxTime fillcolor=lightgrey tooltip="Maximal session time (min)"]
+	cell_31_0 [label=RightValue_volume fillcolor=lightgrey tooltip="Right reward size (uL)"]
+	cell_32_0 [label=LeftValue_volume fillcolor=lightgrey tooltip="Left reward size (uL)"]
+	cell_33_0 [label=warmup fillcolor=lightgrey tooltip="Warmup master switch"]
+	cell_34_0 [label=warm_min_trial fillcolor=lightgrey tooltip="Warmup finish criteria: minimal trials"]
+	cell_35_0 [label=warm_max_choice_ratio_bias fillcolor=lightgrey tooltip="Warmup finish criteria: maximal choice ratio bias from 0.5"]
+	cell_36_0 [label=warm_min_finish_ratio fillcolor=lightgrey tooltip="Warmup finish criteria: minimal finish ratio"]
+	cell_37_0 [label=warm_windowsize fillcolor=lightgrey tooltip="Warmup finish criteria: window size to compute the bias and ratio"]
+	cell_0_1 [label=STAGE_1_WARMUP fillcolor="#a50026" tooltip="Warmup, followed by legendary Coupled Baiting Stage 1.2 (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])
+stage_task = Coupled Baiting" width=1]
+	cell_0_2 [label=STAGE_1 fillcolor="#e95638" tooltip="Phase B in Han's slides (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])
+stage_task = Coupled Baiting" width=1]
+	cell_0_3 [label=STAGE_2 fillcolor="#fdbf6f" tooltip="Coupled baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1])
+stage_task = Coupled Baiting" width=1]
+	cell_0_4 [label=STAGE_3 fillcolor="#fdfebc" tooltip="Switch to uncoupled but still baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day
+stage_task = Uncoupled Baiting" width=1]
+	cell_0_5 [label=STAGE_FINAL fillcolor="#b7e075" tooltip="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water
+stage_task = Uncoupled Baiting" width=1]
+	cell_0_6 [label=GRADUATED fillcolor="#006837" tooltip="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water
+stage_task = Uncoupled Baiting" width=1]
+	cell_1_0 -> cell_2_0 [style=invis]
+	cell_1_0 -> cell_1_1 [style=invis]
+	cell_2_0 -> cell_3_0 [style=invis]
+	cell_2_0 -> cell_2_1 [style=invis]
+	cell_3_0 -> cell_4_0 [style=invis]
+	cell_3_0 -> cell_3_1 [style=invis]
+	cell_4_0 -> cell_5_0 [style=invis]
+	cell_4_0 -> cell_4_1 [style=invis]
+	cell_5_0 -> cell_6_0 [style=invis]
+	cell_5_0 -> cell_5_1 [style=invis]
+	cell_6_0 -> cell_7_0 [style=invis]
+	cell_6_0 -> cell_6_1 [style=invis]
+	cell_7_0 -> cell_8_0 [style=invis]
+	cell_7_0 -> cell_7_1 [style=invis]
+	cell_8_0 -> cell_9_0 [style=invis]
+	cell_8_0 -> cell_8_1 [style=invis]
+	cell_9_0 -> cell_10_0 [style=invis]
+	cell_9_0 -> cell_9_1 [style=invis]
+	cell_10_0 -> cell_11_0 [style=invis]
+	cell_10_0 -> cell_10_1 [style=invis]
+	cell_11_0 -> cell_12_0 [style=invis]
+	cell_11_0 -> cell_11_1 [style=invis]
+	cell_12_0 -> cell_13_0 [style=invis]
+	cell_12_0 -> cell_12_1 [style=invis]
+	cell_13_0 -> cell_14_0 [style=invis]
+	cell_13_0 -> cell_13_1 [style=invis]
+	cell_14_0 -> cell_15_0 [style=invis]
+	cell_14_0 -> cell_14_1 [style=invis]
+	cell_15_0 -> cell_16_0 [style=invis]
+	cell_15_0 -> cell_15_1 [style=invis]
+	cell_16_0 -> cell_17_0 [style=invis]
+	cell_16_0 -> cell_16_1 [style=invis]
+	cell_17_0 -> cell_18_0 [style=invis]
+	cell_17_0 -> cell_17_1 [style=invis]
+	cell_18_0 -> cell_19_0 [style=invis]
+	cell_18_0 -> cell_18_1 [style=invis]
+	cell_19_0 -> cell_20_0 [style=invis]
+	cell_19_0 -> cell_19_1 [style=invis]
+	cell_20_0 -> cell_21_0 [style=invis]
+	cell_20_0 -> cell_20_1 [style=invis]
+	cell_21_0 -> cell_22_0 [style=invis]
+	cell_21_0 -> cell_21_1 [style=invis]
+	cell_22_0 -> cell_23_0 [style=invis]
+	cell_22_0 -> cell_22_1 [style=invis]
+	cell_23_0 -> cell_24_0 [style=invis]
+	cell_23_0 -> cell_23_1 [style=invis]
+	cell_24_0 -> cell_25_0 [style=invis]
+	cell_24_0 -> cell_24_1 [style=invis]
+	cell_25_0 -> cell_26_0 [style=invis]
+	cell_25_0 -> cell_25_1 [style=invis]
+	cell_26_0 -> cell_27_0 [style=invis]
+	cell_26_0 -> cell_26_1 [style=invis]
+	cell_27_0 -> cell_28_0 [style=invis]
+	cell_27_0 -> cell_27_1 [style=invis]
+	cell_28_0 -> cell_29_0 [style=invis]
+	cell_28_0 -> cell_28_1 [style=invis]
+	cell_29_0 -> cell_30_0 [style=invis]
+	cell_29_0 -> cell_29_1 [style=invis]
+	cell_30_0 -> cell_31_0 [style=invis]
+	cell_30_0 -> cell_30_1 [style=invis]
+	cell_31_0 -> cell_32_0 [style=invis]
+	cell_31_0 -> cell_31_1 [style=invis]
+	cell_32_0 -> cell_33_0 [style=invis]
+	cell_32_0 -> cell_32_1 [style=invis]
+	cell_33_0 -> cell_34_0 [style=invis]
+	cell_33_0 -> cell_33_1 [style=invis]
+	cell_34_0 -> cell_35_0 [style=invis]
+	cell_34_0 -> cell_34_1 [style=invis]
+	cell_35_0 -> cell_36_0 [style=invis]
+	cell_35_0 -> cell_35_1 [style=invis]
+	cell_36_0 -> cell_37_0 [style=invis]
+	cell_36_0 -> cell_36_1 [style=invis]
+	cell_37_0 -> cell_37_1 [style=invis]
+	cell_0_1 -> cell_1_1 [style=invis]
+	cell_0_1 -> cell_0_2 [style=invis]
+	cell_1_1 -> cell_2_1 [style=invis]
+	cell_1_1 -> cell_1_2 [style=invis]
+	cell_2_1 -> cell_3_1 [style=invis]
+	cell_2_1 -> cell_2_2 [style=invis]
+	cell_3_1 -> cell_4_1 [style=invis]
+	cell_3_1 -> cell_3_2 [style=invis]
+	cell_4_1 -> cell_5_1 [style=invis]
+	cell_4_1 -> cell_4_2 [style=invis]
+	cell_5_1 -> cell_6_1 [style=invis]
+	cell_5_1 -> cell_5_2 [style=invis]
+	cell_6_1 -> cell_7_1 [style=invis]
+	cell_6_1 -> cell_6_2 [style=invis]
+	cell_7_1 -> cell_8_1 [style=invis]
+	cell_7_1 -> cell_7_2 [style=invis]
+	cell_8_1 -> cell_9_1 [style=invis]
+	cell_8_1 -> cell_8_2 [style=invis]
+	cell_9_1 -> cell_10_1 [style=invis]
+	cell_9_1 -> cell_9_2 [style=invis]
+	cell_10_1 -> cell_11_1 [style=invis]
+	cell_10_1 -> cell_10_2 [style=invis]
+	cell_11_1 -> cell_12_1 [style=invis]
+	cell_11_1 -> cell_11_2 [style=invis]
+	cell_12_1 -> cell_13_1 [style=invis]
+	cell_12_1 -> cell_12_2 [style=invis]
+	cell_13_1 -> cell_14_1 [style=invis]
+	cell_13_1 -> cell_13_2 [style=invis]
+	cell_14_1 -> cell_15_1 [style=invis]
+	cell_14_1 -> cell_14_2 [style=invis]
+	cell_15_1 -> cell_16_1 [style=invis]
+	cell_15_1 -> cell_15_2 [style=invis]
+	cell_16_1 -> cell_17_1 [style=invis]
+	cell_16_1 -> cell_16_2 [style=invis]
+	cell_17_1 -> cell_18_1 [style=invis]
+	cell_17_1 -> cell_17_2 [style=invis]
+	cell_18_1 -> cell_19_1 [style=invis]
+	cell_18_1 -> cell_18_2 [style=invis]
+	cell_19_1 -> cell_20_1 [style=invis]
+	cell_19_1 -> cell_19_2 [style=invis]
+	cell_20_1 -> cell_21_1 [style=invis]
+	cell_20_1 -> cell_20_2 [style=invis]
+	cell_21_1 -> cell_22_1 [style=invis]
+	cell_21_1 -> cell_21_2 [style=invis]
+	cell_22_1 -> cell_23_1 [style=invis]
+	cell_22_1 -> cell_22_2 [style=invis]
+	cell_23_1 -> cell_24_1 [style=invis]
+	cell_23_1 -> cell_23_2 [style=invis]
+	cell_24_1 -> cell_25_1 [style=invis]
+	cell_24_1 -> cell_24_2 [style=invis]
+	cell_25_1 -> cell_26_1 [style=invis]
+	cell_25_1 -> cell_25_2 [style=invis]
+	cell_26_1 -> cell_27_1 [style=invis]
+	cell_26_1 -> cell_26_2 [style=invis]
+	cell_27_1 -> cell_28_1 [style=invis]
+	cell_27_1 -> cell_27_2 [style=invis]
+	cell_28_1 -> cell_29_1 [style=invis]
+	cell_28_1 -> cell_28_2 [style=invis]
+	cell_29_1 -> cell_30_1 [style=invis]
+	cell_29_1 -> cell_29_2 [style=invis]
+	cell_30_1 -> cell_31_1 [style=invis]
+	cell_30_1 -> cell_30_2 [style=invis]
+	cell_31_1 -> cell_32_1 [style=invis]
+	cell_31_1 -> cell_31_2 [style=invis]
+	cell_32_1 -> cell_33_1 [style=invis]
+	cell_32_1 -> cell_32_2 [style=invis]
+	cell_33_1 -> cell_34_1 [style=invis]
+	cell_33_1 -> cell_33_2 [style=invis]
+	cell_34_1 -> cell_35_1 [style=invis]
+	cell_34_1 -> cell_34_2 [style=invis]
+	cell_35_1 -> cell_36_1 [style=invis]
+	cell_35_1 -> cell_35_2 [style=invis]
+	cell_36_1 -> cell_37_1 [style=invis]
+	cell_36_1 -> cell_36_2 [style=invis]
+	cell_37_1 -> cell_37_2 [style=invis]
+	cell_0_2 -> cell_1_2 [style=invis]
+	cell_0_2 -> cell_0_3 [style=invis]
+	cell_1_2 -> cell_2_2 [style=invis]
+	cell_1_2 -> cell_1_3 [style=invis]
+	cell_2_2 -> cell_3_2 [style=invis]
+	cell_2_2 -> cell_2_3 [style=invis]
+	cell_3_2 -> cell_4_2 [style=invis]
+	cell_3_2 -> cell_3_3 [style=invis]
+	cell_4_2 -> cell_5_2 [style=invis]
+	cell_4_2 -> cell_4_3 [style=invis]
+	cell_5_2 -> cell_6_2 [style=invis]
+	cell_5_2 -> cell_5_3 [style=invis]
+	cell_6_2 -> cell_7_2 [style=invis]
+	cell_6_2 -> cell_6_3 [style=invis]
+	cell_7_2 -> cell_8_2 [style=invis]
+	cell_7_2 -> cell_7_3 [style=invis]
+	cell_8_2 -> cell_9_2 [style=invis]
+	cell_8_2 -> cell_8_3 [style=invis]
+	cell_9_2 -> cell_10_2 [style=invis]
+	cell_9_2 -> cell_9_3 [style=invis]
+	cell_10_2 -> cell_11_2 [style=invis]
+	cell_10_2 -> cell_10_3 [style=invis]
+	cell_11_2 -> cell_12_2 [style=invis]
+	cell_11_2 -> cell_11_3 [style=invis]
+	cell_12_2 -> cell_13_2 [style=invis]
+	cell_12_2 -> cell_12_3 [style=invis]
+	cell_13_2 -> cell_14_2 [style=invis]
+	cell_13_2 -> cell_13_3 [style=invis]
+	cell_14_2 -> cell_15_2 [style=invis]
+	cell_14_2 -> cell_14_3 [style=invis]
+	cell_15_2 -> cell_16_2 [style=invis]
+	cell_15_2 -> cell_15_3 [style=invis]
+	cell_16_2 -> cell_17_2 [style=invis]
+	cell_16_2 -> cell_16_3 [style=invis]
+	cell_17_2 -> cell_18_2 [style=invis]
+	cell_17_2 -> cell_17_3 [style=invis]
+	cell_18_2 -> cell_19_2 [style=invis]
+	cell_18_2 -> cell_18_3 [style=invis]
+	cell_19_2 -> cell_20_2 [style=invis]
+	cell_19_2 -> cell_19_3 [style=invis]
+	cell_20_2 -> cell_21_2 [style=invis]
+	cell_20_2 -> cell_20_3 [style=invis]
+	cell_21_2 -> cell_22_2 [style=invis]
+	cell_21_2 -> cell_21_3 [style=invis]
+	cell_22_2 -> cell_23_2 [style=invis]
+	cell_22_2 -> cell_22_3 [style=invis]
+	cell_23_2 -> cell_24_2 [style=invis]
+	cell_23_2 -> cell_23_3 [style=invis]
+	cell_24_2 -> cell_25_2 [style=invis]
+	cell_24_2 -> cell_24_3 [style=invis]
+	cell_25_2 -> cell_26_2 [style=invis]
+	cell_25_2 -> cell_25_3 [style=invis]
+	cell_26_2 -> cell_27_2 [style=invis]
+	cell_26_2 -> cell_26_3 [style=invis]
+	cell_27_2 -> cell_28_2 [style=invis]
+	cell_27_2 -> cell_27_3 [style=invis]
+	cell_28_2 -> cell_29_2 [style=invis]
+	cell_28_2 -> cell_28_3 [style=invis]
+	cell_29_2 -> cell_30_2 [style=invis]
+	cell_29_2 -> cell_29_3 [style=invis]
+	cell_30_2 -> cell_31_2 [style=invis]
+	cell_30_2 -> cell_30_3 [style=invis]
+	cell_31_2 -> cell_32_2 [style=invis]
+	cell_31_2 -> cell_31_3 [style=invis]
+	cell_32_2 -> cell_33_2 [style=invis]
+	cell_32_2 -> cell_32_3 [style=invis]
+	cell_33_2 -> cell_34_2 [style=invis]
+	cell_33_2 -> cell_33_3 [style=invis]
+	cell_34_2 -> cell_35_2 [style=invis]
+	cell_34_2 -> cell_34_3 [style=invis]
+	cell_35_2 -> cell_36_2 [style=invis]
+	cell_35_2 -> cell_35_3 [style=invis]
+	cell_36_2 -> cell_37_2 [style=invis]
+	cell_36_2 -> cell_36_3 [style=invis]
+	cell_37_2 -> cell_37_3 [style=invis]
+	cell_0_3 -> cell_1_3 [style=invis]
+	cell_0_3 -> cell_0_4 [style=invis]
+	cell_1_3 -> cell_2_3 [style=invis]
+	cell_1_3 -> cell_1_4 [style=invis]
+	cell_2_3 -> cell_3_3 [style=invis]
+	cell_2_3 -> cell_2_4 [style=invis]
+	cell_3_3 -> cell_4_3 [style=invis]
+	cell_3_3 -> cell_3_4 [style=invis]
+	cell_4_3 -> cell_5_3 [style=invis]
+	cell_4_3 -> cell_4_4 [style=invis]
+	cell_5_3 -> cell_6_3 [style=invis]
+	cell_5_3 -> cell_5_4 [style=invis]
+	cell_6_3 -> cell_7_3 [style=invis]
+	cell_6_3 -> cell_6_4 [style=invis]
+	cell_7_3 -> cell_8_3 [style=invis]
+	cell_7_3 -> cell_7_4 [style=invis]
+	cell_8_3 -> cell_9_3 [style=invis]
+	cell_8_3 -> cell_8_4 [style=invis]
+	cell_9_3 -> cell_10_3 [style=invis]
+	cell_9_3 -> cell_9_4 [style=invis]
+	cell_10_3 -> cell_11_3 [style=invis]
+	cell_10_3 -> cell_10_4 [style=invis]
+	cell_11_3 -> cell_12_3 [style=invis]
+	cell_11_3 -> cell_11_4 [style=invis]
+	cell_12_3 -> cell_13_3 [style=invis]
+	cell_12_3 -> cell_12_4 [style=invis]
+	cell_13_3 -> cell_14_3 [style=invis]
+	cell_13_3 -> cell_13_4 [style=invis]
+	cell_14_3 -> cell_15_3 [style=invis]
+	cell_14_3 -> cell_14_4 [style=invis]
+	cell_15_3 -> cell_16_3 [style=invis]
+	cell_15_3 -> cell_15_4 [style=invis]
+	cell_16_3 -> cell_17_3 [style=invis]
+	cell_16_3 -> cell_16_4 [style=invis]
+	cell_17_3 -> cell_18_3 [style=invis]
+	cell_17_3 -> cell_17_4 [style=invis]
+	cell_18_3 -> cell_19_3 [style=invis]
+	cell_18_3 -> cell_18_4 [style=invis]
+	cell_19_3 -> cell_20_3 [style=invis]
+	cell_19_3 -> cell_19_4 [style=invis]
+	cell_20_3 -> cell_21_3 [style=invis]
+	cell_20_3 -> cell_20_4 [style=invis]
+	cell_21_3 -> cell_22_3 [style=invis]
+	cell_21_3 -> cell_21_4 [style=invis]
+	cell_22_3 -> cell_23_3 [style=invis]
+	cell_22_3 -> cell_22_4 [style=invis]
+	cell_23_3 -> cell_24_3 [style=invis]
+	cell_23_3 -> cell_23_4 [style=invis]
+	cell_24_3 -> cell_25_3 [style=invis]
+	cell_24_3 -> cell_24_4 [style=invis]
+	cell_25_3 -> cell_26_3 [style=invis]
+	cell_25_3 -> cell_25_4 [style=invis]
+	cell_26_3 -> cell_27_3 [style=invis]
+	cell_26_3 -> cell_26_4 [style=invis]
+	cell_27_3 -> cell_28_3 [style=invis]
+	cell_27_3 -> cell_27_4 [style=invis]
+	cell_28_3 -> cell_29_3 [style=invis]
+	cell_28_3 -> cell_28_4 [style=invis]
+	cell_29_3 -> cell_30_3 [style=invis]
+	cell_29_3 -> cell_29_4 [style=invis]
+	cell_30_3 -> cell_31_3 [style=invis]
+	cell_30_3 -> cell_30_4 [style=invis]
+	cell_31_3 -> cell_32_3 [style=invis]
+	cell_31_3 -> cell_31_4 [style=invis]
+	cell_32_3 -> cell_33_3 [style=invis]
+	cell_32_3 -> cell_32_4 [style=invis]
+	cell_33_3 -> cell_34_3 [style=invis]
+	cell_33_3 -> cell_33_4 [style=invis]
+	cell_34_3 -> cell_35_3 [style=invis]
+	cell_34_3 -> cell_34_4 [style=invis]
+	cell_35_3 -> cell_36_3 [style=invis]
+	cell_35_3 -> cell_35_4 [style=invis]
+	cell_36_3 -> cell_37_3 [style=invis]
+	cell_36_3 -> cell_36_4 [style=invis]
+	cell_37_3 -> cell_37_4 [style=invis]
+	cell_0_4 -> cell_1_4 [style=invis]
+	cell_0_4 -> cell_0_5 [style=invis]
+	cell_1_4 -> cell_2_4 [style=invis]
+	cell_1_4 -> cell_1_5 [style=invis]
+	cell_2_4 -> cell_3_4 [style=invis]
+	cell_2_4 -> cell_2_5 [style=invis]
+	cell_3_4 -> cell_4_4 [style=invis]
+	cell_3_4 -> cell_3_5 [style=invis]
+	cell_4_4 -> cell_5_4 [style=invis]
+	cell_4_4 -> cell_4_5 [style=invis]
+	cell_5_4 -> cell_6_4 [style=invis]
+	cell_5_4 -> cell_5_5 [style=invis]
+	cell_6_4 -> cell_7_4 [style=invis]
+	cell_6_4 -> cell_6_5 [style=invis]
+	cell_7_4 -> cell_8_4 [style=invis]
+	cell_7_4 -> cell_7_5 [style=invis]
+	cell_8_4 -> cell_9_4 [style=invis]
+	cell_8_4 -> cell_8_5 [style=invis]
+	cell_9_4 -> cell_10_4 [style=invis]
+	cell_9_4 -> cell_9_5 [style=invis]
+	cell_10_4 -> cell_11_4 [style=invis]
+	cell_10_4 -> cell_10_5 [style=invis]
+	cell_11_4 -> cell_12_4 [style=invis]
+	cell_11_4 -> cell_11_5 [style=invis]
+	cell_12_4 -> cell_13_4 [style=invis]
+	cell_12_4 -> cell_12_5 [style=invis]
+	cell_13_4 -> cell_14_4 [style=invis]
+	cell_13_4 -> cell_13_5 [style=invis]
+	cell_14_4 -> cell_15_4 [style=invis]
+	cell_14_4 -> cell_14_5 [style=invis]
+	cell_15_4 -> cell_16_4 [style=invis]
+	cell_15_4 -> cell_15_5 [style=invis]
+	cell_16_4 -> cell_17_4 [style=invis]
+	cell_16_4 -> cell_16_5 [style=invis]
+	cell_17_4 -> cell_18_4 [style=invis]
+	cell_17_4 -> cell_17_5 [style=invis]
+	cell_18_4 -> cell_19_4 [style=invis]
+	cell_18_4 -> cell_18_5 [style=invis]
+	cell_19_4 -> cell_20_4 [style=invis]
+	cell_19_4 -> cell_19_5 [style=invis]
+	cell_20_4 -> cell_21_4 [style=invis]
+	cell_20_4 -> cell_20_5 [style=invis]
+	cell_21_4 -> cell_22_4 [style=invis]
+	cell_21_4 -> cell_21_5 [style=invis]
+	cell_22_4 -> cell_23_4 [style=invis]
+	cell_22_4 -> cell_22_5 [style=invis]
+	cell_23_4 -> cell_24_4 [style=invis]
+	cell_23_4 -> cell_23_5 [style=invis]
+	cell_24_4 -> cell_25_4 [style=invis]
+	cell_24_4 -> cell_24_5 [style=invis]
+	cell_25_4 -> cell_26_4 [style=invis]
+	cell_25_4 -> cell_25_5 [style=invis]
+	cell_26_4 -> cell_27_4 [style=invis]
+	cell_26_4 -> cell_26_5 [style=invis]
+	cell_27_4 -> cell_28_4 [style=invis]
+	cell_27_4 -> cell_27_5 [style=invis]
+	cell_28_4 -> cell_29_4 [style=invis]
+	cell_28_4 -> cell_28_5 [style=invis]
+	cell_29_4 -> cell_30_4 [style=invis]
+	cell_29_4 -> cell_29_5 [style=invis]
+	cell_30_4 -> cell_31_4 [style=invis]
+	cell_30_4 -> cell_30_5 [style=invis]
+	cell_31_4 -> cell_32_4 [style=invis]
+	cell_31_4 -> cell_31_5 [style=invis]
+	cell_32_4 -> cell_33_4 [style=invis]
+	cell_32_4 -> cell_32_5 [style=invis]
+	cell_33_4 -> cell_34_4 [style=invis]
+	cell_33_4 -> cell_33_5 [style=invis]
+	cell_34_4 -> cell_35_4 [style=invis]
+	cell_34_4 -> cell_34_5 [style=invis]
+	cell_35_4 -> cell_36_4 [style=invis]
+	cell_35_4 -> cell_35_5 [style=invis]
+	cell_36_4 -> cell_37_4 [style=invis]
+	cell_36_4 -> cell_36_5 [style=invis]
+	cell_37_4 -> cell_37_5 [style=invis]
+	cell_0_5 -> cell_1_5 [style=invis]
+	cell_0_5 -> cell_0_6 [style=invis]
+	cell_1_5 -> cell_2_5 [style=invis]
+	cell_1_5 -> cell_1_6 [style=invis]
+	cell_2_5 -> cell_3_5 [style=invis]
+	cell_2_5 -> cell_2_6 [style=invis]
+	cell_3_5 -> cell_4_5 [style=invis]
+	cell_3_5 -> cell_3_6 [style=invis]
+	cell_4_5 -> cell_5_5 [style=invis]
+	cell_4_5 -> cell_4_6 [style=invis]
+	cell_5_5 -> cell_6_5 [style=invis]
+	cell_5_5 -> cell_5_6 [style=invis]
+	cell_6_5 -> cell_7_5 [style=invis]
+	cell_6_5 -> cell_6_6 [style=invis]
+	cell_7_5 -> cell_8_5 [style=invis]
+	cell_7_5 -> cell_7_6 [style=invis]
+	cell_8_5 -> cell_9_5 [style=invis]
+	cell_8_5 -> cell_8_6 [style=invis]
+	cell_9_5 -> cell_10_5 [style=invis]
+	cell_9_5 -> cell_9_6 [style=invis]
+	cell_10_5 -> cell_11_5 [style=invis]
+	cell_10_5 -> cell_10_6 [style=invis]
+	cell_11_5 -> cell_12_5 [style=invis]
+	cell_11_5 -> cell_11_6 [style=invis]
+	cell_12_5 -> cell_13_5 [style=invis]
+	cell_12_5 -> cell_12_6 [style=invis]
+	cell_13_5 -> cell_14_5 [style=invis]
+	cell_13_5 -> cell_13_6 [style=invis]
+	cell_14_5 -> cell_15_5 [style=invis]
+	cell_14_5 -> cell_14_6 [style=invis]
+	cell_15_5 -> cell_16_5 [style=invis]
+	cell_15_5 -> cell_15_6 [style=invis]
+	cell_16_5 -> cell_17_5 [style=invis]
+	cell_16_5 -> cell_16_6 [style=invis]
+	cell_17_5 -> cell_18_5 [style=invis]
+	cell_17_5 -> cell_17_6 [style=invis]
+	cell_18_5 -> cell_19_5 [style=invis]
+	cell_18_5 -> cell_18_6 [style=invis]
+	cell_19_5 -> cell_20_5 [style=invis]
+	cell_19_5 -> cell_19_6 [style=invis]
+	cell_20_5 -> cell_21_5 [style=invis]
+	cell_20_5 -> cell_20_6 [style=invis]
+	cell_21_5 -> cell_22_5 [style=invis]
+	cell_21_5 -> cell_21_6 [style=invis]
+	cell_22_5 -> cell_23_5 [style=invis]
+	cell_22_5 -> cell_22_6 [style=invis]
+	cell_23_5 -> cell_24_5 [style=invis]
+	cell_23_5 -> cell_23_6 [style=invis]
+	cell_24_5 -> cell_25_5 [style=invis]
+	cell_24_5 -> cell_24_6 [style=invis]
+	cell_25_5 -> cell_26_5 [style=invis]
+	cell_25_5 -> cell_25_6 [style=invis]
+	cell_26_5 -> cell_27_5 [style=invis]
+	cell_26_5 -> cell_26_6 [style=invis]
+	cell_27_5 -> cell_28_5 [style=invis]
+	cell_27_5 -> cell_27_6 [style=invis]
+	cell_28_5 -> cell_29_5 [style=invis]
+	cell_28_5 -> cell_28_6 [style=invis]
+	cell_29_5 -> cell_30_5 [style=invis]
+	cell_29_5 -> cell_29_6 [style=invis]
+	cell_30_5 -> cell_31_5 [style=invis]
+	cell_30_5 -> cell_30_6 [style=invis]
+	cell_31_5 -> cell_32_5 [style=invis]
+	cell_31_5 -> cell_31_6 [style=invis]
+	cell_32_5 -> cell_33_5 [style=invis]
+	cell_32_5 -> cell_32_6 [style=invis]
+	cell_33_5 -> cell_34_5 [style=invis]
+	cell_33_5 -> cell_33_6 [style=invis]
+	cell_34_5 -> cell_35_5 [style=invis]
+	cell_34_5 -> cell_34_6 [style=invis]
+	cell_35_5 -> cell_36_5 [style=invis]
+	cell_35_5 -> cell_35_6 [style=invis]
+	cell_36_5 -> cell_37_5 [style=invis]
+	cell_36_5 -> cell_36_6 [style=invis]
+	cell_37_5 -> cell_37_6 [style=invis]
+	cell_0_6 -> cell_1_6 [style=invis]
+	cell_1_6 -> cell_2_6 [style=invis]
+	cell_2_6 -> cell_3_6 [style=invis]
+	cell_3_6 -> cell_4_6 [style=invis]
+	cell_4_6 -> cell_5_6 [style=invis]
+	cell_5_6 -> cell_6_6 [style=invis]
+	cell_6_6 -> cell_7_6 [style=invis]
+	cell_7_6 -> cell_8_6 [style=invis]
+	cell_8_6 -> cell_9_6 [style=invis]
+	cell_9_6 -> cell_10_6 [style=invis]
+	cell_10_6 -> cell_11_6 [style=invis]
+	cell_11_6 -> cell_12_6 [style=invis]
+	cell_12_6 -> cell_13_6 [style=invis]
+	cell_13_6 -> cell_14_6 [style=invis]
+	cell_14_6 -> cell_15_6 [style=invis]
+	cell_15_6 -> cell_16_6 [style=invis]
+	cell_16_6 -> cell_17_6 [style=invis]
+	cell_17_6 -> cell_18_6 [style=invis]
+	cell_18_6 -> cell_19_6 [style=invis]
+	cell_19_6 -> cell_20_6 [style=invis]
+	cell_20_6 -> cell_21_6 [style=invis]
+	cell_21_6 -> cell_22_6 [style=invis]
+	cell_22_6 -> cell_23_6 [style=invis]
+	cell_23_6 -> cell_24_6 [style=invis]
+	cell_24_6 -> cell_25_6 [style=invis]
+	cell_25_6 -> cell_26_6 [style=invis]
+	cell_26_6 -> cell_27_6 [style=invis]
+	cell_27_6 -> cell_28_6 [style=invis]
+	cell_28_6 -> cell_29_6 [style=invis]
+	cell_29_6 -> cell_30_6 [style=invis]
+	cell_30_6 -> cell_31_6 [style=invis]
+	cell_31_6 -> cell_32_6 [style=invis]
+	cell_32_6 -> cell_33_6 [style=invis]
+	cell_33_6 -> cell_34_6 [style=invis]
+	cell_34_6 -> cell_35_6 [style=invis]
+	cell_35_6 -> cell_36_6 [style=invis]
+	cell_36_6 -> cell_37_6 [style=invis]
+	subgraph row_0 {
+		rank=same
+		cell_0_1
+		cell_0_2
+		cell_0_3
+		cell_0_4
+		cell_0_5
+		cell_0_6
+	}
+	subgraph row_1 {
+		rank=same
+		cell_1_0
+		cell_1_1
+		cell_1_2
+		cell_1_3
+		cell_1_4
+		cell_1_5
+		cell_1_6
+	}
+	subgraph row_2 {
+		rank=same
+		cell_2_0
+		cell_2_1
+		cell_2_2
+		cell_2_3
+		cell_2_4
+		cell_2_5
+		cell_2_6
+	}
+	subgraph row_3 {
+		rank=same
+		cell_3_0
+		cell_3_1
+		cell_3_2
+		cell_3_3
+		cell_3_4
+		cell_3_5
+		cell_3_6
+	}
+	subgraph row_4 {
+		rank=same
+		cell_4_0
+		cell_4_1
+		cell_4_2
+		cell_4_3
+		cell_4_4
+		cell_4_5
+		cell_4_6
+	}
+	subgraph row_5 {
+		rank=same
+		cell_5_0
+		cell_5_1
+		cell_5_2
+		cell_5_3
+		cell_5_4
+		cell_5_5
+		cell_5_6
+	}
+	subgraph row_6 {
+		rank=same
+		cell_6_0
+		cell_6_1
+		cell_6_2
+		cell_6_3
+		cell_6_4
+		cell_6_5
+		cell_6_6
+	}
+	subgraph row_7 {
+		rank=same
+		cell_7_0
+		cell_7_1
+		cell_7_2
+		cell_7_3
+		cell_7_4
+		cell_7_5
+		cell_7_6
+	}
+	subgraph row_8 {
+		rank=same
+		cell_8_0
+		cell_8_1
+		cell_8_2
+		cell_8_3
+		cell_8_4
+		cell_8_5
+		cell_8_6
+	}
+	subgraph row_9 {
+		rank=same
+		cell_9_0
+		cell_9_1
+		cell_9_2
+		cell_9_3
+		cell_9_4
+		cell_9_5
+		cell_9_6
+	}
+	subgraph row_10 {
+		rank=same
+		cell_10_0
+		cell_10_1
+		cell_10_2
+		cell_10_3
+		cell_10_4
+		cell_10_5
+		cell_10_6
+	}
+	subgraph row_11 {
+		rank=same
+		cell_11_0
+		cell_11_1
+		cell_11_2
+		cell_11_3
+		cell_11_4
+		cell_11_5
+		cell_11_6
+	}
+	subgraph row_12 {
+		rank=same
+		cell_12_0
+		cell_12_1
+		cell_12_2
+		cell_12_3
+		cell_12_4
+		cell_12_5
+		cell_12_6
+	}
+	subgraph row_13 {
+		rank=same
+		cell_13_0
+		cell_13_1
+		cell_13_2
+		cell_13_3
+		cell_13_4
+		cell_13_5
+		cell_13_6
+	}
+	subgraph row_14 {
+		rank=same
+		cell_14_0
+		cell_14_1
+		cell_14_2
+		cell_14_3
+		cell_14_4
+		cell_14_5
+		cell_14_6
+	}
+	subgraph row_15 {
+		rank=same
+		cell_15_0
+		cell_15_1
+		cell_15_2
+		cell_15_3
+		cell_15_4
+		cell_15_5
+		cell_15_6
+	}
+	subgraph row_16 {
+		rank=same
+		cell_16_0
+		cell_16_1
+		cell_16_2
+		cell_16_3
+		cell_16_4
+		cell_16_5
+		cell_16_6
+	}
+	subgraph row_17 {
+		rank=same
+		cell_17_0
+		cell_17_1
+		cell_17_2
+		cell_17_3
+		cell_17_4
+		cell_17_5
+		cell_17_6
+	}
+	subgraph row_18 {
+		rank=same
+		cell_18_0
+		cell_18_1
+		cell_18_2
+		cell_18_3
+		cell_18_4
+		cell_18_5
+		cell_18_6
+	}
+	subgraph row_19 {
+		rank=same
+		cell_19_0
+		cell_19_1
+		cell_19_2
+		cell_19_3
+		cell_19_4
+		cell_19_5
+		cell_19_6
+	}
+	subgraph row_20 {
+		rank=same
+		cell_20_0
+		cell_20_1
+		cell_20_2
+		cell_20_3
+		cell_20_4
+		cell_20_5
+		cell_20_6
+	}
+	subgraph row_21 {
+		rank=same
+		cell_21_0
+		cell_21_1
+		cell_21_2
+		cell_21_3
+		cell_21_4
+		cell_21_5
+		cell_21_6
+	}
+	subgraph row_22 {
+		rank=same
+		cell_22_0
+		cell_22_1
+		cell_22_2
+		cell_22_3
+		cell_22_4
+		cell_22_5
+		cell_22_6
+	}
+	subgraph row_23 {
+		rank=same
+		cell_23_0
+		cell_23_1
+		cell_23_2
+		cell_23_3
+		cell_23_4
+		cell_23_5
+		cell_23_6
+	}
+	subgraph row_24 {
+		rank=same
+		cell_24_0
+		cell_24_1
+		cell_24_2
+		cell_24_3
+		cell_24_4
+		cell_24_5
+		cell_24_6
+	}
+	subgraph row_25 {
+		rank=same
+		cell_25_0
+		cell_25_1
+		cell_25_2
+		cell_25_3
+		cell_25_4
+		cell_25_5
+		cell_25_6
+	}
+	subgraph row_26 {
+		rank=same
+		cell_26_0
+		cell_26_1
+		cell_26_2
+		cell_26_3
+		cell_26_4
+		cell_26_5
+		cell_26_6
+	}
+	subgraph row_27 {
+		rank=same
+		cell_27_0
+		cell_27_1
+		cell_27_2
+		cell_27_3
+		cell_27_4
+		cell_27_5
+		cell_27_6
+	}
+	subgraph row_28 {
+		rank=same
+		cell_28_0
+		cell_28_1
+		cell_28_2
+		cell_28_3
+		cell_28_4
+		cell_28_5
+		cell_28_6
+	}
+	subgraph row_29 {
+		rank=same
+		cell_29_0
+		cell_29_1
+		cell_29_2
+		cell_29_3
+		cell_29_4
+		cell_29_5
+		cell_29_6
+	}
+	subgraph row_30 {
+		rank=same
+		cell_30_0
+		cell_30_1
+		cell_30_2
+		cell_30_3
+		cell_30_4
+		cell_30_5
+		cell_30_6
+	}
+	subgraph row_31 {
+		rank=same
+		cell_31_0
+		cell_31_1
+		cell_31_2
+		cell_31_3
+		cell_31_4
+		cell_31_5
+		cell_31_6
+	}
+	subgraph row_32 {
+		rank=same
+		cell_32_0
+		cell_32_1
+		cell_32_2
+		cell_32_3
+		cell_32_4
+		cell_32_5
+		cell_32_6
+	}
+	subgraph row_33 {
+		rank=same
+		cell_33_0
+		cell_33_1
+		cell_33_2
+		cell_33_3
+		cell_33_4
+		cell_33_5
+		cell_33_6
+	}
+	subgraph row_34 {
+		rank=same
+		cell_34_0
+		cell_34_1
+		cell_34_2
+		cell_34_3
+		cell_34_4
+		cell_34_5
+		cell_34_6
+	}
+	subgraph row_35 {
+		rank=same
+		cell_35_0
+		cell_35_1
+		cell_35_2
+		cell_35_3
+		cell_35_4
+		cell_35_5
+		cell_35_6
+	}
+	subgraph row_36 {
+		rank=same
+		cell_36_0
+		cell_36_1
+		cell_36_2
+		cell_36_3
+		cell_36_4
+		cell_36_5
+		cell_36_6
+	}
+	subgraph row_37 {
+		rank=same
+		cell_37_0
+		cell_37_1
+		cell_37_2
+		cell_37_3
+		cell_37_4
+		cell_37_5
+		cell_37_6
+	}
+}

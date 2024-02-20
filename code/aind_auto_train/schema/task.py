@@ -7,7 +7,7 @@ from pydantic import BaseModel
 from aind_data_schema.base import AindModel
 
 # %%
-class Task(Enum):
+class Task(str, Enum):
     """Foraging tasks"""
     C1B1 = "Coupled Baiting"
     C0B0 = "Uncoupled Without Baiting"
@@ -15,20 +15,21 @@ class Task(Enum):
     C0B1 = "Uncoupled Baiting"
     DUMMY = "Dummy task"
     
-class AdvancedBlockMode(Enum):
+class AdvancedBlockMode(str, Enum):
     ''' Modes for advanced block '''
     OFF = "off"
     NOW = "now"
     ONCE = "once"
     
-class AutoWaterMode(Enum):
+class AutoWaterMode(str, Enum):
     ''' Modes for auto water '''
     NATURAL = "Natural"
     BOTH = "Both"
     HIGH_PRO = "High pro"
     
-class TrainingStage(Enum):
-    STAGE_1 = "Stage 1"  # A special first stage that needed to be splitted into 1.1 and 1.2 on the GUI side
+class TrainingStage(str, Enum):
+    STAGE_1_WARMUP = "Stage 1 w/warmup"  # Stage 1 with warmup (classical Stage 1.1 + 1.2)
+    STAGE_1 = "Stage 1"   # Stage 1 without warmup (classical Stage 1.2)
     STAGE_2 = "Stage 2"
     STAGE_3 = "Stage 3"
     STAGE_4 = "Stage 4"
@@ -63,6 +64,7 @@ class TaskParas(AindModel):
     # Metadata
     training_stage: TrainingStage = Field(..., title="Training stage")
     task: Task = Field(..., title="Task name")
+    task_url: str = Field("", title="URL to the task description")
     task_schema_version: str = Field(..., title="Schema version")  # Corresponding to the GUI
     description: str = Field("", title='Description of this set of parameters')
     
@@ -143,24 +145,18 @@ class DynamicForagingParas(TaskParas):
     MaxTrial: int = Field(..., title="Maximal number of trials")
     MaxTime: int = Field(..., title="Maximal session time (min)")
                              
-    # Reward size. TODO: which one has higher priority? valve open time or volume?
-    RightValue: float = Field(0.05, title="Right reward size (valve open time in sec)", exclude_from_GUI=True)  # exclude_from_GUI means this will not sent to the GUI
-    LeftValue: float = Field(0.05, title="Left reward size (valve open time in sec)", exclude_from_GUI=True)
-    RightValue_volume: float = Field(5.00, title="Right reward size (volume)", exclude_from_GUI=True)
-    LeftValue_volume: float = Field(5.00, title="Left reward size (volume)", exclude_from_GUI=True)
+    # Reward size
+    RightValue_volume: float = Field(3.00, title="Right reward size (uL)")
+    LeftValue_volume: float = Field(3.00, title="Left reward size (uL)")
     
-    # --- Other GUI fields that will never be changed by the script (only clicked by the user) ---
-    NextBlock: bool = Field(False, title="(User clicks) Next block", exclude_from_GUI=True)
-    GiveLeft: bool = Field(False, title="(User clicks) Give left", exclude_from_GUI=True)
-    GiveRight: bool = Field(False, title="(User clicks) Give right", exclude_from_GUI=True)
-    GiveWaterL: float = Field(0.03, title="(User clicks) Size of give water left", exclude_from_GUI=True)
-    GiveWaterR: float = Field(0.03, title="(User clicks) Size of give water right", exclude_from_GUI=True)
-    GiveWaterL_volume: float = Field(3.00, title="(User clicks) Size of give water left (volume)", exclude_from_GUI=True)
-    GiveWaterR_volume: float = Field(3.00, title="(User clicks) Size of give water right (volume)", exclude_from_GUI=True)
-    IncludeAutoReward: bool = Field(False, title="(User clicks) Include auto reward", exclude_from_GUI=True)
-    SaveTraining: bool = Field(True, title="(User clicks) Save training", exclude_from_GUI=True)
-    InitiallyInactiveN: int = Field(2, title="Initially inactive trials", exclude_from_GUI=True)   # TODO: What is this???
+    # Warmup
+    warmup: bool = Field(False, title="Warmup master switch")
+    warm_min_trial: int = Field(50, title="Warmup finish criteria: minimal trials")
+    warm_max_choice_ratio_bias: float = Field(0.1, title="Warmup finish criteria: maximal choice ratio bias from 0.5")
+    warm_min_finish_ratio: float = Field(0.8, title="Warmup finish criteria: minimal finish ratio")
+    warm_windowsize: int = Field(20, title="Warmup finish criteria: window size to compute the bias and ratio")
     
+        
 
 
 # For dummy task

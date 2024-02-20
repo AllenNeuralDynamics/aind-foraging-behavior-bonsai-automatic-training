@@ -19,28 +19,30 @@ from aind_auto_train.schema.task import (
 )
 
 curriculum_name = Task.C1B1
-curriculum_version = "0.1"
-curriculum_description = '''Base curriculum for the coupled-baiting task'''
+curriculum_version = "1.0"
+curriculum_description = '''2024-02-19 Base curriculum for the coupled-baiting task'''
 
-task_schema_version = "1.0"
+task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
+task_schema_version = "1.1.0"
 
 # --- Parameters ---
-# Notes on the STAGE_1:
-# On the very first session, we typically run Left-Right alternating for 30~50 trials (previously called stage 1.1)
-# and then, within the same session, proceed to block switch [min=10, max=20, beta=5] (previously called stage 1.2).
-# Since the curriculum defined here only runs on a session-by-session basis, we decided to leave any within-session automation to the GUI.
-# Therefore, here I define parameters for TrainingStage.STAGE_1 as the old stage 1.2 ("Phase B" in my slides), assuming that the GUI will take care
-# of stage 1.1 ("Phase A" in my slides) automatically, whenever it receives a training stage name of TrainingStage.STAGE_1 ("Stage 1").
-
-# "Phase B" in Han's slides
-paras_stage_1 = DynamicForagingParas(
+# Stage 1 with warmup (classical Stage 1.1 + 1.2)
+paras_stage_1_warmup = DynamicForagingParas(
     # Metainfo
+    task_url=task_url,
     task_schema_version=task_schema_version,
     task=Task.C1B1,
-    training_stage=TrainingStage.STAGE_1,  # "Phase B" in Han's slides
-    description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
+    training_stage=TrainingStage.STAGE_1_WARMUP,  # "Phase B" in Han's slides
+    description="Warmup, followed by Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
 
     # -- Essentials --
+    # Warmup ON
+    warmup=True,
+    warm_min_trial=50,
+    warm_max_choice_ratio_bias=0.1,
+    warm_min_finish_ratio=0.8,
+    warm_windowsize=20,
+    
     # p_sum = 0.8, p_ratio = [1:0]
     BaseRewardSum=0.8,
     RewardFamily=3,
@@ -62,8 +64,10 @@ paras_stage_1 = DynamicForagingParas(
     DelayMax=0.5,
     DelayBeta=0,
     
-    # Reward delay
-    RewardDelay=0,
+    # Reward size and reward delay
+    RewardDelay=0.0,
+    RightValue_volume=5.0,
+    LeftValue_volume=5.0,
 
     # -- Within session automation --
     # Auto water
@@ -86,6 +90,49 @@ paras_stage_1 = DynamicForagingParas(
     # -- Miscs --
     ResponseTime=5, RewardConsumeTime=3,  # Very long response time at the beginning
     UncoupledReward="",  # Only valid in uncoupled task
+)
+
+transition_from_stage_1_warmup = StageTransitions(
+    from_stage=TrainingStage.STAGE_1_WARMUP,
+    transition_rules=[
+        TransitionRule(
+            decision=Decision.PROGRESS,
+            to_stage=TrainingStage.STAGE_2,
+            condition_description="Finished trials >= 200 and efficiency >= 0.6",
+            condition="""lambda metrics:
+                        metrics.finished_trials[-1] >= 200
+                        and
+                        metrics.foraging_efficiency[-1] >= 0.6
+                        """,
+        ),
+        TransitionRule(
+            decision=Decision.PROGRESS,
+            to_stage=TrainingStage.STAGE_1,
+            condition_description="After the first session",
+            condition="""lambda metrics:
+                        metrics.session_at_current_stage >= 1
+                        """,
+        )
+    ]
+)
+
+# Stage 1 without warmup (classical 1.2)
+paras_stage_1 = DynamicForagingParas(
+    **{
+        **paras_stage_1_warmup.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_1,
+            description="Phase B in Han's slides (block = [10, 20, 5], p_sum = 0.8, p_ratio = [1:0])",
+
+            # -- Essentials --
+            # Turn off Warmup from now on
+            warmup=False,
+            
+            # Decrease water size to 3.0 from now on
+            RightValue_volume=3.0,
+            LeftValue_volume=3.0,
+        )
+    }
 )
 
 transition_from_stage_1 = StageTransitions(
@@ -124,10 +171,10 @@ paras_stage_2 = DynamicForagingParas(
             BlockMax=40,
             BlockBeta=10,
 
-            # ITI [1, 7, 3] --> [2, 10, 5]
-            ITIMin=2,
+            # ITI [1, 7, 3] --> [1, 10, 5]
+            ITIMin=1,
             ITIMax=10,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 0.5 --> 1.0
             DelayMin=1.0,
@@ -192,9 +239,9 @@ paras_stage_3 = DynamicForagingParas(
             BlockBeta=20,
 
             # ITI [2, 10, 5] --> [3, 15, 5]
-            ITIMin=3,
+            ITIMin=1,
             ITIMax=15,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 1.0 --> 1.5
             DelayMin=1.5,
@@ -212,9 +259,9 @@ transition_from_stage_3 = StageTransitions(
         TransitionRule(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.STAGE_FINAL,
-            condition_description="Finished trials >= 400 and efficiency >= 0.7",
+            condition_description="Finished trials >= 350 and efficiency >= 0.7",
             condition="""lambda metrics:
-                        metrics.finished_trials[-1] >= 400
+                        metrics.finished_trials[-1] >= 350
                         and
                         metrics.foraging_efficiency[-1] >= 0.7
                         """,
@@ -222,9 +269,9 @@ transition_from_stage_3 = StageTransitions(
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials < 200 or efficiency < 0.6",
+            condition_description="Finished trials < 250 or efficiency < 0.6",
             condition="""lambda metrics:
-                        metrics.finished_trials[-1] < 200
+                        metrics.finished_trials[-1] < 250
                         or
                         metrics.foraging_efficiency[-1] < 0.6
                         """,
@@ -242,6 +289,10 @@ paras_stage_final = DynamicForagingParas(
 
             # --- Here I explicitly list all parameters again just for clarity ---
             # Essentials
+
+            # Warmup OFF
+            warmup=False,
+
             # p_sum = 0.45, p_ratio = [8:1] --> [8:1], [6:1], [3:1], [1:1]
             BaseRewardSum=0.45,
             RewardFamily=1,
@@ -253,16 +304,21 @@ paras_stage_final = DynamicForagingParas(
             BlockBeta=20,
             BlockMinReward=0,
 
-            # ITI [3, 15, 5] --> [3, 30, 5] (mean ~ 7.9 s, Bari et al. 2019)
-            ITIMin=3,
+            # ITI [1, 15, 5] --> [1, 30, 5] (mean ~ 6.0 s, not included 1-s no lick window before ITI start)
+            ITIMin=1,
             ITIMax=30,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 1.5 --> 2.0 (Bari et al. 2019)
             DelayMin=2.0,
             DelayMax=2.0,
             DelayBeta=0,
 
+            # Reward size and reward delay
+            RewardDelay=0.0,
+            RightValue_volume=3.0,
+            LeftValue_volume=3.0,
+    
             # Within session automation
             AutoReward=False,  # Turn off auto water
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
@@ -287,14 +343,14 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 500 and mean efficiency >= 0.7 "
+                                   "mean finished trials >= 400 and mean efficiency >= 0.7 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
                         metrics.session_at_current_stage >= 5
                         and
-                        np.mean(metrics.finished_trials[-5:]) >= 500
+                        np.mean(metrics.finished_trials[-5:]) >= 400
                         and
                         np.mean(metrics.foraging_efficiency[-5:]) >= 0.7
                         """,
@@ -302,9 +358,9 @@ transition_from_stage_final = StageTransitions(
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_3,
-            condition_description="For recent 2 sessions, mean finished trials < 400 or efficiency < 0.6",
+            condition_description="For recent 2 sessions, mean finished trials < 300 or efficiency < 0.6",
             condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-2:]) < 400
+                        np.mean(metrics.finished_trials[-2:]) < 300
                         or
                         np.mean(metrics.foraging_efficiency[-2:]) < 0.6
                         """,
@@ -320,13 +376,16 @@ curriculum = DynamicForagingCurriculum(
     curriculum_description=curriculum_description,
 
     parameters={
+        TrainingStage.STAGE_1_WARMUP: paras_stage_1_warmup,
         TrainingStage.STAGE_1: paras_stage_1,
         TrainingStage.STAGE_2: paras_stage_2,
         TrainingStage.STAGE_3: paras_stage_3,
         TrainingStage.STAGE_FINAL: paras_stage_final,
+        TrainingStage.GRADUATED: paras_stage_final,
     },
 
     curriculum={
+        TrainingStage.STAGE_1_WARMUP: transition_from_stage_1_warmup,
         TrainingStage.STAGE_1: transition_from_stage_1,
         TrainingStage.STAGE_2: transition_from_stage_2,
         TrainingStage.STAGE_3: transition_from_stage_3,

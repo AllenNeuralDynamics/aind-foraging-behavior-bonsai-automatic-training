@@ -1,0 +1,70 @@
+// Curriculum for Dynamic Foraging - Coupled Baiting
+digraph {
+	fontsize=17 label="Uncoupled Baiting (v1.0 @ schema v1.0)
+2024-02-19 Base curriculum for the uncoupled-baiting task" labelloc=t
+	rankdir=TB
+	STAGE_1_WARMUP [label="STAGE_1_WARMUP
+Coupled Baiting" fillcolor="#a50026" shape=ellipse style=filled tooltip="Warmup, followed by legendary Coupled Baiting Stage 1.2 (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])
+stage_task = Coupled Baiting"]
+	STAGE_1 [label="STAGE_1
+Coupled Baiting" fillcolor="#e95638" shape=ellipse style=filled tooltip="Phase B in Han's slides (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])
+stage_task = Coupled Baiting"]
+	STAGE_2 [label="STAGE_2
+Coupled Baiting" fillcolor="#fdbf6f" shape=ellipse style=filled tooltip="Coupled baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1])
+stage_task = Coupled Baiting"]
+	STAGE_3 [label="STAGE_3
+Uncoupled Baiting" fillcolor="#fdfebc" shape=ellipse style=filled tooltip="Switch to uncoupled but still baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day
+stage_task = Uncoupled Baiting"]
+	STAGE_FINAL [label="STAGE_FINAL
+Uncoupled Baiting" fillcolor="#b7e075" shape=ellipse style=filled tooltip="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water
+stage_task = Uncoupled Baiting"]
+	GRADUATED [label="GRADUATED
+Uncoupled Baiting" fillcolor="#006837" shape=ellipse style=filled tooltip="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water
+stage_task = Uncoupled Baiting"]
+	GRADUATED [label=GRADUATED fillcolor="#006837" shape=box style=filled]
+	STAGE_1_WARMUP -> STAGE_2 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Finished trials >= 200 and
+ efficiency >= 0.6" headtooltip="metrics.finished_trials[-1] >= 200
+and
+metrics.foraging_efficiency[-1] >= 0.6
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_1_WARMUP -> STAGE_1 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="After the first session" headtooltip="metrics.session_at_current_stage >= 1
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_1 -> STAGE_2 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Finished trials >= 200 and
+ efficiency >= 0.6" headtooltip="metrics.finished_trials[-1] >= 200
+and
+metrics.foraging_efficiency[-1] >= 0.6
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_2 -> STAGE_3 [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Finished trials >= 300 and
+ efficiency >= 0.65 and
+ stay for >= 2 days" headtooltip="metrics.finished_trials[-1] >= 300
+and
+metrics.foraging_efficiency[-1] >= 0.65
+and
+metrics.session_at_current_stage >= 2
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_2 -> STAGE_1 [color=grey edgetooltip=ROLLBACK fontcolor=grey headlabel="" headtooltip=" " minlen=2 penwidth=2 style=dashed taillabel="Finished trials < 200 or
+ efficiency < 0.55" tailtooltip="metrics.finished_trials[-1] < 200
+or
+metrics.foraging_efficiency[-1] < 0.55
+"]
+	STAGE_3 -> STAGE_FINAL [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="Just stay for 1 day" headtooltip="metrics.session_at_current_stage >= 1
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_FINAL -> GRADUATED [label="      " color=black edgetooltip=PROGRESS fontcolor=black headlabel="For recent 5 sessions,
+mean finished trials >= 400 and
+ mean efficiency >= 0.67 and
+ total sessions >= 10 and
+ sessions at final >= 5" headtooltip="metrics.session_total >= 10 
+and
+metrics.session_at_current_stage >= 5
+and
+np.mean(metrics.finished_trials[-5:]) >= 400
+and
+np.mean(metrics.foraging_efficiency[-5:]) >= 0.67
+" minlen=2 penwidth=2 style=solid taillabel="" tailtooltip=" "]
+	STAGE_FINAL -> STAGE_3 [color=grey edgetooltip=ROLLBACK fontcolor=grey headlabel="" headtooltip=" " minlen=2 penwidth=2 style=dashed taillabel="For recent 2 sessions,
+ mean finished trials < 300 or
+ efficiency < 0.6" tailtooltip="np.mean(metrics.finished_trials[-2:]) < 300
+or
+np.mean(metrics.foraging_efficiency[-2:]) < 0.6
+"]
+}

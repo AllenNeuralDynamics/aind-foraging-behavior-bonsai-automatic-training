@@ -8,7 +8,6 @@ import pandas as pd
 
 from aind_auto_train.schema.curriculum import TrainingStage
 from aind_auto_train.schema.task import metrics_class, Metrics, DynamicForagingMetrics
-from aind_auto_train.curriculums.coupled_baiting_0p1 import curriculum as coupled_baiting_curriculum
 from aind_auto_train.util.aws_util import import_df_from_s3, export_df_to_s3
 from aind_auto_train.plot.manager import plot_manager_all_progress
 from aind_auto_train.curriculum_manager import CurriculumManager
@@ -234,8 +233,8 @@ class AutoTrainManager:
                 f'"Coupled Baiting_curriculum_v0.1_schema_v0.2"')
             return self.curriculum_manager.get_curriculum(
                 curriculum_name='Coupled Baiting',
-                curriculum_version='0.1',
-                curriculum_schema_version='0.3',
+                curriculum_version='1.0',
+                curriculum_schema_version='1.0',
             )
 
     def add_and_evaluate_session(self, subject_id, session):

@@ -1,7 +1,6 @@
 '''
-Curriculum for Dynamic Foraging - Uncoupled Baiting
-Adapted from the Uncoupled Without Baiting curriculum
-"draft 2, began using 10/17/23"
+Curriculum for Dynamic Foraging - Uncoupled without Baiting
+Adopted from "draft 2, began using 10/17/23"
 https://alleninstitute-my.sharepoint.com/:w:/g/personal/katrina_nguyen_alleninstitute_org/EUGu5FS565pLuHhqFYT9yfEBjF7tIDGVEmbwnmcCYJBoWw?e=wD8fX9
 
 Run the code to generate the curriculum.json and graphs
@@ -21,27 +20,31 @@ from aind_auto_train.schema.task import (
 )
 
 # Note this could be any string, not necessarily one of the Task enums
-curriculum_name = "Uncoupled Baiting"
-curriculum_version = "0.1"
-curriculum_description = '''Base curriculum for the uncoupled-baiting task'''
+curriculum_name = Task.C0B0
+curriculum_version = "1.0"
+curriculum_description = '''2024-02-19 Base curriculum for the uncoupled-no-baiting task'''
 
-task_schema_version = "1.0"
+task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
+task_schema_version = "1.1.0"
 
 # --- Parameters ---
-# Notes on the STAGE_1:
-# On the very first session, we typically run Left-Right alternating for 30~50 trials (previously called stage 1.1)
-# and then, within the same session, proceed to block switch [min=10, max=20, beta=5] (previously called stage 1.2).
-# Since the curriculum defined here only runs on a session-by-session basis, we decided to leave any within-session automation to the GUI.
-# Therefore, here I define parameters for TrainingStage.STAGE_1 as the old stage 1.2, assuming that the GUI will take care
-# of stage 1.1 automatically, whenever it receives a training stage name of TrainingStage.STAGE_1 ("Stage 1") AND session = 1.
+# Stage 1 with warmup (classical Stage 1.1 + 1.2)
 
-paras_stage_1 = DynamicForagingParas(
+paras_stage_1_warmup = DynamicForagingParas(
     # Metainfo
-    training_stage=TrainingStage.STAGE_1,
-    description="Legendary Coupled Baiting Stage 1.2 (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])",
+    training_stage=TrainingStage.STAGE_1_WARMUP,
+    description="Warmup, followed by legendary Coupled Baiting Stage 1.2 (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])",
 
     # -- Essentials --
+    # Warmup ON
+    warmup=True,
+    warm_min_trial=50,
+    warm_max_choice_ratio_bias=0.1,
+    warm_min_finish_ratio=0.8,
+    warm_windowsize=20,
+
     # First session is ** coupled baiting **
+    task_url=task_url,
     task_schema_version=task_schema_version,
     task=Task.C1B1,
 
@@ -60,13 +63,15 @@ paras_stage_1 = DynamicForagingParas(
     ITIMax=7,
     ITIBeta=3,
 
-    # Start with no delay
-    DelayMin=0,
-    DelayMax=0,
-    DelayBeta=0.5,
+    # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
+    DelayMin=0.5,
+    DelayMax=0.5,
+    DelayBeta=0,
 
-    # Reward delay
-    RewardDelay=0,
+    # Reward size and reward delay
+    RewardDelay=0.0,
+    RightValue_volume=5.0,
+    LeftValue_volume=5.0,
 
     # -- Within session automation --
     # Auto water
@@ -92,6 +97,50 @@ paras_stage_1 = DynamicForagingParas(
     UncoupledReward="",  # Only valid in uncoupled task
 )
 
+transition_from_stage_1_warmup = StageTransitions(
+    from_stage=TrainingStage.STAGE_1_WARMUP,
+    transition_rules=[
+        TransitionRule(
+            decision=Decision.PROGRESS,
+            to_stage=TrainingStage.STAGE_2,
+            condition_description="Finished trials >= 200 and efficiency >= 0.6",
+            condition="""lambda metrics:
+                        metrics.finished_trials[-1] >= 200
+                        and
+                        metrics.foraging_efficiency[-1] >= 0.6
+                        """,
+        ),
+        TransitionRule(
+            decision=Decision.PROGRESS,
+            to_stage=TrainingStage.STAGE_1,
+            condition_description="After the first session",
+            condition="""lambda metrics:
+                        metrics.session_at_current_stage >= 1
+                        """,
+        )
+
+    ]
+)
+
+# Stage 1 without warmup (classical 1.2)
+paras_stage_1 = DynamicForagingParas(
+    **{
+        **paras_stage_1_warmup.model_dump(),
+        **dict(
+            training_stage=TrainingStage.STAGE_1,
+            description="Phase B in Han's slides (block = [10, 30, 10], p_sum = 0.8, p_ratio = [1:0])",
+
+            # -- Essentials --
+            # Turn off Warmup from now on
+            warmup=False,
+            
+            # Decrease water size to 3.0 from now on
+            RightValue_volume=3.0,
+            LeftValue_volume=3.0,
+        )
+    }
+)
+
 transition_from_stage_1 = StageTransitions(
     from_stage=TrainingStage.STAGE_1,
     transition_rules=[
@@ -113,26 +162,29 @@ paras_stage_2 = DynamicForagingParas(
         **paras_stage_1.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_2,
-            description="Coupled baiting (block = [20, 35, 20], p_sum = 1.0, p_ratio = [8:1])",
+            description="Coupled without baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1])",
 
             # --- Only include changes compared to stage_1 ---
             # -- Essentials --
 
-            # Coupled baiting
-            task=Task.C1B1,
+            # Coupled no baiting
+            task=Task.C1B0,
 
-            # p_sum = 0.8 --> 1.0, p_ratio [1:0] -> [8:1]
-            BaseRewardSum=1.0,
+            # p_ratio [1:0] -> [8:1]
             RewardFamily=1,
             RewardPairsN=1,
 
             # block length [10, 30, 10] --> [20, 35, 20]
             BlockMin=20,
             BlockMax=35,
-            BlockBeta=20,
+            BlockBeta=10,
 
-            # ITI [1, 7, 3] --> [1, 25, 3]
-            ITIMax=25,
+            # ITI [1, 7, 3] --> [1, 10, 3]
+            ITIMax=10,
+            
+            # Delay 0.5 --> 1.0
+            DelayMin=1.0,
+            DelayMax=1.0,
 
             # -- Within session automation --
             # Miscs
@@ -174,68 +226,25 @@ paras_stage_3 = DynamicForagingParas(
         **paras_stage_2.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_3,
-            description="Coupled baiting; remove auto water; add delay",
+            description="Switch to uncoupled; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
 
             # -- Essentials --
-
-            # Coupled baiting
-            task=Task.C1B1,
-
-            # Delay 0.0 --> 1.0
-            DelayMin=1.0,
-            DelayMax=1.0,
-            DelayBeta=0.5,
-
-            # Turn off auto water
-            AutoReward=False,
-        )
-    }
-)
-
-transition_from_stage_3 = StageTransitions(
-    from_stage=TrainingStage.STAGE_3,
-    transition_rules=[
-        TransitionRule(
-            decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_4,
-            condition_description="Finished trials >= 400 and efficiency >= 0.7 and stay for >= 2 days",
-            condition="""lambda metrics:
-                                metrics.finished_trials[-1] >= 400
-                                and
-                                metrics.foraging_efficiency[-1] >= 0.7
-                                and
-                                metrics.session_at_current_stage >= 2
-                                """,
-        ),
-        TransitionRule(
-            decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials < 200 or efficiency < 0.6",
-            condition="""lambda metrics:
-                                metrics.finished_trials[-1] < 200
-                                or
-                                metrics.foraging_efficiency[-1] < 0.6
-                                """,
-        ),
-    ]
-)
-
-paras_stage_4 = DynamicForagingParas(
-    **{
-        **paras_stage_3.model_dump(),
-        **dict(
-            training_stage=TrainingStage.STAGE_4,
-            description="Switch to uncoupled but still baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
-
-            # -- Essentials --
-            # Coupled baiting
-            task=Task.C0B1,
+            # Coupled no baiting
+            task=Task.C0B0,
             UncoupledReward="0.1, 0.4, 0.7",
+            
+            # Delay 1.0 --> 1.5
+            DelayMin=1.5,
+            DelayMax=1.5,
+            DelayBeta=0.0,
 
             # Final block length for uncoupled task
             BlockMin=20,
             BlockMax=35,
             BlockBeta=10,
+
+            # ITI [1, 10, 3] --> [1, 15, 3]
+            ITIMax=15,
 
             # Turn on auto water for the first day after switching to uncoupled task
             AutoReward=True,
@@ -248,8 +257,8 @@ paras_stage_4 = DynamicForagingParas(
     }
 )
 
-transition_from_stage_4 = StageTransitions(
-    from_stage=TrainingStage.STAGE_4,
+transition_from_stage_3 = StageTransitions(
+    from_stage=TrainingStage.STAGE_3,
     transition_rules=[
         TransitionRule(
             decision=Decision.PROGRESS,
@@ -265,14 +274,14 @@ transition_from_stage_4 = StageTransitions(
 
 paras_stage_final = DynamicForagingParas(
     **{
-        **paras_stage_4.model_dump(),
+        **paras_stage_3.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_FINAL,
-            description="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
+            description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
 
             # Essentials
-            # Coupled baiting
-            task=Task.C0B1,
+            # Coupled no baiting
+            task=Task.C0B0,
             UncoupledReward="0.1, 0.4, 0.7",
 
             BlockMin=20,
@@ -281,12 +290,12 @@ paras_stage_final = DynamicForagingParas(
             BlockMinReward=0,
 
             ITIMin=1.0,
-            ITIMax=25.0,
+            ITIMax=30.0,
             ITIBeta=3.0,
 
-            DelayMin=1.0,
-            DelayMax=1.0,
-            DelayBeta=0.5,
+            DelayMin=2.0,
+            DelayMax=2.0,
+            DelayBeta=0.0,
 
             RewardDelay=0,
 
@@ -313,24 +322,24 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 500 and mean efficiency >= 0.7 "
+                                   "mean finished trials >= 400 and mean efficiency >= 0.67 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
                         metrics.session_at_current_stage >= 5
                         and
-                        np.mean(metrics.finished_trials[-5:]) >= 500
+                        np.mean(metrics.finished_trials[-5:]) >= 400
                         and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.7
+                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.67
                         """,
         ),
         TransitionRule(
             decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_4,  # Back to C0B0 with auto water
-            condition_description="For recent 2 sessions, mean finished trials < 400 or efficiency < 0.6",
+            to_stage=TrainingStage.STAGE_3,  # Back to C0B0 with auto water
+            condition_description="For recent 2 sessions, mean finished trials < 300 or efficiency < 0.6",
             condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-2:]) < 400
+                        np.mean(metrics.finished_trials[-2:]) < 300
                         or
                         np.mean(metrics.foraging_efficiency[-2:]) < 0.6
                         """,
@@ -346,18 +355,19 @@ curriculum = DynamicForagingCurriculum(
     curriculum_description=curriculum_description,
 
     parameters={
+        TrainingStage.STAGE_1_WARMUP: paras_stage_1_warmup,
         TrainingStage.STAGE_1: paras_stage_1,
         TrainingStage.STAGE_2: paras_stage_2,
         TrainingStage.STAGE_3: paras_stage_3,
-        TrainingStage.STAGE_4: paras_stage_4,
         TrainingStage.STAGE_FINAL: paras_stage_final,
+        TrainingStage.GRADUATED: paras_stage_final,        
     },
 
     curriculum={
+        TrainingStage.STAGE_1_WARMUP: transition_from_stage_1_warmup,
         TrainingStage.STAGE_1: transition_from_stage_1,
         TrainingStage.STAGE_2: transition_from_stage_2,
         TrainingStage.STAGE_3: transition_from_stage_3,
-        TrainingStage.STAGE_4: transition_from_stage_4,
         TrainingStage.STAGE_FINAL: transition_from_stage_final,
     },
 
