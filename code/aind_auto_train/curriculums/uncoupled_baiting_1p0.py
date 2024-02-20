@@ -38,7 +38,7 @@ paras_stage_1_warmup = DynamicForagingParas(
 
     # -- Essentials --
     # Warmup ON
-    warmup=True,
+    wamup='on',
     warm_min_trial=50,
     warm_max_choice_ratio_bias=0.1,
     warm_min_finish_ratio=0.8,
@@ -133,7 +133,7 @@ paras_stage_1 = DynamicForagingParas(
 
             # -- Essentials --
             # Turn off Warmup from now on
-            warmup=False,
+            wamup='off',
             
             # Decrease water size to 3.0 from now on
             RightValue_volume=3.0,
