@@ -142,7 +142,7 @@ def draw_diagram_paras(curriculum,
         dict_paras = task_schema.to_GUI_format()
         paras.append(dict_paras)  # Cache the parameters
         dict_paras = {k: v for k, v in dict_paras.items()
-                      if k not in ('task', 'task_schema_version', 'curriculum_version',
+                      if k not in ('task', 'task_url', 'task_schema_version', 'curriculum_version',
                                    'training_stage', 'description')}
 
         for i_para, (para_name, para_value) in enumerate(dict_paras.items()):
