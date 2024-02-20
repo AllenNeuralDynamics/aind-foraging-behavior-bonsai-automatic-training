@@ -1,7 +1,6 @@
 '''
-Curriculum for Dynamic Foraging - Uncoupled Baiting
-Adapted from the Uncoupled Without Baiting curriculum
-"draft 2, began using 10/17/23"
+Curriculum for Dynamic Foraging - Uncoupled without Baiting
+Adopted from "draft 2, began using 10/17/23"
 https://alleninstitute-my.sharepoint.com/:w:/g/personal/katrina_nguyen_alleninstitute_org/EUGu5FS565pLuHhqFYT9yfEBjF7tIDGVEmbwnmcCYJBoWw?e=wD8fX9
 
 Run the code to generate the curriculum.json and graphs
@@ -21,11 +20,12 @@ from aind_auto_train.schema.task import (
 )
 
 # Note this could be any string, not necessarily one of the Task enums
-curriculum_name = "Uncoupled Baiting"
-curriculum_version = "0.1"
-curriculum_description = '''Base curriculum for the uncoupled-baiting task'''
+curriculum_name = Task.C0B0
+curriculum_version = "1.0"
+curriculum_description = '''Base curriculum for the uncoupled-no-baiting task'''
 
-task_schema_version = "1.0"
+task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
+task_schema_version = "1.1.0"
 
 # --- Parameters ---
 # Notes on the STAGE_1:
@@ -42,6 +42,7 @@ paras_stage_1 = DynamicForagingParas(
 
     # -- Essentials --
     # First session is ** coupled baiting **
+    task_url=task_url,
     task_schema_version=task_schema_version,
     task=Task.C1B1,
 
@@ -113,13 +114,13 @@ paras_stage_2 = DynamicForagingParas(
         **paras_stage_1.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_2,
-            description="Coupled baiting (block = [20, 35, 20], p_sum = 1.0, p_ratio = [8:1])",
+            description="Coupled without baiting (block = [20, 35, 20], p_sum = 1.0, p_ratio = [8:1])",
 
             # --- Only include changes compared to stage_1 ---
             # -- Essentials --
 
-            # Coupled baiting
-            task=Task.C1B1,
+            # Coupled no baiting
+            task=Task.C1B0,
 
             # p_sum = 0.8 --> 1.0, p_ratio [1:0] -> [8:1]
             BaseRewardSum=1.0,
@@ -174,12 +175,12 @@ paras_stage_3 = DynamicForagingParas(
         **paras_stage_2.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_3,
-            description="Coupled baiting; remove auto water; add delay",
+            description="Coupled without baiting; remove auto water; add delay",
 
             # -- Essentials --
 
-            # Coupled baiting
-            task=Task.C1B1,
+            # Coupled no baiting
+            task=Task.C1B0,
 
             # Delay 0.0 --> 1.0
             DelayMin=1.0,
@@ -225,11 +226,11 @@ paras_stage_4 = DynamicForagingParas(
         **paras_stage_3.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_4,
-            description="Switch to uncoupled but still baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
+            description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn on auto water for 1 day",
 
             # -- Essentials --
-            # Coupled baiting
-            task=Task.C0B1,
+            # Coupled no baiting
+            task=Task.C0B0,
             UncoupledReward="0.1, 0.4, 0.7",
 
             # Final block length for uncoupled task
@@ -268,11 +269,11 @@ paras_stage_final = DynamicForagingParas(
         **paras_stage_4.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_FINAL,
-            description="Uncoupled baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
+            description="Uncoupled without baiting; p_rew = [0.1, 0.4, 0.7]; turn off auto water",
 
             # Essentials
-            # Coupled baiting
-            task=Task.C0B1,
+            # Coupled no baiting
+            task=Task.C0B0,
             UncoupledReward="0.1, 0.4, 0.7",
 
             BlockMin=20,
