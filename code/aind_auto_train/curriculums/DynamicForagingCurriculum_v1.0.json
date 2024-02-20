@@ -49,6 +49,11 @@
                     ],
                     "title": "Task name"
                 },
+                "task_url": {
+                    "default": "",
+                    "title": "URL to the task description",
+                    "type": "string"
+                },
                 "task_schema_version": {
                     "title": "Schema version",
                     "type": "string"
@@ -73,6 +78,11 @@
                 "UncoupledReward": {
                     "default": "0.1,0.3,0.7",
                     "title": "Uncoupled reward",
+                    "type": "string"
+                },
+                "Randomness": {
+                    "default": "Exponential",
+                    "title": "Randomness mode",
                     "type": "string"
                 },
                 "BlockMin": {
@@ -102,6 +112,10 @@
                 },
                 "DelayBeta": {
                     "title": "Delay period (beta)",
+                    "type": "number"
+                },
+                "RewardDelay": {
+                    "title": "Reward delay (sec)",
                     "type": "number"
                 },
                 "AutoReward": {
@@ -183,101 +197,40 @@
                     "title": "Maximal session time (min)",
                     "type": "integer"
                 },
-                "RightValue": {
-                    "default": 0.05,
-                    "exclude_from_GUI": true,
-                    "title": "Right reward size (valve open time in sec)",
-                    "type": "number"
-                },
-                "LeftValue": {
-                    "default": 0.05,
-                    "exclude_from_GUI": true,
-                    "title": "Left reward size (valve open time in sec)",
-                    "type": "number"
-                },
                 "RightValue_volume": {
-                    "default": 5.0,
-                    "exclude_from_GUI": true,
-                    "title": "Right reward size (volume)",
+                    "default": 3.0,
+                    "title": "Right reward size (uL)",
                     "type": "number"
                 },
                 "LeftValue_volume": {
-                    "default": 5.0,
-                    "exclude_from_GUI": true,
-                    "title": "Left reward size (volume)",
-                    "type": "number"
-                },
-                "NextBlock": {
-                    "default": false,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Next block",
-                    "type": "boolean"
-                },
-                "GiveLeft": {
-                    "default": false,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Give left",
-                    "type": "boolean"
-                },
-                "GiveRight": {
-                    "default": false,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Give right",
-                    "type": "boolean"
-                },
-                "GiveWaterL": {
-                    "default": 0.03,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Size of give water left",
-                    "type": "number"
-                },
-                "GiveWaterR": {
-                    "default": 0.03,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Size of give water right",
-                    "type": "number"
-                },
-                "GiveWaterL_volume": {
                     "default": 3.0,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Size of give water left (volume)",
+                    "title": "Left reward size (uL)",
                     "type": "number"
                 },
-                "GiveWaterR_volume": {
-                    "default": 3.0,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Size of give water right (volume)",
-                    "type": "number"
-                },
-                "IncludeAutoReward": {
-                    "default": false,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Include auto reward",
-                    "type": "boolean"
-                },
-                "SaveTraining": {
-                    "default": true,
-                    "exclude_from_GUI": true,
-                    "title": "(User clicks) Save training",
-                    "type": "boolean"
-                },
-                "InitiallyInactiveN": {
-                    "default": 2,
-                    "exclude_from_GUI": true,
-                    "title": "Initially inactive trials",
-                    "type": "integer"
-                },
-                "Randomness": {
-                    "default": "Exponential",
-                    "exclude_from_GUI": true,
-                    "title": "Randomness mode",
+                "warmup": {
+                    "default": "off",
+                    "title": "Warmup master switch",
                     "type": "string"
                 },
-                "qt_spinbox_lineedit": {
-                    "default": 5.0,
-                    "exclude_from_GUI": true,
-                    "title": "qt_spinbox_lineedit??",
+                "warm_min_trial": {
+                    "default": 50,
+                    "title": "Warmup finish criteria: minimal trials",
+                    "type": "integer"
+                },
+                "warm_max_choice_ratio_bias": {
+                    "default": 0.1,
+                    "title": "Warmup finish criteria: maximal choice ratio bias from 0.5",
                     "type": "number"
+                },
+                "warm_min_finish_ratio": {
+                    "default": 0.8,
+                    "title": "Warmup finish criteria: minimal finish ratio",
+                    "type": "number"
+                },
+                "warm_windowsize": {
+                    "default": 20,
+                    "title": "Warmup finish criteria: window size to compute the bias and ratio",
+                    "type": "integer"
                 }
             },
             "required": [
@@ -293,6 +246,7 @@
                 "DelayMin",
                 "DelayMax",
                 "DelayBeta",
+                "RewardDelay",
                 "AutoReward",
                 "Multiplier",
                 "Unrewarded",
@@ -347,6 +301,7 @@
         },
         "TrainingStage": {
             "enum": [
+                "Stage 1 w/warmup",
                 "Stage 1",
                 "Stage 2",
                 "Stage 3",
@@ -389,8 +344,8 @@
     "description": "Task-specific curriculum for dynamic foraging task\nNote that the two generic types {taskparas_class} and {metrics_class} are specified here",
     "properties": {
         "curriculum_schema_version": {
-            "const": "0.3",
-            "default": "0.3",
+            "const": "1.0",
+            "default": "1.0",
             "title": "Curriculum schema version"
         },
         "curriculum_name": {
