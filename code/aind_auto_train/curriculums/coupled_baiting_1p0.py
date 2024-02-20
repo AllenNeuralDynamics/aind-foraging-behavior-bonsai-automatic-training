@@ -171,10 +171,10 @@ paras_stage_2 = DynamicForagingParas(
             BlockMax=40,
             BlockBeta=10,
 
-            # ITI [1, 7, 3] --> [2, 10, 5]
-            ITIMin=2,
+            # ITI [1, 7, 3] --> [1, 10, 5]
+            ITIMin=1,
             ITIMax=10,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 0.5 --> 1.0
             DelayMin=1.0,
@@ -239,9 +239,9 @@ paras_stage_3 = DynamicForagingParas(
             BlockBeta=20,
 
             # ITI [2, 10, 5] --> [3, 15, 5]
-            ITIMin=3,
+            ITIMin=1,
             ITIMax=15,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 1.0 --> 1.5
             DelayMin=1.5,
@@ -304,10 +304,10 @@ paras_stage_final = DynamicForagingParas(
             BlockBeta=20,
             BlockMinReward=0,
 
-            # ITI [3, 15, 5] --> [3, 30, 5] (mean ~ 7.9 s, Bari et al. 2019)
-            ITIMin=3,
+            # ITI [1, 15, 5] --> [1, 30, 5] (mean ~ 6.0 s, not included 1-s no lick window before ITI start)
+            ITIMin=1,
             ITIMax=30,
-            ITIBeta=5,
+            ITIBeta=3,
 
             # Delay 1.5 --> 2.0 (Bari et al. 2019)
             DelayMin=2.0,
