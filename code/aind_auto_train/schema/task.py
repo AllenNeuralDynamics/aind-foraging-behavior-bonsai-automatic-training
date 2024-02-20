@@ -150,7 +150,7 @@ class DynamicForagingParas(TaskParas):
     LeftValue_volume: float = Field(3.00, title="Left reward size (uL)")
     
     # Warmup
-    warmup: bool = Field(False, title="Warmup master switch")
+    warmup: str = Field('off', title="Warmup master switch")
     warm_min_trial: int = Field(50, title="Warmup finish criteria: minimal trials")
     warm_max_choice_ratio_bias: float = Field(0.1, title="Warmup finish criteria: maximal choice ratio bias from 0.5")
     warm_min_finish_ratio: float = Field(0.8, title="Warmup finish criteria: minimal finish ratio")
