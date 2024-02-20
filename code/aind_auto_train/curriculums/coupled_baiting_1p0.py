@@ -20,7 +20,7 @@ from aind_auto_train.schema.task import (
 
 curriculum_name = Task.C1B1
 curriculum_version = "1.0"
-curriculum_description = '''Base curriculum for the coupled-baiting task'''
+curriculum_description = '''2024-02-19 Base curriculum for the coupled-baiting task'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -64,8 +64,10 @@ paras_stage_1_warmup = DynamicForagingParas(
     DelayMax=0.5,
     DelayBeta=0,
     
-    # Reward delay
-    RewardDelay=0,
+    # Reward size and reward delay
+    RewardDelay=0.0,
+    RightValue_volume=5.0,
+    LeftValue_volume=5.0,
 
     # -- Within session automation --
     # Auto water
@@ -125,6 +127,10 @@ paras_stage_1 = DynamicForagingParas(
             # -- Essentials --
             # Turn off Warmup from now on
             warmup=False,
+            
+            # Decrease water size to 3.0 from now on
+            RightValue_volume=3.0,
+            LeftValue_volume=3.0,
         )
     }
 )
@@ -283,6 +289,10 @@ paras_stage_final = DynamicForagingParas(
 
             # --- Here I explicitly list all parameters again just for clarity ---
             # Essentials
+
+            # Warmup OFF
+            warmup=False,
+
             # p_sum = 0.45, p_ratio = [8:1] --> [8:1], [6:1], [3:1], [1:1]
             BaseRewardSum=0.45,
             RewardFamily=1,
@@ -304,6 +314,11 @@ paras_stage_final = DynamicForagingParas(
             DelayMax=2.0,
             DelayBeta=0,
 
+            # Reward size and reward delay
+            RewardDelay=0.0,
+            RightValue_volume=3.0,
+            LeftValue_volume=3.0,
+    
             # Within session automation
             AutoReward=False,  # Turn off auto water
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
