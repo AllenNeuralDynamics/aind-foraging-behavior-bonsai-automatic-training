@@ -20,14 +20,14 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 - [Curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculum_manager.py) manages all available pre-generated curriculums (on any S3 bucket).
 
 ## Usage
-1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py#L199-L204) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py#L223-L247).
-   - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_0p1.py) for the dynamic foraging task.
-   - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.3.json) 
+1. Design the curriculum, i.e., all [training stages](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/e04c3206d2d1ed2b59ff768d17b50d8bdc0b6d14/code/aind_auto_train/curriculums/coupled_baiting_1p0.py#L378-L385) and [transition rules](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/e04c3206d2d1ed2b59ff768d17b50d8bdc0b6d14/code/aind_auto_train/curriculums/coupled_baiting_1p0.py#L387-L393).
+   - Here is an [example curriculum](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/curriculums/coupled_baiting_1p0.py#L387-L393) for the dynamic foraging task.
+   - Here is automatically generated [json file](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/e04c3206d2d1ed2b59ff768d17b50d8bdc0b6d14/code/aind_auto_train/curriculums/Uncoupled%20Baiting_curriculum_v1.0_schema_v1.0.json) 
    - Here are automatically rendered diagrams for stage transitions rules and parameters (click the images to try the hover feature :blush:)
 
 | rules | parameters |
 |--|--|
-|<img width="700" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.3_rules.svg">|<img width="500" src="https://raw.githubusercontent.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/main/code/aind_auto_train/curriculums/Coupled%20Baiting_curriculum_v0.1_schema_v0.3_paras.svg">|
+|<img width="400" src="https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/e04c3206d2d1ed2b59ff768d17b50d8bdc0b6d14/code/aind_auto_train/curriculums/Uncoupled%20Baiting_curriculum_v1.0_schema_v1.0_rules.svg">|<img width="500" src="https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/e04c3206d2d1ed2b59ff768d17b50d8bdc0b6d14/code/aind_auto_train/curriculums/Uncoupled%20Baiting_curriculum_v1.0_schema_v1.0_paras.svg">|
 
 2. Create `AutoTrainManager` and connect it to the behavior database `df_behavior`.
 3. Feed all necessary metrics to `Auto train manager` and let it run.
@@ -40,6 +40,12 @@ This repo is the red circle in the diagram. It will be running on Code Ocean and
 - Demo notebook for the [curriculum schema](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_schema.ipynb).
 - Demo notebook for [a full automation workflow (auto train manager)](https://nbviewer.org/github/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_auto_train_manager.ipynb)
 - Demo notebook for the [curriculum manager](https://github.com/AllenNeuralDynamics/aind-foraging-behavior-bonsai-automatic-training/blob/main/code/aind_auto_train/demo_curriculum_manager.ipynb)
+
+## Notes
+System upgrade checklist
+- Upgrade all training rigs
+- Upgrade CO capsule (terminate all running workers and start a new one)
+- Upgrade streamlit app
 
 ## Compared with SLIMS/mTrack
 <!-- markdown-link-check-disable-next-line -->
