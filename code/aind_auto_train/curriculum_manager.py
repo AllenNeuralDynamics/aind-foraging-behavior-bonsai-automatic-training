@@ -118,9 +118,11 @@ class CurriculumManager:
 
         # Check the schema version
         schema_version = curriculum_schema.model_fields['curriculum_schema_version'].default
-        assert loaded_json['curriculum_schema_version'] == schema_version, \
-            f"Schema version in the loaded json ({loaded_json['curriculum_schema_version']}) does not match the loaded schema ({schema_version})! "\
-            f"Please update your `aind_auto_train` repo!"
+        
+        if loaded_json['curriculum_schema_version'] != schema_version:
+            logger.error(f"Schema version in the loaded json ({loaded_json['curriculum_schema_version']}) does not match the loaded schema ({schema_version})! "
+                         f"You're either using an outdated `aind_auto_train` repo or loading an outdated curriculum!")
+            return None
 
         # Create the curriculum object
         curriculum = curriculum_schema(**loaded_json)

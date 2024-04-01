@@ -3,13 +3,14 @@ import threading
 import time
 import logging
 
-from aind_auto_train import setup_logging
+from aind_auto_train import setup_logging, __version__
 from aind_auto_train.auto_train_manager import DynamicForagingAutoTrainManager
 setup_logging()
 logger = logging.getLogger(__name__)
 
-def update_auto_train_database(managers, interval=3600):
+def update_auto_train_database(managers, interval=10):
     while True:
+        logger.info(f'\n\n --- v{__version__} ---')
         try:
             for manager_name, manager in managers.items():
                 manager.update()
