@@ -21,8 +21,8 @@ from aind_auto_train.schema.task import (
 
 # Note this could be any string, not necessarily one of the Task enums
 curriculum_name = Task.C0B0
-curriculum_version = "1.0"
-curriculum_description = '''2024-02-19 Base curriculum for the uncoupled-no-baiting task'''
+curriculum_version = "2.0"
+curriculum_description = '''2024-04-12 decreased reward size and higher standard for graduation'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -70,8 +70,8 @@ paras_stage_1_warmup = DynamicForagingParas(
 
     # Reward size and reward delay
     RewardDelay=0.0,
-    RightValue_volume=5.0,
-    LeftValue_volume=5.0,
+    RightValue_volume=4.0,
+    LeftValue_volume=4.0,
 
     # -- Within session automation --
     # Auto water
@@ -92,8 +92,8 @@ paras_stage_1_warmup = DynamicForagingParas(
     StopIgnores=20000,
 
     # -- Miscs --
-    ResponseTime=5,  # Very long response time at the beginning
-    RewardConsumeTime=3,
+    ResponseTime=5.0,  # Very long response time at the beginning
+    RewardConsumeTime=1.0,  # Shorter RewardConsumeTime to increase the number of trials
     UncoupledReward="",  # Only valid in uncoupled task
 )
 
@@ -133,10 +133,13 @@ paras_stage_1 = DynamicForagingParas(
             # -- Essentials --
             # Turn off Warmup from now on
             warmup='off',
+
+            Unrewarded=5,
+            Ignored=5,
             
-            # Decrease water size to 3.0 from now on
-            RightValue_volume=3.0,
-            LeftValue_volume=3.0,
+            # Decrease water size to 2.0 from now on
+            RightValue_volume=2.0,
+            LeftValue_volume=2.0,
         )
     }
 )
@@ -173,6 +176,10 @@ paras_stage_2 = DynamicForagingParas(
             # p_ratio [1:0] -> [8:1]
             RewardFamily=1,
             RewardPairsN=1,
+            
+            # Decrease autowater
+            Unrewarded=10,
+            Ignored=10,
 
             # block length [10, 30, 10] --> [20, 35, 20]
             BlockMin=20,
@@ -188,7 +195,7 @@ paras_stage_2 = DynamicForagingParas(
 
             # -- Within session automation --
             # Miscs
-            ResponseTime=2,  # Decrease response time: 5 --> 2
+            ResponseTime=3.0,  # Decrease response time: 5 --> 3
         )
     }
 )
@@ -248,11 +255,14 @@ paras_stage_3 = DynamicForagingParas(
 
             # Turn on auto water for the first day after switching to uncoupled task
             AutoReward=True,
-            Unrewarded=10,
-            Ignored=1000,
+            Unrewarded=15,  # almost turned off
+            Ignored=15,  # almost turned off
 
             # Turn off auto block
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
+            
+            # Miscs
+            ResponseTime=2.0,  # Decrease response time: 3 --> 2
         )
     }
 )
@@ -308,7 +318,7 @@ paras_stage_final = DynamicForagingParas(
             StopIgnores=20000,
 
             # Miscs
-            ResponseTime=2.0,
+            ResponseTime=1.0,
             RewardConsumeTime=3.0,
         )
     }
@@ -322,16 +332,16 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 400 and mean efficiency >= 0.67 "
+                                   "mean finished trials >= 500 and mean efficiency >= 0.75 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
                         metrics.session_at_current_stage >= 5
                         and
-                        np.mean(metrics.finished_trials[-5:]) >= 400
+                        np.mean(metrics.finished_trials[-5:]) >= 500
                         and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.67
+                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.75
                         """,
         ),
         TransitionRule(
