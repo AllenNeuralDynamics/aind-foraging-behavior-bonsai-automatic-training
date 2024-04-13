@@ -248,6 +248,10 @@ paras_stage_3 = DynamicForagingParas(
             DelayMin=1.5,
             DelayMax=1.5,
 
+            # Decrease autowater number (almost turned off)
+            Unrewarded=15,
+            Ignored=15,
+
             # Miscs
             ResponseTime=2,  # Decrease response time:  3 --> 2
         )
