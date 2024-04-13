@@ -19,8 +19,8 @@ from aind_auto_train.schema.task import (
 )
 
 curriculum_name = Task.C1B1
-curriculum_version = "1.0"
-curriculum_description = '''2024-02-19 Base curriculum for the coupled-baiting task'''
+curriculum_version = "2.0"
+curriculum_description = '''2024-04-12 decreased reward size and higher standard for graduation'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -66,8 +66,8 @@ paras_stage_1_warmup = DynamicForagingParas(
     
     # Reward size and reward delay
     RewardDelay=0.0,
-    RightValue_volume=5.0,
-    LeftValue_volume=5.0,
+    RightValue_volume=4.0,
+    LeftValue_volume=4.0,
 
     # -- Within session automation --
     # Auto water
@@ -88,7 +88,8 @@ paras_stage_1_warmup = DynamicForagingParas(
     StopIgnores=20000,
 
     # -- Miscs --
-    ResponseTime=5, RewardConsumeTime=3,  # Very long response time at the beginning
+    ResponseTime=5.0,   # Very long response time at the beginning
+    RewardConsumeTime=1.0,   # Shorter RewardConsumeTime to increase the number of trials
     UncoupledReward="",  # Only valid in uncoupled task
 )
 
@@ -129,8 +130,8 @@ paras_stage_1 = DynamicForagingParas(
             warmup='off',
             
             # Decrease water size to 3.0 from now on
-            RightValue_volume=3.0,
-            LeftValue_volume=3.0,
+            RightValue_volume=2.0,
+            LeftValue_volume=2.0,
         )
     }
 )
@@ -259,9 +260,9 @@ transition_from_stage_3 = StageTransitions(
         TransitionRule(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.STAGE_FINAL,
-            condition_description="Finished trials >= 350 and efficiency >= 0.7",
+            condition_description="Finished trials >= 400 and efficiency >= 0.7",
             condition="""lambda metrics:
-                        metrics.finished_trials[-1] >= 350
+                        metrics.finished_trials[-1] >= 400
                         and
                         metrics.foraging_efficiency[-1] >= 0.7
                         """,
@@ -269,11 +270,11 @@ transition_from_stage_3 = StageTransitions(
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_2,
-            condition_description="Finished trials < 250 or efficiency < 0.6",
+            condition_description="Finished trials < 300 or efficiency < 0.65",
             condition="""lambda metrics:
-                        metrics.finished_trials[-1] < 250
+                        metrics.finished_trials[-1] < 300
                         or
-                        metrics.foraging_efficiency[-1] < 0.6
+                        metrics.foraging_efficiency[-1] < 0.65
                         """,
         ),
     ]
@@ -316,8 +317,8 @@ paras_stage_final = DynamicForagingParas(
 
             # Reward size and reward delay
             RewardDelay=0.0,
-            RightValue_volume=3.0,
-            LeftValue_volume=3.0,
+            RightValue_volume=2.0,
+            LeftValue_volume=2.0,
     
             # Within session automation
             AutoReward=False,  # Turn off auto water
@@ -328,8 +329,8 @@ paras_stage_final = DynamicForagingParas(
             StopIgnores=50,
 
             # Miscs
-            ResponseTime=2,
-            RewardConsumeTime=3,
+            ResponseTime=1.0,
+            RewardConsumeTime=3.0,
             UncoupledReward="",  # Only valid in uncoupled task
         )
     }
@@ -343,26 +344,26 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 400 and mean efficiency >= 0.7 "
+                                   "mean finished trials >= 500 and mean efficiency >= 0.75 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
                         metrics.session_at_current_stage >= 5
                         and
-                        np.mean(metrics.finished_trials[-5:]) >= 400
+                        np.mean(metrics.finished_trials[-5:]) >= 500
                         and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.7
+                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.75
                         """,
         ),
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_3,
-            condition_description="For recent 2 sessions, mean finished trials < 300 or efficiency < 0.6",
+            condition_description="For recent 2 sessions, mean finished trials < 350 or efficiency < 0.65",
             condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-2:]) < 300
+                        np.mean(metrics.finished_trials[-2:]) < 350
                         or
-                        np.mean(metrics.foraging_efficiency[-2:]) < 0.6
+                        np.mean(metrics.foraging_efficiency[-2:]) < 0.65
                         """,
         ),
     ]
