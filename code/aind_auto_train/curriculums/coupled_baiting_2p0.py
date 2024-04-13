@@ -73,8 +73,8 @@ paras_stage_1_warmup = DynamicForagingParas(
     # Auto water
     AutoReward=True,
     AutoWaterType=AutoWaterMode.NATURAL,
-    Unrewarded=5,
-    Ignored=5,
+    Unrewarded=3,
+    Ignored=3,
     Multiplier=0.5,
 
     # Auto block
@@ -129,6 +129,9 @@ paras_stage_1 = DynamicForagingParas(
             # Turn off Warmup from now on
             warmup='off',
             
+            Unrewarded=5,
+            Ignored=5,      
+                  
             # Decrease water size to 3.0 from now on
             RightValue_volume=2.0,
             LeftValue_volume=2.0,
