@@ -335,7 +335,7 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 500 and mean efficiency >= 0.75 "
+                                   "mean finished trials >= 500 and mean efficiency >= 0.70 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
@@ -344,7 +344,7 @@ transition_from_stage_final = StageTransitions(
                         and
                         np.mean(metrics.finished_trials[-5:]) >= 500
                         and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.75
+                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.70
                         """,
         ),
         TransitionRule(
