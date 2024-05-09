@@ -31,6 +31,7 @@ class TrainingStage(str, Enum):
     STAGE_1_WARMUP = "Stage 1 w/warmup"  # Stage 1 with warmup (classical Stage 1.1 + 1.2)
     STAGE_1 = "Stage 1"   # Stage 1 without warmup (classical Stage 1.2)
     STAGE_2 = "Stage 2"
+    STAGE_2_noLick = 'Stage 2 noLlick'
     STAGE_3 = "Stage 3"
     STAGE_4 = "Stage 4"
     STAGE_5 = "Stage 5"
