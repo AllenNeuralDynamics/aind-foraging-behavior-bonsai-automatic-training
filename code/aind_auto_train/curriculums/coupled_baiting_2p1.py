@@ -17,6 +17,8 @@ from aind_auto_train.schema.task import (
     Task, TrainingStage, DynamicForagingParas, 
     AutoWaterMode, AdvancedBlockMode
 )
+from aind_auto_train import setup_logging
+setup_logging()
 
 curriculum_name = Task.C1B1
 curriculum_version = "2.1"
