@@ -50,3 +50,26 @@ System upgrade checklist
 ## Compared with SLIMS/mTrack
 <!-- markdown-link-check-disable-next-line -->
 See [this thread](https://github.com/AllenNeuralDynamics/aind-behavior-blog/discussions/124)
+
+## Instructions for adding new curriculums
+Since `graphviz` in Code Ocean has some unsolved bug, it is recommended to install the library locally in a conda environment to create new curriculums.
+1. Clone this repo to your local computer
+2. Create conda environment by
+   ```python
+   conda create -n autotrain python=3.8
+   conda activate autotrain
+   ```
+3. Install the library in editable mode
+   ```shell
+   pip install -e .
+   ```
+4. Install `graphviz` via conda (which installs necessary `dot` .bin files for you)
+   ```shell
+   conda install python-graphviz
+   ```
+5. Set up AWS credential. (ask Han for this step)
+6. Test the installation by running demo script `code\aind_auto_train\curriculums\dummy_task.py`
+7. Create you own curriculum based on existing curriculums in `code\aind_auto_train\curriculums\`
+8. Run your new .py file and check the generated diagrams under the default folder `{your windows user folder}/capsule/scratch/saved_curriculums/`
+9. Run the script `code\aind_auto_train\curriculum_manager.py` to upload new curriculum files to AWS S3 bucket `s3://aind-behavior-data/foraging_auto_training/saved_curriculums/`
+10. Check the new curriculum on the [Streamlit app](https://foraging-behavior-browser.allenneuraldynamics-test.org/?tab_id=tab_auto_train_curriculum).
