@@ -22,8 +22,8 @@ from aind_auto_train.schema.task import (
 
 # Note this could be any string, not necessarily one of the Task enums
 curriculum_name = "Uncoupled Baiting"
-curriculum_version = "2.0"
-curriculum_description = '''2024-04-12 decreased reward size and higher standard for graduation'''
+curriculum_version = "2.1"
+curriculum_description = '''2024-05-09 decrease delay period as we now use much longer early lick punishment'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -65,8 +65,8 @@ paras_stage_1_warmup = DynamicForagingParas(
     ITIBeta=3,
 
     # Add a (fixed) small delay period at the beginning  # TODO: automate delay period
-    DelayMin=0.5,
-    DelayMax=0.5,
+    DelayMin=0.1,
+    DelayMax=0.1,
     DelayBeta=0,
 
     # Reward size and reward delay
@@ -190,9 +190,8 @@ paras_stage_2 = DynamicForagingParas(
             # ITI [1, 7, 3] --> [1, 10, 3]
             ITIMax=10,
             
-            # Delay 0.5 --> 1.0
-            DelayMin=1.0,
-            DelayMax=1.0,
+            DelayMin=0.3,
+            DelayMax=0.3,
             
             # -- Within session automation --
             # Miscs
@@ -241,9 +240,8 @@ paras_stage_3 = DynamicForagingParas(
             task=Task.C0B1,
             UncoupledReward="0.1, 0.4, 0.7",
             
-            # Delay 1.0 --> 1.5
-            DelayMin=1.5,
-            DelayMax=1.5,
+            DelayMin=0.5,
+            DelayMax=0.5,
             DelayBeta=0.0,
 
             # Final block length for uncoupled task
@@ -306,8 +304,8 @@ paras_stage_final = DynamicForagingParas(
             ITIMax=30.0,
             ITIBeta=3.0,
 
-            DelayMin=2.0,
-            DelayMax=2.0,
+            DelayMin=1.0,
+            DelayMax=1.0,
             DelayBeta=0.0,
 
             RewardDelay=0,
