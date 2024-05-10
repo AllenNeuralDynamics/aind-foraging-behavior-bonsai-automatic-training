@@ -19,6 +19,8 @@ from aind_auto_train.schema.task import (
     Task, TrainingStage, DynamicForagingParas,
     AutoWaterMode, AdvancedBlockMode
 )
+from aind_auto_train import setup_logging
+setup_logging()
 
 # Note this could be any string, not necessarily one of the Task enums
 curriculum_name = "Uncoupled Baiting"

@@ -6,6 +6,8 @@ from typing import List, Dict
 from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
 from aind_auto_train.schema.task import Task, TrainingStage, DummyTaskParas, DummyTaskMetrics
 from aind_auto_train.schema.curriculum import DummyTaskCurriculum, StageTransitions, TransitionRule, Decision
+from aind_auto_train import setup_logging
+setup_logging()
 
 
 meta = dict(task_schema_version="0.1",
