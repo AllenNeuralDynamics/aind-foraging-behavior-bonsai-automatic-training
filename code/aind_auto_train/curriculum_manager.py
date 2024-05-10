@@ -21,7 +21,9 @@ import aind_auto_train.schema.task as task_schemas
 
 logger = logging.getLogger(__name__)
 
-# Directory for caching df_maseter tables
+# # Directory for caching df_maseter tables
+# LOCAL_SAVED_CURRICULUM_ROOT = os.path.expanduser(
+#     '~\aind-foraging-behavior-bonsai-automatic-training\scratch\saved_curriculums/')
 LOCAL_SAVED_CURRICULUM_ROOT = os.path.expanduser(
     '~/capsule/scratch/saved_curriculums/')
 

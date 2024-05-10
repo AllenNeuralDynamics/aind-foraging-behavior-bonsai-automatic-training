@@ -205,7 +205,7 @@ transition_from_stage_2 = StageTransitions(
     transition_rules=[
         TransitionRule(
             decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_2_noLick,
+            to_stage=TrainingStage.STAGE_3,
             condition_description="Stay for >= 3 days",
             condition="""lambda metrics:
                         metrics.session_at_current_stage >= 3
@@ -225,11 +225,11 @@ transition_from_stage_2 = StageTransitions(
 )
 
 
-paras_stage_2_nolick = DynamicForagingParas(
+paras_stage_3 = DynamicForagingParas(
     **{
         **paras_stage_2.model_dump(),
         **dict(
-            training_stage=TrainingStage.STAGE_2_noLick,
+            training_stage=TrainingStage.STAGE_3,
             description="Coupled without baiting (block = [20, 35, 10], p_sum = 0.8, p_ratio = [8:1]), turn on no lick window",
 
             # --- Only include changes compared to stage_1 ---
@@ -265,12 +265,12 @@ paras_stage_2_nolick = DynamicForagingParas(
     }
 )
 
-transition_from_stage_2_nolick = StageTransitions(
-    from_stage=TrainingStage.STAGE_2_noLick,
+transition_from_stage_3 = StageTransitions(
+    from_stage=TrainingStage.STAGE_3,
     transition_rules=[
         TransitionRule(
             decision=Decision.PROGRESS,
-            to_stage=TrainingStage.STAGE_3,
+            to_stage=TrainingStage.STAGE_4,
             condition_description="Finished trials >= 300 and efficiency >= 0.65 and stay for >= 3 days",
             condition="""lambda metrics:
                         metrics.finished_trials[-1] >= 300
@@ -293,11 +293,11 @@ transition_from_stage_2_nolick = StageTransitions(
     ]
 )
 
-paras_stage_3 = DynamicForagingParas(
+paras_stage_4 = DynamicForagingParas(
     **{
-        **paras_stage_2_nolick.model_dump(),
+        **paras_stage_3.model_dump(),
         **dict(
-            training_stage=TrainingStage.STAGE_3,
+            training_stage=TrainingStage.STAGE_4,
             description="Switch to uncoupled; p_rew = [0.1, 0.4, 0.7] or [0.1, 0.5, 0.9]; turn on auto water for 1 days",
 
             # -- Essentials --
@@ -330,8 +330,8 @@ paras_stage_3 = DynamicForagingParas(
     }
 )
 
-transition_from_stage_3 = StageTransitions(
-    from_stage=TrainingStage.STAGE_3,
+transition_from_stage_4 = StageTransitions(
+    from_stage=TrainingStage.STAGE_4,
     transition_rules=[
         TransitionRule(
             decision=Decision.PROGRESS,
@@ -347,7 +347,7 @@ transition_from_stage_3 = StageTransitions(
 
 paras_stage_final = DynamicForagingParas(
     **{
-        **paras_stage_3.model_dump(),
+        **paras_stage_4.model_dump(),
         **dict(
             training_stage=TrainingStage.STAGE_FINAL,
             description="Uncoupled without baiting; p_rew = [0.1, 0.5, 0.9]; turn off auto water",
@@ -409,7 +409,7 @@ transition_from_stage_final = StageTransitions(
         ),
         TransitionRule(
             decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_3,  # Back to C0B0 with auto water
+            to_stage=TrainingStage.STAGE_4,  # Back to C0B0 with auto water
             condition_description="For recent 2 sessions, mean finished trials < 300 or efficiency < 0.6",
             condition="""lambda metrics:
                         np.mean(metrics.finished_trials[-2:]) < 300
@@ -431,8 +431,8 @@ curriculum = DynamicForagingCurriculum(
         TrainingStage.STAGE_1_WARMUP: paras_stage_1_warmup,
         TrainingStage.STAGE_1: paras_stage_1,
         TrainingStage.STAGE_2: paras_stage_2,
-        TrainingStage.STAGE_2_noLick: paras_stage_2_nolick,
         TrainingStage.STAGE_3: paras_stage_3,
+        TrainingStage.STAGE_4: paras_stage_4,
         TrainingStage.STAGE_FINAL: paras_stage_final,
         TrainingStage.GRADUATED: paras_stage_final,        
     },
@@ -441,8 +441,8 @@ curriculum = DynamicForagingCurriculum(
         TrainingStage.STAGE_1_WARMUP: transition_from_stage_1_warmup,
         TrainingStage.STAGE_1: transition_from_stage_1,
         TrainingStage.STAGE_2: transition_from_stage_2,
-        TrainingStage.STAGE_2_noLick: transition_from_stage_2_nolick,
         TrainingStage.STAGE_3: transition_from_stage_3,
+        TrainingStage.STAGE_4: transition_from_stage_4,
         TrainingStage.STAGE_FINAL: transition_from_stage_final,
     },
 
