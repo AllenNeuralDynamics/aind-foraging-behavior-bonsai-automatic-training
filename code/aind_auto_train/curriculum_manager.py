@@ -56,7 +56,7 @@ class CurriculumManager:
         schema_version_code_base = curriculum_schemas.Curriculum.model_fields['curriculum_schema_version'].default
         
         for f in self.json_files:
-            match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
+            match = re.search(r'(.+)_curriculum_v(.+)_schema_v(.+)\.json',
                               os.path.basename(f))
             if match is None:
                 logger.warning(
