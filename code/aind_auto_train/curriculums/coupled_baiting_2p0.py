@@ -8,6 +8,8 @@ Run the code to generate the curriculum.json and graphs
 
 # %%
 from aind_auto_train.curriculum_manager import LOCAL_SAVED_CURRICULUM_ROOT
+from aind_auto_train import setup_logging
+setup_logging()
 
 from aind_auto_train.schema.curriculum import (
     DynamicForagingCurriculum, StageTransitions, TransitionRule,

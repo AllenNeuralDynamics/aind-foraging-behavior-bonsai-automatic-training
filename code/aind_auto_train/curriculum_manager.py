@@ -21,7 +21,9 @@ import aind_auto_train.schema.task as task_schemas
 
 logger = logging.getLogger(__name__)
 
-# Directory for caching df_maseter tables
+# # Directory for caching df_maseter tables
+# LOCAL_SAVED_CURRICULUM_ROOT = os.path.expanduser(
+#     '~\aind-foraging-behavior-bonsai-automatic-training\scratch\saved_curriculums/')
 LOCAL_SAVED_CURRICULUM_ROOT = os.path.expanduser(
     '~/capsule/scratch/saved_curriculums/')
 
@@ -54,7 +56,7 @@ class CurriculumManager:
         schema_version_code_base = curriculum_schemas.Curriculum.model_fields['curriculum_schema_version'].default
         
         for f in self.json_files:
-            match = re.search(r'(.+)_curriculum_v([\d.]+)_schema_v([\d.]+)\.json',
+            match = re.search(r'(.+)_curriculum_v(.+)_schema_v(.+)\.json',
                               os.path.basename(f))
             if match is None:
                 logger.warning(
