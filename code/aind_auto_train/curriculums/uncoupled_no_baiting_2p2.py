@@ -180,8 +180,8 @@ paras_stage_2 = DynamicForagingParas(
             RewardPairsN=1,
             
             # Decrease autowater
-            Unrewarded=10,
-            Ignored=10,
+            Unrewarded=7,
+            Ignored=7,
 
             # block length [10, 30, 10] --> [20, 35, 20]
             BlockMin=20,
@@ -258,8 +258,8 @@ paras_stage_3 = DynamicForagingParas(
 
             # Turn on auto water for the first day after switching to uncoupled task
             AutoReward=True,
-            Unrewarded=15,  # almost turned off
-            Ignored=15,  # almost turned off
+            Unrewarded=10,  # almost turned off
+            Ignored=10,  # almost turned off
 
             # Turn off auto block
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block

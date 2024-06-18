@@ -187,8 +187,8 @@ paras_stage_2 = DynamicForagingParas(
 
             # -- Within session automation --
             # Decrease auto water: unrewarded 5 --> 10, ignored 5 --> 10
-            Unrewarded=10,
-            Ignored=10,
+            Unrewarded=7,
+            Ignored=7,
 
             # Increase auto block switch threshold: 0.5 --> 0.6
             SwitchThr=0.6,
@@ -253,8 +253,8 @@ paras_stage_3 = DynamicForagingParas(
             DelayBeta=0.0,
 
             # Decrease autowater number (almost turned off)
-            Unrewarded=15,
-            Ignored=15,
+            Unrewarded=10,
+            Ignored=10,
 
             # Miscs
             ResponseTime=2,  # Decrease response time:  3 --> 2
