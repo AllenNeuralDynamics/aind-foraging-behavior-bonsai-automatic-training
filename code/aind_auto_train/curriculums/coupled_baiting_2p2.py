@@ -192,7 +192,7 @@ paras_stage_2 = DynamicForagingParas(
 
             # Increase auto block switch threshold: 0.5 --> 0.6
             SwitchThr=0.6,
-            StopIgnores=50,  # Auto stop on ignores-in-a-row starts to take effect
+            StopIgnores=25,  # Auto stop on ignores-in-a-row starts to take effect
 
             # Miscs
             ResponseTime=3,  # Decrease response time: 5 --> 3
@@ -333,7 +333,7 @@ paras_stage_final = DynamicForagingParas(
 
             MaxTrial=1000,
             MaxTime=90,
-            StopIgnores=50,
+            StopIgnores=25,
 
             # Miscs
             ResponseTime=1.0,

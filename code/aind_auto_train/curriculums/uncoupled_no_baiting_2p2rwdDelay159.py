@@ -195,6 +195,8 @@ paras_stage_2 = DynamicForagingParas(
             # DelayMin=0.5,
             # DelayMax=0.5,
 
+            StopIgnores=25,
+
             # -- Within session automation --
             # Miscs
             ResponseTime=1.5,  # Decrease response time: 5 --> 1.5
@@ -380,7 +382,7 @@ paras_stage_final = DynamicForagingParas(
 
             MaxTrial=1000,
             MaxTime=90,
-            StopIgnores=20000,
+            StopIgnores=25,
 
             # Miscs
             ResponseTime=1.5,
