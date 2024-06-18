@@ -366,11 +366,11 @@ transition_from_stage_final = StageTransitions(
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_3,
-            condition_description="For recent 2 sessions, mean finished trials < 350 or efficiency < 0.65",
+            condition_description="For recent 5 sessions, mean finished trials < 300 or efficiency < 0.60",
             condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-2:]) < 350
+                        np.mean(metrics.finished_trials[-5:]) < 300
                         or
-                        np.mean(metrics.foraging_efficiency[-2:]) < 0.65
+                        np.mean(metrics.foraging_efficiency[-5:]) < 0.60
                         """,
         ),
     ]
