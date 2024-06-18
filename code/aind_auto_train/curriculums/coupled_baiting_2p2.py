@@ -21,8 +21,8 @@ from aind_auto_train import setup_logging
 setup_logging()
 
 curriculum_name = Task.C1B1
-curriculum_version = "2.1"
-curriculum_description = '''2024-05-09 decrease delay period as we now use much longer early lick punishment'''
+curriculum_version = "2.2"
+curriculum_description = '''2024-06-18 less rollback from FINAL; more AutoWater; AutoIgnore=25'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"

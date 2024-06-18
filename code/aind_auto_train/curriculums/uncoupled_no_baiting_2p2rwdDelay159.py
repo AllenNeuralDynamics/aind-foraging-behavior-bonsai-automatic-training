@@ -23,8 +23,8 @@ setup_logging()
 
 # Note this could be any string, not necessarily one of the Task enums
 curriculum_name = Task.C0B0
-curriculum_version = "2.1rwdDelay159"
-curriculum_description = '''2024-05-09 added reward delay; decrease no-lick delay in early training; use [0.1, 0.5, 0.9]'''
+curriculum_version = "2.2rwdDelay159"
+curriculum_description = '''2024-06-18 less rollback from FINAL; more AutoWater; AutoIgnore=25'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
