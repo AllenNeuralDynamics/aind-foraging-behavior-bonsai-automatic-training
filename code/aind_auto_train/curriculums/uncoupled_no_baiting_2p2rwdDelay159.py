@@ -24,7 +24,7 @@ setup_logging()
 # Note this could be any string, not necessarily one of the Task enums
 curriculum_name = Task.C0B0
 curriculum_version = "2.2rwdDelay159"
-curriculum_description = '''2024-06-18 less rollback from FINAL; more AutoWater; AutoIgnore=25'''
+curriculum_description = '''2024-06-18 less rollback from FINAL; more AutoWater; AutoIgnore=25, 2024-06-18 less rollback from stage3'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -191,9 +191,9 @@ paras_stage_2 = DynamicForagingParas(
             # ITI [1, 7, 3] --> [1, 10, 3]
             ITIMax=10,
             
-            # Delay 0.5 --> 1.0
-            # DelayMin=0.5,
-            # DelayMax=0.5,
+            # Delay 0 --> 0.25
+            DelayMin=0.25,
+            DelayMax=0.25,
 
             StopIgnores=25,
 
@@ -286,12 +286,14 @@ transition_from_stage_3 = StageTransitions(
         ),
         TransitionRule(
             decision=Decision.ROLLBACK,
-            to_stage=TrainingStage.STAGE_1,
-            condition_description="Finished trials < 200 or efficiency < 0.55",
+            to_stage=TrainingStage.STAGE_2,
+            condition_description="Finished trials < 250 or efficiency < 0.50 after stay for >= 3 days",
             condition="""lambda metrics:
-                        metrics.finished_trials[-1] < 200
+                        (metrics.finished_trials[-1] < 250
                         or
-                        metrics.foraging_efficiency[-1] < 0.55
+                        metrics.foraging_efficiency[-1] < 0.50)
+                        and
+                        metrics.session_at_current_stage >= 3
                         """,
         ),
     ]
@@ -340,9 +342,9 @@ transition_from_stage_4 = StageTransitions(
         TransitionRule(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.STAGE_FINAL,
-            condition_description="Just stay for 1 days",
+            condition_description="Just stay for 2 days",
             condition="""lambda metrics:
-                                metrics.session_at_current_stage >= 1
+                                metrics.session_at_current_stage >= 2
                                 """,
         ),
         # Once we reach here (C0B0), maybe we should not roll back to C1B0 or C1B1 anymore?
@@ -399,24 +401,24 @@ transition_from_stage_final = StageTransitions(
             decision=Decision.PROGRESS,
             to_stage=TrainingStage.GRADUATED,
             condition_description=("For recent 5 sessions,"
-                                   "mean finished trials >= 500 and mean efficiency >= 0.70 "
+                                   "mean finished trials >= 400 and mean efficiency >= 0.65 "
                                    "and total sessions >= 10 and sessions at final >= 5"),
             condition="""lambda metrics:
                         metrics.session_total >= 10 
                         and
                         metrics.session_at_current_stage >= 5
+                        and 
+                        np.mean(metrics.finished_trials[-5:]) >= 400
                         and
-                        np.mean(metrics.finished_trials[-5:]) >= 500
-                        and
-                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.70
+                        np.mean(metrics.foraging_efficiency[-5:]) >= 0.65
                         """,
         ),
         TransitionRule(
             decision=Decision.ROLLBACK,
             to_stage=TrainingStage.STAGE_4,  # Back to C0B0 with auto water
-            condition_description="For recent 5 sessions, mean finished trials < 300 or efficiency < 0.6",
+            condition_description="For recent 5 sessions, mean finished trials < 250 or efficiency < 0.6",
             condition="""lambda metrics:
-                        np.mean(metrics.finished_trials[-5:]) < 300
+                        np.mean(metrics.finished_trials[-5:]) < 250
                         or
                         np.mean(metrics.foraging_efficiency[-5:]) < 0.60
                         """,
