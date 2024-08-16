@@ -90,7 +90,7 @@ paras_stage_1_warmup = DynamicForagingParas(
 
     # Auto stop; set StopIgnores to a large number at the beginning
     MaxTrial=1000,
-    Maxtime=75,
+    MaxTime=75,
     StopIgnores=20000,
 
     # -- Miscs --
@@ -383,7 +383,7 @@ paras_stage_final = DynamicForagingParas(
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
 
             MaxTrial=1000,
-            Maxtime=75,
+            MaxTime=75,
             StopIgnores=25,
 
             # Miscs
