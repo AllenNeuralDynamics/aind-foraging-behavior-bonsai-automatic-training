@@ -21,8 +21,8 @@ from aind_auto_train import setup_logging
 setup_logging()
 
 curriculum_name = Task.C1B1
-curriculum_version = "2.2"
-curriculum_description = '''2024-06-18 less rollback from FINAL; more AutoWater; AutoIgnore=25'''
+curriculum_version = "2.3"
+curriculum_description = '''2024-08-16 max_len = 75 mins; decrease finished trial criterion'''
 
 task_url = "https://github.com/AllenNeuralDynamics/dynamic-foraging-task"
 task_schema_version = "1.1.0"
@@ -86,7 +86,7 @@ paras_stage_1_warmup = DynamicForagingParas(
 
     # Auto stop; set StopIgnores to a large number at the beginning
     MaxTrial=1000,
-    MaxTime=90,
+    Maxtime=75,
     StopIgnores=20000,
 
     # -- Miscs --
@@ -332,7 +332,7 @@ paras_stage_final = DynamicForagingParas(
             AdvancedBlockAuto=AdvancedBlockMode.OFF,  # Turn off auto block
 
             MaxTrial=1000,
-            MaxTime=90,
+            Maxtime=75,
             StopIgnores=25,
 
             # Miscs
