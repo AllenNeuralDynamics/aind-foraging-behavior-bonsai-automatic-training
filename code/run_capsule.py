@@ -10,8 +10,14 @@ from aind_auto_train.curriculum_manager import CurriculumManager, LOCAL_SAVED_CU
 setup_logging()
 logger = logging.getLogger(__name__)
 
-def update_auto_train_database(managers, curriculum_manager, interval=600):
-    while True:
+def update_auto_train_database(managers, curriculum_manager, interval=3):
+    # Jon helped me trigger this capsule 10 PM each day by airflow.
+    # So now there is no need to keep this capsule running.
+    # But since the processing pipeline takes some time, we should run this one longer.
+    # Starting from 10 PM, let's update the curriculum manager once per 60 min for 10 times (until 7 AM in the morning)
+
+    RUN_TIMES = 10  # Max pipeline run time for each run
+    for i in range(RUN_TIMES):
         logger.info(f'\n\n --- v{__version__} ---')
         try:
             logger.info(f'-- Update curriculums --')
@@ -44,8 +50,6 @@ def run():
 
     # create a thread, and run update_auto_train_database() per 1 hour
     update_auto_train_database(managers, curriculum_manager)
-    thread = threading.Thread(update_auto_train_database, args=[managers, curriculum_manager])
-    thread.start()
 
 
 
