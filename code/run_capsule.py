@@ -10,7 +10,7 @@ from aind_auto_train.curriculum_manager import CurriculumManager, LOCAL_SAVED_CU
 setup_logging()
 logger = logging.getLogger(__name__)
 
-def update_auto_train_database(managers, curriculum_manager, interval=3):
+def update_auto_train_database(managers, curriculum_manager, interval=3600):
     # Jon helped me trigger this capsule 10 PM each day by airflow.
     # So now there is no need to keep this capsule running.
     # But since the processing pipeline takes some time, we should run this one longer.
