@@ -8,71 +8,9 @@ import s3fs
 
 logger = logging.getLogger(__name__)
 
-
-def get_aws_credentials(profile='default'):
-    """Explicitly get AWS credentials
-    First check if the credentials are in the environment variables.
-    If not, try ~/.aws/credentials (for windows, %UserProfile%\.aws\credentials)
-        The content of the file should look like this:
-
-        [default]
-        AWS_ACCESS_KEY_ID=foo
-        AWS_SECRET_ACCESS_KEY=bar
-
-        See https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html
-
-    :param profile: The profile to read from the credentials file. Default is 'default'.
-    :return: A dictionary containing 'aws_access_key_id' and 'aws_secret_access_key', or None if not found.
-    """
-
-    # --- Try environment variables first ---
-    if 'AWS_SECRET_ACCESS_KEY' in os.environ and 'AWS_ACCESS_KEY_ID' in os.environ:
-        logger.info(f'Found AWS credential from environment variables!')
-        return {
-            'aws_access_key_id': os.environ['AWS_ACCESS_KEY_ID'],
-            'aws_secret_access_key': os.environ['AWS_SECRET_ACCESS_KEY']
-        }
-
-    logger.info(
-        f'AWS credentials not found in environment variables. Try ~/.aws/credentials...')
-
-    # --- Try reading from ~/.aws/credentials ---
-    # Construct the path to the credentials file
-    credentials_path = os.path.expanduser("~/.aws/credentials")
-
-    # Check if credentials file exists
-    if not os.path.exists(credentials_path):
-        logger.error(
-            "AWS credential error! AWS credentials file not found at ~/.aws/credentials either!")
-        return None
-
-    # Read the credentials file
-    config = configparser.ConfigParser()
-    config.read(credentials_path)
-
-    # Retrieve credentials for the specified profile
-    if profile in config:
-        aws_access_key_id = config[profile].get('aws_access_key_id')
-        aws_secret_access_key = config[profile].get('aws_secret_access_key')
-        logger.info(f'Found AWS credential from ~/.aws/credentials!')
-        return {
-            'aws_access_key_id': aws_access_key_id,
-            'aws_secret_access_key': aws_secret_access_key
-        }
-
-    logger.error(f"AWS credential error! Profile '{profile}' not found in credentials file.")
-    return None
-
-
 # Setup s3fs filesystem
-aws_credentials = get_aws_credentials()
-if aws_credentials is not None:
-    fs = s3fs.S3FileSystem(key=aws_credentials['aws_access_key_id'],
-                        secret=aws_credentials['aws_secret_access_key'])
-else:
-    fs = None
-    logger.error(f'AWS S3 not connected!')
-
+# Using anon=False will automatically check for credential files, environment variables, and iam roles.
+fs = s3fs.S3FileSystem(anon=False)
 
 # Function to export DataFrame to S3
 def export_df_to_s3(df,
