@@ -6,6 +6,7 @@ import logging
 from aind_auto_train import setup_logging, __version__
 from aind_auto_train.auto_train_manager import DynamicForagingAutoTrainManager
 from aind_auto_train.curriculum_manager import CurriculumManager, LOCAL_SAVED_CURRICULUM_ROOT
+from copy_database_to_public import copy_folder_on_s3
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -54,4 +55,6 @@ def run():
 
 
 if __name__ == "__main__":
+    copy_folder_on_s3()  # Copy autotrain database to the public bucket
     run()
+    copy_folder_on_s3()
