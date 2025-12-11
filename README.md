@@ -52,6 +52,44 @@ System upgrade checklist
 See [this thread](https://github.com/AllenNeuralDynamics/aind-behavior-blog/discussions/124)
 
 ## Instructions for adding new curriculums
+### Do it in Code Ocean (recommended)
+1. Duplicate the capsule [`foraging-behavior-bonsai-automatic-training_debug`](https://codeocean.allenneuraldynamics.org/capsule/3812636/tree)
+2. Start the Code Server (VS Code)
+3. Test the environment by running a demo script `code/aind_auto_train/curriculums/dummy_task.py`
+   <img width="400" height="715" alt="image" src="https://github.com/user-attachments/assets/10f93340-77e8-4192-8d20-4f69c400d1a3" />
+   
+   You should see outputs like this
+   ```
+   (base) root@ffc34097cd8a:~/capsule# /opt/conda/bin/python /root/capsule/code/aind_auto_train/curriculums/dummy_task.py
+   2025-12-11 23:23:44 | INFO | aind_auto_train.schema.curriculum | Curriculum saved to /root/capsule/scratch/saved_curriculums//Dummy task_curriculum_v0.1_schema_v1.0.json
+   2025-12-11 23:23:44 | INFO | aind_auto_train.schema.curriculum | Curriculum schema saved to /root/capsule/scratch/saved_curriculums//DummyTaskCurriculum_v1.0.json
+   2025-12-11 23:23:44 | INFO | aind_auto_train.schema.curriculum | Curriculum rules diagram saved to /root/capsule/scratch/saved_curriculums//Dummy task_curriculum_v0.1_schema_v1.0_rules
+   2025-12-11 23:23:44 | INFO | aind_auto_train.schema.curriculum | Curriculum parameters diagram saved to /root/capsule/scratch/saved_curriculums//Dummy task_curriculum_v0.1_schema_v1.0_paras
+   ```
+   and six new files under `scratch/saved_curriculums`
+   
+   <img width="300" height="197" alt="image" src="https://github.com/user-attachments/assets/dd3c88d6-6876-41a8-aee9-e6b315456abc" />
+   
+   Choose one of the svg file and click the "Preview svg" <img width="150" height="80" alt="image" src="https://github.com/user-attachments/assets/037a2790-10a2-4912-9aa9-a3b4e217577b" />, you should see the curriculum diagram
+   
+   <img width="800" height="911" alt="image" src="https://github.com/user-attachments/assets/2ae0d54d-82a4-4e28-82fe-e3531de44320" />
+
+4. On your own branch, create you curriculum based on existing curriculums in `code/aind_auto_train/curriculums`
+     - If there are new task parameters, you should add them to the `DynamicForagingParas` class in `schema/task.py` with correct default values for backward compatibility.
+6. Run your new .py file and check the generated diagrams under `scratch/saved_curriculums`
+7. Run the script `code/aind_auto_train/curriculum_manager.py` to upload new curriculum files to AWS S3 bucket `s3://aind-behavior-data/foraging_auto_training/saved_curriculums/`
+     - If this fails due to credential issues, just send the six generated files to Han.
+8. Issue a PR to the this repo for review
+    - Remember to manually bump the version of the repo in `aind_auto_train/__init__.py`
+9. Check the new curriculum on the [Streamlit app](https://foraging-behavior-browser.allenneuraldynamics-test.org/?tab_id=tab_auto_train_curriculum).
+    - Han may need to update the aind_auto_train in Streamlit
+11. On the GUI side, check if you can load the new curriculum and trigger a new session
+    - You may need to update the aind_auto_train version as well
+12. Let Han know and he will update the version in the auto_train service capsule.
+
+---
+
+### Do it locally
 Since `graphviz` in Code Ocean has some unsolved bug, it is recommended to install the library locally in a conda environment to create new curriculums.
 1. Clone this repo to your local computer
 2. Create conda environment by
